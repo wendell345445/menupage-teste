@@ -56,7 +56,7 @@ export function CategoryChips({
                     ? isActive
                       ? {
                           background:
-                            "linear-gradient(135deg, rgba(37,99,235,0.98), rgba(29,78,216,0.92))",
+                            "linear-gradient(135deg, color-mix(in srgb, var(--menu-primary) 98%, transparent), color-mix(in srgb, var(--menu-gradient-to) 92%, transparent))",
                           border: "1px solid rgba(255,255,255,0.95)",
                           boxShadow: "none",
                           backdropFilter: "blur(14px) saturate(175%)",
@@ -65,20 +65,21 @@ export function CategoryChips({
                       : {
                           background:
                             "linear-gradient(135deg, rgba(255,255,255,0.44), rgba(255,255,255,0.22))",
-                          border: "1.5px solid rgba(0,0,0,0.10)",
-                          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.58)",
+                          border: "1px solid #DDDDDD",
+                          boxShadow:
+                            "inset 0 1px 0 rgba(255,255,255,0.58)",
                           backdropFilter: "blur(14px) saturate(175%)",
                           WebkitBackdropFilter: "blur(14px) saturate(175%)",
                         }
                     : isActive
                       ? {
-                          background: "#2563EB",
-                          border: "1px solid #2563EB",
+                          background: "var(--menu-primary)",
+                          border: "1px solid var(--menu-primary)",
                           boxShadow: "none",
                         }
                       : {
                           background: "#ffffff",
-                          border: "1px solid rgba(0,0,0,0.05)",
+                          border: "1px solid #DDDDDD",
                           boxShadow: "none",
                         }
                 }

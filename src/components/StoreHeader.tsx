@@ -86,7 +86,7 @@ export function StoreHeader({
       </style>
 
       <section
-        className="fixed left-1/2 top-0 z-[90] h-[49px] w-full max-w-[768px] -translate-x-1/2 overflow-visible bg-[#2563EB] shadow-none"
+        className="fixed left-1/2 top-0 z-[90] h-[49px] w-full max-w-[768px] -translate-x-1/2 overflow-visible bg-[var(--menu-primary)] shadow-none"
         aria-label={`Cabeçalho de ${storeName}`}
       >
         <button
@@ -114,7 +114,7 @@ export function StoreHeader({
           {searchOpen ? (
             <div className="flex h-[30px] w-full max-w-[320px] items-center gap-1.5 rounded-full bg-white px-2.5 shadow-[0_6px_18px_rgba(15,23,42,0.10)] ring-1 ring-white/35">
               <svg
-                className="h-[15px] w-[15px] shrink-0 text-[#2563EB]"
+                className="h-[15px] w-[15px] shrink-0 text-[var(--menu-primary)]"
                 viewBox="0 0 24 24"
                 fill="none"
                 aria-hidden="true"

@@ -1,7 +1,7 @@
 import { ShoppingBag } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-const THEME_BLUE = '#2563EB'
+const THEME_COLOR = 'var(--menu-primary)'
 const HOME_ICON_SRC = '/home%202.svg'
 const ORDERS_ICON_SRC = '/pedidos.svg'
 
@@ -40,7 +40,7 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
           className="absolute left-0 top-0 h-px w-full"
           style={{
             background:
-              'linear-gradient(90deg, transparent 5%, rgba(37,99,235,0.22) 40%, rgba(37,99,235,0.22) 60%, transparent 95%)',
+              'linear-gradient(90deg, transparent 5%, color-mix(in srgb, var(--menu-primary) 22%, transparent) 40%, color-mix(in srgb, var(--menu-primary) 22%, transparent) 60%, transparent 95%)',
           }}
         />
 
@@ -53,7 +53,7 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
 
         <NavItem
           label="Carrinho"
-          icon={<ShoppingBag className="h-[21px] w-[21px] text-[#2563EB]" strokeWidth={1.9} />}
+          icon={<ShoppingBag className="h-[21px] w-[21px] text-[var(--menu-primary)]" strokeWidth={1.9} />}
           active={false}
           onClick={onCartClick}
           badge={cartQuantity > 0 ? cartQuantity : undefined}
@@ -80,7 +80,7 @@ function SvgMaskIcon({ src }: SvgMaskIconProps) {
       aria-hidden="true"
       className="block h-[22px] w-[22px] transition-opacity duration-200"
       style={{
-        backgroundColor: THEME_BLUE,
+        backgroundColor: THEME_COLOR,
         opacity: 1,
         WebkitMaskImage: `url("${src}")`,
         maskImage: `url("${src}")`,
@@ -113,32 +113,32 @@ function NavItem({ label, icon, active, onClick, badge }: NavItemProps) {
       style={
         active
           ? {
-              background: 'linear-gradient(160deg, rgba(37,99,235,0.08) 0%, rgba(37,99,235,0.14) 100%)',
-              boxShadow: '0 2px 16px rgba(37,99,235,0.10), inset 0 1px 0 rgba(255,255,255,0.8)',
+              background: 'linear-gradient(160deg, color-mix(in srgb, var(--menu-primary) 8%, transparent) 0%, color-mix(in srgb, var(--menu-primary) 14%, transparent) 100%)',
+              boxShadow: '0 2px 16px color-mix(in srgb, var(--menu-primary) 10%, transparent), inset 0 1px 0 rgba(255,255,255,0.8)',
             }
           : undefined
       }
     >
       {active && (
         <span
-          className="absolute left-1/2 top-0 h-[3.5px] w-9 -translate-x-1/2 rounded-b-full bg-[#2563EB]"
-          style={{ boxShadow: '0 1px 6px rgba(37,99,235,0.22)' }}
+          className="absolute left-1/2 top-0 h-[3.5px] w-9 -translate-x-1/2 rounded-b-full bg-[var(--menu-primary)]"
+          style={{ boxShadow: '0 1px 6px color-mix(in srgb, var(--menu-primary) 22%, transparent)' }}
         />
       )}
 
-      <div className="relative text-[#2563EB]">
+      <div className="relative text-[var(--menu-primary)]">
         {icon}
         {badge != null && badge > 0 && (
           <span
-            className="absolute -right-[7px] -top-[6px] flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#2563EB] px-[3px] text-[9px] font-bold text-white"
-            style={{ boxShadow: '0 2px 8px rgba(37,99,235,0.25)' }}
+            className="absolute -right-[7px] -top-[6px] flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[var(--menu-primary)] px-[3px] text-[9px] font-bold text-white"
+            style={{ boxShadow: '0 2px 8px color-mix(in srgb, var(--menu-primary) 25%, transparent)' }}
           >
             {badge}
           </span>
         )}
       </div>
 
-      <span className="text-[10px] font-semibold tracking-[0.1px] text-[#2563EB]">
+      <span className="text-[10px] font-semibold tracking-[0.1px] text-[var(--menu-primary)]">
         {label}
       </span>
     </button>

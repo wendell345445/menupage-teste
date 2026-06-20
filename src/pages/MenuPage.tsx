@@ -18,9 +18,9 @@ import { MenuPageSidebar } from "../components/MenuPageSidebar";
 import { useCartStore } from "../store/useCartStore";
 
 import { useStoreSlug } from "@/hooks/useStoreSlug";
+import { getMenuThemeFromUrl } from "@/lib/menuThemes";
 import { resolveImageUrl } from "@/shared/lib/imageUrl";
 
-const THEME_COLOR = "#2563EB";
 const IMAGE_SKELETON_MIN_MS = 800;
 
 function getMinimumOrderValue(store: unknown) {
@@ -169,6 +169,7 @@ export function MenuPage() {
   const slug = useStoreSlug();
   const navigate = useNavigate();
   const { data, isLoading } = useMenu(slug);
+  const selectedTheme = useMemo(() => getMenuThemeFromUrl(), []);
 
   const setStore = useCartStore((s) => s.setStore);
   // Modo mesa só vale na aba que veio do QR (`/mesa/:token`).
@@ -238,7 +239,9 @@ export function MenuPage() {
     };
 
     updateCategoryStickyState();
-    window.addEventListener("scroll", updateCategoryStickyState, { passive: true });
+    window.addEventListener("scroll", updateCategoryStickyState, {
+      passive: true,
+    });
     window.addEventListener("resize", updateCategoryStickyState);
 
     return () => {
@@ -523,7 +526,10 @@ export function MenuPage() {
       {store.facebookPixelId && hasCookieConsent() && (
         <FacebookPixel pixelId={store.facebookPixelId} />
       )}
-      <ThemeInjector primaryColor={THEME_COLOR} secondaryColor={THEME_COLOR} />
+      <ThemeInjector
+        primaryColor={selectedTheme.primaryColor}
+        secondaryColor={selectedTheme.secondaryColor}
+      />
 
       <MenuPageSidebar
         open={isSidebarOpen}
@@ -557,7 +563,7 @@ export function MenuPage() {
         <StoreHeader
           storeName={store.name}
           logo={store.logo}
-          primaryColor={THEME_COLOR}
+          primaryColor={selectedTheme.primaryColor}
           showCompactIdentity={showHeaderIdentity}
           searchOpen={isHeaderSearchOpen}
           searchValue={search}
@@ -574,7 +580,7 @@ export function MenuPage() {
           <StoreInfo
             name={store.name}
             logo={store.logo}
-            primaryColor={THEME_COLOR}
+            primaryColor={selectedTheme.primaryColor}
             address={store.address}
             isOpen={isOpen}
             nextOpenLabel={store.nextOpenLabel}
@@ -625,7 +631,7 @@ export function MenuPage() {
                       className="absolute -right-12 -top-10 h-24 w-40 rounded-full opacity-45 blur-2xl"
                       style={{
                         background:
-                          "radial-gradient(circle, rgba(37,99,235,0.18) 0%, rgba(37,99,235,0) 70%)",
+                          "radial-gradient(circle, color-mix(in srgb, var(--menu-primary) 18%, transparent) 0%, transparent 70%)",
                       }}
                     />
                     <div className="absolute inset-x-0 top-0 h-px bg-white/75" />
