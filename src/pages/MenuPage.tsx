@@ -351,7 +351,7 @@ export function MenuPage() {
       explicitFeaturedProducts.length > 0
         ? explicitFeaturedProducts
         : allProducts
-    ).slice(0, 8);
+    ).slice(0, 6);
   }, [allProducts]);
 
   const filteredProducts = useMemo(() => {
@@ -705,7 +705,7 @@ export function MenuPage() {
                   </div>
 
                   <div className="-mx-4 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:-mx-6 sm:px-6 md:-mx-8 md:px-8 [&::-webkit-scrollbar]:hidden">
-                    <div className="flex snap-x snap-mandatory gap-3">
+                    <div className="flex snap-x snap-mandatory items-start gap-3">
                       {featuredProducts.slice(0, 8).map((product) => {
                         const basePrice = getProductBasePrice(product);
                         const hasPromo =
@@ -727,17 +727,17 @@ export function MenuPage() {
                             key={product.id}
                             type="button"
                             onClick={() => navigate(`/produto/${product.id}`)}
-                            className="group w-[132px] shrink-0 snap-start text-left transition-transform active:scale-[0.98] sm:w-[150px]"
+                            className="group flex w-[132px] shrink-0 snap-start flex-col text-left transition-transform active:scale-[0.98] sm:w-[150px]"
                             aria-label={`Ver detalhes de ${product.name}`}
                           >
-                            <div className="transition-transform duration-300 group-active:scale-[0.98]">
+                            <div className="shrink-0 transition-transform duration-300 group-active:scale-[0.98]">
                               <FeaturedProductImage
                                 imageUrl={product.imageUrl}
                                 alt={product.name}
                               />
                             </div>
 
-                            <div className="mt-1.5 min-h-[42px]">
+                            <div className="mt-1.5 flex min-h-[58px] flex-col justify-start">
                               <h3 className="line-clamp-1 text-[12px] font-semibold leading-tight tracking-[-0.16px] text-[#4a4a4a] sm:text-[13px]">
                                 {product.name}
                               </h3>
@@ -748,17 +748,19 @@ export function MenuPage() {
                                 </span>
                               )}
 
-                              {hasPromo && (
-                                <div className="mt-1 flex items-center gap-1">
-                                  <span className="whitespace-nowrap text-[9px] font-semibold leading-none text-[#4a4a4a] line-through sm:text-[10px]">
-                                    {fmtBRL(basePrice)}
-                                  </span>
+                              <div className="mt-1 flex min-h-[12px] items-center gap-1">
+                                {hasPromo ? (
+                                  <>
+                                    <span className="whitespace-nowrap text-[9px] font-semibold leading-none text-[#4a4a4a] line-through sm:text-[10px]">
+                                      {fmtBRL(basePrice)}
+                                    </span>
 
-                                  <span className="rounded-[2px] bg-[#1f8f18] px-1 py-[1.5px] text-[7px] font-bold leading-none text-white">
-                                    {discount}%
-                                  </span>
-                                </div>
-                              )}
+                                    <span className="rounded-[2px] bg-[#1f8f18] px-1 py-[1.5px] text-[7px] font-bold leading-none text-white">
+                                      {discount}%
+                                    </span>
+                                  </>
+                                ) : null}
+                              </div>
                             </div>
                           </button>
                         );

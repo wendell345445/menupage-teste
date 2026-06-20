@@ -194,7 +194,7 @@ export function StoreHeader({
             type="button"
             aria-label="Abrir pesquisa"
             onClick={onSearchClick}
-            className="absolute right-4 top-1/2 z-10 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-white/20 text-white ring-1 ring-white/30 backdrop-blur-md transition-transform hover:bg-white/25 active:scale-95 sm:right-5"
+            className="absolute right-4 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/20 text-white ring-1 ring-white/30 backdrop-blur-md transition-transform hover:bg-white/25 active:scale-95 sm:right-5"
           >
             <svg
               className="h-[17px] w-[17px]"

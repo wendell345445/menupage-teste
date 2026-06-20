@@ -146,9 +146,7 @@ export function StoreInfo({
         </div>
       </div>
 
-      <div className="mt-[11px] h-px w-full bg-gradient-to-r from-menu-divider via-[rgba(64,57,57,0.05)] to-transparent" />
-
-      <div className="mt-[9px] flex w-full flex-nowrap items-center gap-x-2.5 gap-y-1 overflow-hidden">
+      <div className="mt-[11px] flex w-full flex-nowrap items-center gap-x-2.5 gap-y-1 overflow-hidden">
         {minimumOrderValue != null && (
           <>
             <div className="flex min-w-0 shrink-0 items-center gap-[5px]" aria-label={`Pedido mínimo ${fmtBRL(minimumOrderValue)}`}>
@@ -213,6 +211,8 @@ export function StoreInfo({
           </>
         )}
       </div>
+
+      <div className="mt-[9px] h-px w-full bg-gradient-to-r from-menu-divider via-[rgba(64,57,57,0.05)] to-transparent" />
     </section>
   )
 }
