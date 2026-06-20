@@ -116,9 +116,13 @@ export function StoreInfo({
         </div>
       </div>
 
-      <div className="min-w-0 flex-1 pt-[4px]">
-        {address ? (
-          <div className="flex items-start gap-[7px]">
+      <div className="min-w-0 flex-1 pt-[1px]">
+        <h1 className="min-w-0 truncate py-[2px] text-[18px] font-bold leading-[1.18] tracking-[-0.38px] text-[#574f4f] sm:text-[20px]">
+          {name}
+        </h1>
+
+        {address && (
+          <div className="mt-[5px] flex items-start gap-[7px]">
             {/* Mapa-com-pin (FontAwesome map-marker-alt v4) — mesmo SVG do MenuPanda */}
             <svg
               className="mt-[3px] h-[12px] w-[12px] shrink-0 text-menu-text"
@@ -139,13 +143,9 @@ export function StoreInfo({
               {address}
             </p>
           </div>
-        ) : (
-          <h2 className="truncate py-[2px] text-[15px] font-bold leading-[1.2] tracking-[-0.3px] text-[#574f4f]">
-            {name}
-          </h2>
         )}
 
-        <div className="mt-[11px] h-px w-full max-w-[420px] bg-gradient-to-r from-menu-divider via-[rgba(64,57,57,0.05)] to-transparent" />
+        <div className="mt-[9px] h-px w-full max-w-[420px] bg-gradient-to-r from-menu-divider via-[rgba(64,57,57,0.05)] to-transparent" />
 
         <div className="mt-[10px] flex flex-nowrap items-center gap-x-2 gap-y-1 overflow-hidden">
           {minimumOrderValue != null && (

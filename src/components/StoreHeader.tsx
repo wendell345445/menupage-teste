@@ -10,7 +10,6 @@ function getLogoImageUrl(url: string): string {
   return resolved.replace('/upload/', '/upload/f_auto,w_120/')
 }
 
-
 interface Props {
   storeName: string
   logo?: string | null
@@ -29,11 +28,12 @@ export function StoreHeader({
 }: Props) {
   const displayLogo = logo || PUBLIC_FALLBACK_LOGO
   const logoUrl = getLogoImageUrl(displayLogo)
+
   return (
     <>
       <section
         className="fixed left-1/2 top-0 z-[90] h-[49px] w-full max-w-[768px] -translate-x-1/2 overflow-visible bg-[#2563EB] shadow-none"
-        aria-label="Cabeçalho da loja"
+        aria-label={`Cabeçalho de ${storeName}`}
       >
         <button
           type="button"
@@ -50,14 +50,14 @@ export function StoreHeader({
           </svg>
         </button>
 
-        <div className="absolute inset-y-0 left-[58px] right-[58px] flex min-w-0 items-center justify-center sm:left-[66px] sm:right-[66px]">
-          {showCompactIdentity ? (
+        {showCompactIdentity && (
+          <div className="absolute inset-y-0 left-[58px] right-[58px] flex min-w-0 items-center justify-center sm:left-[66px] sm:right-[66px]">
             <div className="flex min-w-0 max-w-full items-center justify-center gap-2 rounded-full px-1 py-[2px] transition-all duration-200">
               <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-[12px] border-0 bg-white p-0 shadow-none">
                 <img
                   src={logoUrl}
                   alt={storeName}
-                  className="block h-full w-full rounded-[12px] object-cover object-center"
+                  className="block h-full w-full object-cover object-center"
                   loading="eager"
                 />
               </div>
@@ -66,12 +66,8 @@ export function StoreHeader({
                 {storeName}
               </h1>
             </div>
-          ) : (
-            <h1 className="min-w-0 max-w-full truncate py-[2px] text-center text-[18px] font-bold leading-[1.2] tracking-[-0.33px] text-white sm:text-xl">
-              {storeName}
-            </h1>
-          )}
-        </div>
+          </div>
+        )}
 
         <button
           type="button"
