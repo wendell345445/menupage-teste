@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Banknote } from 'lucide-react'
-
 import { resolveImageUrl } from '@/shared/lib/imageUrl'
 
 const FALLBACK_MINIMUM_ORDER = 20
@@ -154,9 +152,20 @@ export function StoreInfo({
         {minimumOrderValue != null && (
           <>
             <div className="flex min-w-0 shrink-0 items-center gap-[5px]" aria-label={`Pedido mínimo ${fmtBRL(minimumOrderValue)}`}>
-              <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-0 bg-white text-[#574f4f] shadow-none" aria-hidden="true">
-                <Banknote className="h-[11px] w-[11px]" strokeWidth={2.4} />
-              </span>
+              <span
+                className="relative -top-[1px] h-[11px] w-[11px] shrink-0 bg-[#574f4f]"
+                aria-hidden="true"
+                style={{
+                  WebkitMaskImage: 'url(/iconmoney.svg)',
+                  maskImage: 'url(/iconmoney.svg)',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'center',
+                  maskPosition: 'center',
+                  WebkitMaskSize: 'contain',
+                  maskSize: 'contain',
+                }}
+              />
               <span className="whitespace-nowrap text-[11px] font-semibold leading-[1.35] tracking-[-0.22px] text-[#574f4f] sm:text-xs">
                 Pedido mínimo {fmtBRL(minimumOrderValue)}
               </span>

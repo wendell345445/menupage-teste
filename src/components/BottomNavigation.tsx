@@ -1,9 +1,9 @@
 import { ShoppingBag } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+const THEME_BLUE = '#2563EB'
 const HOME_ICON_SRC = '/home%202.svg'
 const ORDERS_ICON_SRC = '/pedidos.svg'
-const MENU_BLUE_FILTER = 'brightness(0) saturate(100%) invert(38%) sepia(78%) saturate(2083%) hue-rotate(211deg) brightness(94%) contrast(93%)'
 
 interface Props {
   cartQuantity: number
@@ -46,7 +46,7 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
 
         <NavItem
           label="Início"
-          icon={<SvgNavIcon src={HOME_ICON_SRC} alt="" active={isHome} />}
+          icon={<SvgMaskIcon src={HOME_ICON_SRC} />}
           active={isHome}
           onClick={() => navigate('/')}
         />
@@ -61,7 +61,7 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
 
         <NavItem
           label={tableMode ? 'Comanda' : 'Pedidos'}
-          icon={<SvgNavIcon src={ORDERS_ICON_SRC} alt="" active={isOrders} forceBlue />}
+          icon={<SvgMaskIcon src={ORDERS_ICON_SRC} />}
           active={isOrders}
           onClick={() => navigate(ordersPath)}
         />
@@ -70,25 +70,27 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
   )
 }
 
-interface SvgNavIconProps {
+interface SvgMaskIconProps {
   src: string
-  alt: string
-  active: boolean
-  forceBlue?: boolean
 }
 
-function SvgNavIcon({ src, alt, active, forceBlue = false }: SvgNavIconProps) {
+function SvgMaskIcon({ src }: SvgMaskIconProps) {
   return (
-    <img
-      src={src}
-      alt={alt}
+    <span
       aria-hidden="true"
-      className="h-[22px] w-[22px] object-contain transition-opacity duration-200"
+      className="block h-[22px] w-[22px] transition-opacity duration-200"
       style={{
-        opacity: active || forceBlue ? 1 : 0.62,
-        filter: active || forceBlue ? MENU_BLUE_FILTER : `${MENU_BLUE_FILTER} opacity(62%)`,
+        backgroundColor: THEME_BLUE,
+        opacity: 1,
+        WebkitMaskImage: `url("${src}")`,
+        maskImage: `url("${src}")`,
+        WebkitMaskRepeat: 'no-repeat',
+        maskRepeat: 'no-repeat',
+        WebkitMaskPosition: 'center',
+        maskPosition: 'center',
+        WebkitMaskSize: 'contain',
+        maskSize: 'contain',
       }}
-      draggable={false}
     />
   )
 }
@@ -124,7 +126,7 @@ function NavItem({ label, icon, active, onClick, badge }: NavItemProps) {
         />
       )}
 
-      <div className={`relative ${active ? 'text-[#2563EB]' : 'text-[#2563EB]/65'}`}>
+      <div className="relative text-[#2563EB]">
         {icon}
         {badge != null && badge > 0 && (
           <span
@@ -136,11 +138,7 @@ function NavItem({ label, icon, active, onClick, badge }: NavItemProps) {
         )}
       </div>
 
-      <span
-        className={`text-[10px] tracking-[0.1px] ${
-          active ? 'font-extrabold text-[#2563EB]' : 'font-semibold text-[#2563EB]/70'
-        }`}
-      >
+      <span className="text-[10px] font-semibold tracking-[0.1px] text-[#2563EB]">
         {label}
       </span>
     </button>
