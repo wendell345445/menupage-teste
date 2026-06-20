@@ -239,7 +239,9 @@ export function MenuPage() {
     };
 
     updateCategoryStickyState();
-    window.addEventListener("scroll", updateCategoryStickyState, { passive: true });
+    window.addEventListener("scroll", updateCategoryStickyState, {
+      passive: true,
+    });
     window.addEventListener("resize", updateCategoryStickyState);
 
     return () => {

@@ -92,115 +92,117 @@ export function StoreInfo({
 
   return (
     <section
-      className="relative flex w-full items-start gap-3.5 sm:gap-4"
+      className="relative w-full"
       aria-label="Informações do estabelecimento"
     >
-      <div className="relative shrink-0">
-        <div className="relative h-[74px] w-[74px] overflow-hidden rounded-[22px] border-0 bg-white p-0 shadow-none sm:h-[78px] sm:w-[78px]">
-          {showLogoSkeleton && <LogoShimmerSkeleton />}
+      <div className="flex w-full items-start gap-3.5 sm:gap-4">
+        <div className="relative shrink-0">
+          <div className="relative h-[74px] w-[74px] overflow-hidden rounded-[22px] border-0 bg-white p-0 shadow-none sm:h-[78px] sm:w-[78px]">
+            {showLogoSkeleton && <LogoShimmerSkeleton />}
 
-          <img
-            src={logoUrl}
-            alt={name}
-            className={`block h-full w-full object-cover object-center transition-opacity duration-300 ${
-              showLogoImage ? 'opacity-100' : 'opacity-0'
-            }`}
-            loading="lazy"
-            onLoad={() => setIsLogoLoaded(true)}
-          />
+            <img
+              src={logoUrl}
+              alt={name}
+              className={`block h-full w-full object-cover object-center transition-opacity duration-300 ${
+                showLogoImage ? 'opacity-100' : 'opacity-0'
+              }`}
+              loading="lazy"
+              onLoad={() => setIsLogoLoaded(true)}
+            />
 
-          <span
-            className="pointer-events-none absolute inset-0 z-20 rounded-[22px] border border-[#DDDDDD]"
-            aria-hidden="true"
-          />
+            <span
+              className="pointer-events-none absolute inset-0 z-20 rounded-[22px] border border-[#DDDDDD]"
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+
+        <div className="min-w-0 flex-1 pt-[1px]">
+          <h1 className="min-w-0 truncate py-[2px] text-[18px] font-bold leading-[1.18] tracking-[-0.38px] text-[#574f4f] sm:text-[20px]">
+            {name}
+          </h1>
+
+          {address && (
+            <div className="mt-[5px] flex items-start gap-[7px]">
+              {/* Mapa-com-pin (FontAwesome map-marker-alt v4) — mesmo SVG do MenuPanda */}
+              <svg
+                className="mt-[3px] h-[12px] w-[12px] shrink-0 text-menu-text"
+                viewBox="0 0 512 512"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M400 0c-61.76 0-112 50.24-112 112 0 57.472 89.856 159.264 100.096 170.688 3.04 3.36 7.36 5.312 11.904 5.312s8.864-1.952 11.904-5.312C422.144 271.264 512 169.472 512 112 512 50.24 461.76 0 400 0zm0 160c-26.496 0-48-21.504-48-48s21.504-48 48-48 48 21.504 48 48-21.504 48-48 48zM10.048 187.968A16.048 16.048 0 0 0 0 202.848V496c0 5.312 2.656 10.272 7.04 13.248C9.728 511.04 12.832 512 16 512c2.016 0 4.032-.384 5.952-1.152L160 455.616V128L10.048 187.968z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M435.712 304.064C426.624 314.176 413.6 320 400 320c-13.6 0-26.624-5.824-35.712-15.936-3.264-3.616-7.456-8.384-12.288-14.048V512l149.952-59.968c6.08-2.4 10.048-8.32 10.048-14.848V201.952c-26.208 44.384-61.248 85.344-76.288 102.112zM266.08 157.632 192 128v327.616l128 51.2v-256.96c-20.448-27.552-41.792-60.736-53.92-92.224z"
+                  fill="currentColor"
+                />
+              </svg>
+              <p className="min-w-0 max-w-[450px] whitespace-pre-line text-[11px] font-normal leading-[1.38] tracking-[-0.28px] text-menu-text sm:text-xs">
+                {address}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="min-w-0 flex-1 pt-[1px]">
-        <h1 className="min-w-0 truncate py-[2px] text-[18px] font-bold leading-[1.18] tracking-[-0.38px] text-[#574f4f] sm:text-[20px]">
-          {name}
-        </h1>
+      <div className="mt-[11px] h-px w-full bg-gradient-to-r from-menu-divider via-[rgba(64,57,57,0.05)] to-transparent" />
 
-        {address && (
-          <div className="mt-[5px] flex items-start gap-[7px]">
-            {/* Mapa-com-pin (FontAwesome map-marker-alt v4) — mesmo SVG do MenuPanda */}
-            <svg
-              className="mt-[3px] h-[12px] w-[12px] shrink-0 text-menu-text"
-              viewBox="0 0 512 512"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M400 0c-61.76 0-112 50.24-112 112 0 57.472 89.856 159.264 100.096 170.688 3.04 3.36 7.36 5.312 11.904 5.312s8.864-1.952 11.904-5.312C422.144 271.264 512 169.472 512 112 512 50.24 461.76 0 400 0zm0 160c-26.496 0-48-21.504-48-48s21.504-48 48-48 48 21.504 48 48-21.504 48-48 48zM10.048 187.968A16.048 16.048 0 0 0 0 202.848V496c0 5.312 2.656 10.272 7.04 13.248C9.728 511.04 12.832 512 16 512c2.016 0 4.032-.384 5.952-1.152L160 455.616V128L10.048 187.968z"
-                fill="currentColor"
-              />
-              <path
-                d="M435.712 304.064C426.624 314.176 413.6 320 400 320c-13.6 0-26.624-5.824-35.712-15.936-3.264-3.616-7.456-8.384-12.288-14.048V512l149.952-59.968c6.08-2.4 10.048-8.32 10.048-14.848V201.952c-26.208 44.384-61.248 85.344-76.288 102.112zM266.08 157.632 192 128v327.616l128 51.2v-256.96c-20.448-27.552-41.792-60.736-53.92-92.224z"
-                fill="currentColor"
-              />
-            </svg>
-            <p className="min-w-0 max-w-[450px] whitespace-pre-line text-[11px] font-normal leading-[1.38] tracking-[-0.28px] text-menu-text sm:text-xs">
-              {address}
-            </p>
-          </div>
+      <div className="mt-[9px] flex w-full flex-nowrap items-center gap-x-2.5 gap-y-1 overflow-hidden">
+        {minimumOrderValue != null && (
+          <>
+            <div className="flex min-w-0 shrink-0 items-center gap-[5px]" aria-label={`Pedido mínimo ${fmtBRL(minimumOrderValue)}`}>
+              <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-0 bg-white text-[#574f4f] shadow-none" aria-hidden="true">
+                <Banknote className="h-[11px] w-[11px]" strokeWidth={2.4} />
+              </span>
+              <span className="whitespace-nowrap text-[11px] font-semibold leading-[1.35] tracking-[-0.22px] text-[#574f4f] sm:text-xs">
+                Pedido mínimo {fmtBRL(minimumOrderValue)}
+              </span>
+            </div>
+
+            <span className="h-[13px] w-px shrink-0 bg-menu-divider" aria-hidden="true" />
+          </>
         )}
 
-        <div className="mt-[9px] h-px w-full max-w-[420px] bg-gradient-to-r from-menu-divider via-[rgba(64,57,57,0.05)] to-transparent" />
-
-        <div className="mt-[10px] flex flex-nowrap items-center gap-x-2 gap-y-1 overflow-hidden">
-          {minimumOrderValue != null && (
-            <>
-              <div className="flex min-w-0 shrink-0 items-center gap-[4px]" aria-label={`Pedido mínimo ${fmtBRL(minimumOrderValue)}`}>
-                <span className="flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-full border-0 bg-white text-[#574f4f] shadow-none" aria-hidden="true">
-                  <Banknote className="h-[10px] w-[10px]" strokeWidth={2.4} />
-                </span>
-                <span className="whitespace-nowrap text-[10px] font-semibold leading-[1.2] tracking-[-0.18px] text-[#574f4f]">
-                  Pedido mínimo {fmtBRL(minimumOrderValue)}
-                </span>
-              </div>
-
-              <span className="h-[11px] w-px shrink-0 bg-menu-divider" aria-hidden="true" />
-            </>
-          )}
-
-          <div
-            className="flex min-w-0 shrink-0 items-center gap-[4px]"
-            aria-label={isOpen ? 'Restaurante aberto agora' : 'Restaurante fechado'}
+        <div
+          className="flex min-w-0 shrink-0 items-center gap-[5px]"
+          aria-label={isOpen ? 'Restaurante aberto agora' : 'Restaurante fechado'}
+        >
+          <span
+            className="relative flex h-[9px] w-[9px] shrink-0 items-center justify-center"
+            aria-hidden="true"
           >
+            {isOpen && (
+              <span className="absolute h-[9px] w-[9px] rounded-full bg-[#39a00a]/20 animate-ping" />
+            )}
             <span
-              className="relative flex h-[8px] w-[8px] shrink-0 items-center justify-center"
-              aria-hidden="true"
-            >
-              {isOpen && (
-                <span className="absolute h-[8px] w-[8px] rounded-full bg-[#39a00a]/20 animate-ping" />
-              )}
-              <span
-                className={`relative h-[5px] w-[5px] rounded-full ${
-                  isOpen
-                    ? 'bg-[#39a00a] shadow-[0_0_0_3px_rgba(57,160,10,0.12)]'
-                    : 'bg-gray-400 shadow-[0_0_0_3px_rgba(160,160,160,0.12)]'
-                }`}
-              />
-            </span>
-
-            <span
-              className={`whitespace-nowrap text-[10px] font-semibold leading-[1.2] tracking-[-0.18px] ${
-                isOpen ? 'text-[#137a13]' : 'text-gray-500'
+              className={`relative h-[6px] w-[6px] rounded-full ${
+                isOpen
+                  ? 'bg-[#39a00a] shadow-[0_0_0_3px_rgba(57,160,10,0.12)]'
+                  : 'bg-gray-400 shadow-[0_0_0_3px_rgba(160,160,160,0.12)]'
               }`}
-            >
-              {isOpen ? 'Aberto agora' : nextOpenLabel ? `Fechado · abrimos ${nextOpenLabel}` : 'Fechado'}
-            </span>
-          </div>
+            />
+          </span>
 
-          {tableNumber != null && (
-            <>
-              <span className="h-[13px] w-px bg-menu-divider" aria-hidden="true" />
-              <span className="whitespace-nowrap rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-semibold leading-[1.2] text-blue-700">
-                🍽️ Mesa {tableNumber}
-              </span>
-            </>
-          )}
+          <span
+            className={`whitespace-nowrap text-[11px] font-semibold leading-[1.35] tracking-[-0.22px] sm:text-xs ${
+              isOpen ? 'text-[#137a13]' : 'text-gray-500'
+            }`}
+          >
+            {isOpen ? 'Aberto agora' : nextOpenLabel ? `Fechado · abrimos ${nextOpenLabel}` : 'Fechado'}
+          </span>
         </div>
+
+        {tableNumber != null && (
+          <>
+            <span className="h-[13px] w-px bg-menu-divider" aria-hidden="true" />
+            <span className="whitespace-nowrap rounded-full bg-blue-100 px-1.5 py-0.5 text-[11px] font-semibold leading-[1.2] text-blue-700 sm:text-xs">
+              🍽️ Mesa {tableNumber}
+            </span>
+          </>
+        )}
       </div>
     </section>
   )
