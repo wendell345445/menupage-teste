@@ -65,7 +65,7 @@ export function CategoryChips({
                       : {
                           background:
                             "linear-gradient(135deg, rgba(255,255,255,0.44), rgba(255,255,255,0.22))",
-                          border: "1px solid rgba(0,0,0,0.10)",
+                          border: "1.5px solid rgba(0,0,0,0.10)",
                           boxShadow: "inset 0 1px 0 rgba(255,255,255,0.58)",
                           backdropFilter: "blur(14px) saturate(175%)",
                           WebkitBackdropFilter: "blur(14px) saturate(175%)",
