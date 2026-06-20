@@ -146,7 +146,7 @@ export function MenuPageSidebar({
                 type="button"
                 aria-label="Fechar menu"
                 onClick={() => onOpenChange(false)}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-black text-white transition-transform hover:bg-black/90 focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 active:scale-95"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#2563EB] text-white transition-transform hover:bg-[#1D4ED8] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 active:scale-95"
               >
                 <X className="h-[17px] w-[17px]" strokeWidth={2.4} />
               </button>
@@ -235,8 +235,8 @@ function SidebarAction({ icon, label, active = false, badge, onClick }: SidebarA
       className={[
         'group flex min-h-[43px] w-full items-center justify-between gap-3 rounded-[16px] px-3 text-left transition-all active:scale-[0.99]',
         active
-          ? 'bg-black text-white shadow-[0_8px_20px_rgba(0,0,0,0.14)]'
-          : 'bg-transparent text-[#574f4f] hover:bg-black/[0.045]',
+          ? 'bg-[#2563EB] text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]'
+          : 'bg-transparent text-[#574f4f] hover:bg-[#EFF6FF]',
       ].join(' ')}
     >
       <span className="flex min-w-0 items-center gap-3">
@@ -248,7 +248,7 @@ function SidebarAction({ icon, label, active = false, badge, onClick }: SidebarA
         <span
           className={[
             'flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full px-1.5 text-[10px] font-black',
-            active ? 'bg-white text-black' : 'bg-black text-white',
+            active ? 'bg-white text-[#2563EB]' : 'bg-[#2563EB] text-white',
           ].join(' ')}
         >
           {badge}

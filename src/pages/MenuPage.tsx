@@ -22,7 +22,7 @@ import { useStoreSlug } from "@/hooks/useStoreSlug";
 import { resolveImageUrl } from "@/shared/lib/imageUrl";
 import { toast } from "@/shared/lib/toast";
 
-const THEME_COLOR = "#000000";
+const THEME_COLOR = "#2563EB";
 const IMAGE_SKELETON_MIN_MS = 800;
 
 function getMinimumOrderValue(store: unknown) {

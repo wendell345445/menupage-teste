@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 const HOME_ICON_SRC = '/home%202.svg'
 const ORDERS_ICON_SRC = '/pedidos.svg'
+const MENU_BLUE_FILTER = 'brightness(0) saturate(100%) invert(38%) sepia(78%) saturate(2083%) hue-rotate(211deg) brightness(94%) contrast(93%)'
 
 interface Props {
   cartQuantity: number
@@ -39,7 +40,7 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
           className="absolute left-0 top-0 h-px w-full"
           style={{
             background:
-              'linear-gradient(90deg, transparent 5%, rgba(0,0,0,0.16) 40%, rgba(0,0,0,0.16) 60%, transparent 95%)',
+              'linear-gradient(90deg, transparent 5%, rgba(37,99,235,0.22) 40%, rgba(37,99,235,0.22) 60%, transparent 95%)',
           }}
         />
 
@@ -52,7 +53,7 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
 
         <NavItem
           label="Carrinho"
-          icon={<ShoppingBag className="h-[21px] w-[21px] text-black" strokeWidth={1.9} />}
+          icon={<ShoppingBag className="h-[21px] w-[21px] text-[#2563EB]" strokeWidth={1.9} />}
           active={false}
           onClick={onCartClick}
           badge={cartQuantity > 0 ? cartQuantity : undefined}
@@ -60,7 +61,7 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
 
         <NavItem
           label={tableMode ? 'Comanda' : 'Pedidos'}
-          icon={<SvgNavIcon src={ORDERS_ICON_SRC} alt="" active={isOrders} forceBlack />}
+          icon={<SvgNavIcon src={ORDERS_ICON_SRC} alt="" active={isOrders} forceBlue />}
           active={isOrders}
           onClick={() => navigate(ordersPath)}
         />
@@ -73,10 +74,10 @@ interface SvgNavIconProps {
   src: string
   alt: string
   active: boolean
-  forceBlack?: boolean
+  forceBlue?: boolean
 }
 
-function SvgNavIcon({ src, alt, active, forceBlack = false }: SvgNavIconProps) {
+function SvgNavIcon({ src, alt, active, forceBlue = false }: SvgNavIconProps) {
   return (
     <img
       src={src}
@@ -84,8 +85,8 @@ function SvgNavIcon({ src, alt, active, forceBlack = false }: SvgNavIconProps) {
       aria-hidden="true"
       className="h-[22px] w-[22px] object-contain transition-opacity duration-200"
       style={{
-        opacity: forceBlack ? 1 : active ? 1 : 0.48,
-        filter: forceBlack || active ? 'brightness(0)' : 'grayscale(1) brightness(0.55)',
+        opacity: active || forceBlue ? 1 : 0.62,
+        filter: active || forceBlue ? MENU_BLUE_FILTER : `${MENU_BLUE_FILTER} opacity(62%)`,
       }}
       draggable={false}
     />
@@ -110,25 +111,25 @@ function NavItem({ label, icon, active, onClick, badge }: NavItemProps) {
       style={
         active
           ? {
-              background: 'linear-gradient(160deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.11) 100%)',
-              boxShadow: '0 2px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8)',
+              background: 'linear-gradient(160deg, rgba(37,99,235,0.08) 0%, rgba(37,99,235,0.14) 100%)',
+              boxShadow: '0 2px 16px rgba(37,99,235,0.10), inset 0 1px 0 rgba(255,255,255,0.8)',
             }
           : undefined
       }
     >
       {active && (
         <span
-          className="absolute left-1/2 top-0 h-[3.5px] w-9 -translate-x-1/2 rounded-b-full bg-black"
-          style={{ boxShadow: '0 1px 6px rgba(0,0,0,0.18)' }}
+          className="absolute left-1/2 top-0 h-[3.5px] w-9 -translate-x-1/2 rounded-b-full bg-[#2563EB]"
+          style={{ boxShadow: '0 1px 6px rgba(37,99,235,0.22)' }}
         />
       )}
 
-      <div className={`relative ${active ? 'text-black' : 'text-[#9e9494]'}`}>
+      <div className={`relative ${active ? 'text-[#2563EB]' : 'text-[#2563EB]/65'}`}>
         {icon}
         {badge != null && badge > 0 && (
           <span
-            className="absolute -right-[7px] -top-[6px] flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-black px-[3px] text-[9px] font-bold text-white"
-            style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.22)' }}
+            className="absolute -right-[7px] -top-[6px] flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#2563EB] px-[3px] text-[9px] font-bold text-white"
+            style={{ boxShadow: '0 2px 8px rgba(37,99,235,0.25)' }}
           >
             {badge}
           </span>
@@ -137,7 +138,7 @@ function NavItem({ label, icon, active, onClick, badge }: NavItemProps) {
 
       <span
         className={`text-[10px] tracking-[0.1px] ${
-          active ? 'font-extrabold text-black' : 'font-semibold text-black'
+          active ? 'font-extrabold text-[#2563EB]' : 'font-semibold text-[#2563EB]/70'
         }`}
       >
         {label}
