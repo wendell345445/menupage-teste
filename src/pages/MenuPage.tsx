@@ -11,7 +11,6 @@ import { CookieBanner, hasCookieConsent } from "../components/CookieBanner";
 import { SuspendedStorePage } from "../components/SuspendedStorePage";
 import { StoreHeader } from "../components/StoreHeader";
 import { StoreInfo } from "../components/StoreInfo";
-import { SearchBar } from "../components/SearchBar";
 import { CategoryChips } from "../components/CategoryChips";
 import { CartSummaryBar } from "../components/CartSummaryBar";
 import { BottomNavigation } from "../components/BottomNavigation";
@@ -20,7 +19,6 @@ import { useCartStore } from "../store/useCartStore";
 
 import { useStoreSlug } from "@/hooks/useStoreSlug";
 import { resolveImageUrl } from "@/shared/lib/imageUrl";
-import { toast } from "@/shared/lib/toast";
 
 const THEME_COLOR = "#2563EB";
 const IMAGE_SKELETON_MIN_MS = 800;
@@ -182,6 +180,7 @@ export function MenuPage() {
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isHeaderSearchOpen, setIsHeaderSearchOpen] = useState(false);
   const [isCategorySticky, setIsCategorySticky] = useState(false);
   const [showHeaderIdentity, setShowHeaderIdentity] = useState(false);
   const categoryStickySentinelRef = useRef<HTMLDivElement | null>(null);
@@ -239,9 +238,7 @@ export function MenuPage() {
     };
 
     updateCategoryStickyState();
-    window.addEventListener("scroll", updateCategoryStickyState, {
-      passive: true,
-    });
+    window.addEventListener("scroll", updateCategoryStickyState, { passive: true });
     window.addEventListener("resize", updateCategoryStickyState);
 
     return () => {
@@ -263,6 +260,7 @@ export function MenuPage() {
       setSearch("");
     }
 
+    setIsHeaderSearchOpen(false);
     setActiveCategoryId(categoryId);
 
     window.requestAnimationFrame(() => {
@@ -301,6 +299,7 @@ export function MenuPage() {
       setSearch("");
     }
 
+    setIsHeaderSearchOpen(false);
     setActiveCategoryId(null);
 
     window.requestAnimationFrame(() => {
@@ -352,7 +351,7 @@ export function MenuPage() {
       explicitFeaturedProducts.length > 0
         ? explicitFeaturedProducts
         : allProducts
-    ).slice(0, 6);
+    ).slice(0, 8);
   }, [allProducts]);
 
   const filteredProducts = useMemo(() => {
@@ -560,27 +559,14 @@ export function MenuPage() {
           logo={store.logo}
           primaryColor={THEME_COLOR}
           showCompactIdentity={showHeaderIdentity}
+          searchOpen={isHeaderSearchOpen}
+          searchValue={search}
           onMenuClick={() => setIsSidebarOpen(true)}
-          onShareClick={async () => {
-            const shareData = {
-              title: store.name,
-              text: store.description,
-              url: window.location.href,
-            };
-            if (navigator.share) {
-              try {
-                await navigator.share(shareData);
-                return;
-              } catch (err) {
-                if ((err as DOMException)?.name === "AbortError") return;
-              }
-            }
-            try {
-              await navigator.clipboard.writeText(shareData.url);
-              toast.success("Link copiado!", "Cole onde quiser compartilhar");
-            } catch {
-              toast.error("Não foi possível compartilhar", shareData.url);
-            }
+          onSearchClick={() => setIsHeaderSearchOpen(true)}
+          onSearchChange={setSearch}
+          onSearchClose={() => {
+            setSearch("");
+            setIsHeaderSearchOpen(false);
           }}
         />
 
@@ -594,12 +580,6 @@ export function MenuPage() {
             nextOpenLabel={store.nextOpenLabel}
             minimumOrder={minimumOrder}
             tableNumber={tableNumber}
-          />
-
-          <SearchBar
-            value={search}
-            onChange={setSearch}
-            placeholder="Pesquisar"
           />
 
           {!search.trim() && (
