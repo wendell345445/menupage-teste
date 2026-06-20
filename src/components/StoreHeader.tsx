@@ -31,6 +31,51 @@ export function StoreHeader({
 
   return (
     <>
+      <style>
+        {`
+          @keyframes menuHeaderMessageSlide {
+            0% {
+              opacity: 0;
+              filter: blur(5px);
+              transform: translateX(38px) scale(0.98);
+            }
+
+            10%, 48% {
+              opacity: 1;
+              filter: blur(0);
+              transform: translateX(0) scale(1);
+            }
+
+            58%, 100% {
+              opacity: 0;
+              filter: blur(5px);
+              transform: translateX(-38px) scale(0.98);
+            }
+          }
+
+          .menu-header-message-text {
+            text-shadow:
+              0 1px 1px rgba(15, 23, 42, 0.08),
+              0 0 14px rgba(255, 255, 255, 0.34);
+            -webkit-font-smoothing: antialiased;
+          }
+
+          .menu-header-rotating-message {
+            opacity: 0;
+            animation: menuHeaderMessageSlide 6.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+            will-change: opacity, transform, filter;
+          }
+
+          .menu-header-rotating-message-one {
+            animation-delay: 0s;
+          }
+
+          .menu-header-rotating-message-two {
+            animation-delay: 3.2s;
+          }
+        `}
+      </style>
+
       <section
         className="fixed left-1/2 top-0 z-[90] h-[49px] w-full max-w-[768px] -translate-x-1/2 overflow-visible bg-[#2563EB] shadow-none"
         aria-label={`Cabeçalho de ${storeName}`}
@@ -50,8 +95,8 @@ export function StoreHeader({
           </svg>
         </button>
 
-        {showCompactIdentity && (
-          <div className="absolute inset-y-0 left-[58px] right-[58px] flex min-w-0 items-center justify-center sm:left-[66px] sm:right-[66px]">
+        <div className="absolute inset-y-0 left-[58px] right-[58px] flex min-w-0 items-center justify-center sm:left-[66px] sm:right-[66px]">
+          {showCompactIdentity ? (
             <div className="flex min-w-0 max-w-full items-center justify-center gap-2 rounded-full px-1 py-[2px] transition-all duration-200">
               <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-[12px] border-0 bg-white p-0 shadow-none">
                 <img
@@ -66,8 +111,22 @@ export function StoreHeader({
                 {storeName}
               </h1>
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="relative flex h-full w-full max-w-[240px] items-center justify-center overflow-hidden text-center sm:max-w-[320px]">
+              <div className="menu-header-rotating-message menu-header-rotating-message-one absolute inset-0 flex items-center justify-center">
+                <span className="menu-header-message-text max-w-full truncate px-2 py-[4px] [font-family:'Sen',Helvetica] text-[13px] font-semibold leading-none tracking-[-0.15px] text-white sm:text-[14px]">
+                  Loja aberta
+                </span>
+              </div>
+
+              <div className="menu-header-rotating-message menu-header-rotating-message-two absolute inset-0 flex items-center justify-center">
+                <span className="menu-header-message-text max-w-full truncate px-2 py-[4px] [font-family:'Sen',Helvetica] text-[13px] font-semibold leading-none tracking-[-0.15px] text-white sm:text-[14px]">
+                  Faça seu pedido
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
 
         <button
           type="button"
