@@ -32,14 +32,14 @@ export function StoreHeader({
   return (
     <>
       <section
-        className="fixed left-1/2 top-0 z-[90] h-[49px] w-full max-w-[768px] -translate-x-1/2 overflow-visible bg-[#ffffff] shadow-none"
+        className="fixed left-1/2 top-0 z-[90] h-[49px] w-full max-w-[768px] -translate-x-1/2 overflow-visible bg-[#2563EB] shadow-none"
         aria-label="Cabeçalho da loja"
       >
         <button
           type="button"
           aria-label="Abrir menu"
           onClick={onMenuClick}
-          className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center text-[#574f4f] transition-transform active:scale-95 sm:left-4"
+          className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center text-white transition-transform active:scale-95 sm:left-4"
         >
           {/* Menu hamburguer estilizado (linhas escalonadas) — SVG idêntico ao MenuPanda */}
           <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -62,12 +62,12 @@ export function StoreHeader({
                 />
               </div>
 
-              <h1 className="min-w-0 max-w-[160px] truncate py-[2px] text-center [font-family:'Sen',Helvetica] text-[13px] font-bold leading-[1.2] tracking-[-0.24px] text-[#574f4f] sm:max-w-[260px] sm:text-[14px]">
+              <h1 className="min-w-0 max-w-[160px] truncate py-[2px] text-center [font-family:'Sen',Helvetica] text-[13px] font-bold leading-[1.2] tracking-[-0.24px] text-white sm:max-w-[260px] sm:text-[14px]">
                 {storeName}
               </h1>
             </div>
           ) : (
-            <h1 className="min-w-0 max-w-full truncate py-[2px] text-center text-[18px] font-bold leading-[1.2] tracking-[-0.33px] text-[#574f4f] sm:text-xl">
+            <h1 className="min-w-0 max-w-full truncate py-[2px] text-center text-[18px] font-bold leading-[1.2] tracking-[-0.33px] text-white sm:text-xl">
               {storeName}
             </h1>
           )}
@@ -77,7 +77,7 @@ export function StoreHeader({
           type="button"
           aria-label="Compartilhar"
           onClick={onShareClick}
-          className="absolute right-4 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center text-[#574f4f] transition-transform active:scale-95 sm:right-5"
+          className="absolute right-4 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center text-white transition-transform active:scale-95 sm:right-5"
         >
           {/* Share clássico (3 nós conectados) — SVG idêntico ao MenuPanda */}
           <svg className="h-[20px] w-[20px]" viewBox="0 0 512 512" fill="none" aria-hidden="true">

@@ -223,23 +223,30 @@ export function MenuPage() {
   }, []);
 
   useEffect(() => {
-    const sentinel = categoryStickySentinelRef.current;
-    if (!sentinel) return;
+    let frame = 0;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsCategorySticky(!entry.isIntersecting);
-      },
-      {
-        root: null,
-        threshold: 0,
-        rootMargin: "-49px 0px 0px 0px",
-      },
-    );
+    const updateCategoryStickyState = () => {
+      cancelAnimationFrame(frame);
 
-    observer.observe(sentinel);
+      frame = window.requestAnimationFrame(() => {
+        const sentinel = categoryStickySentinelRef.current;
+        if (!sentinel) return;
 
-    return () => observer.disconnect();
+        // Usa medição direta em vez de depender apenas do IntersectionObserver.
+        // Isso evita a barra continuar branca quando o sticky já encostou na top bar.
+        setIsCategorySticky(sentinel.getBoundingClientRect().top <= 49);
+      });
+    };
+
+    updateCategoryStickyState();
+    window.addEventListener("scroll", updateCategoryStickyState, { passive: true });
+    window.addEventListener("resize", updateCategoryStickyState);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", updateCategoryStickyState);
+      window.removeEventListener("resize", updateCategoryStickyState);
+    };
   }, []);
 
   const handleCategorySelect = (categoryId: string | null) => {
@@ -602,24 +609,60 @@ export function MenuPage() {
                 aria-hidden="true"
               />
 
-              <div className="sticky top-[48px] z-[80] -mx-4 bg-[#ffffff] sm:-mx-6 md:-mx-8">
-                <div
-                  className={[
-                    "relative bg-[#ffffff] px-4 pt-0 pb-1.5 transition-[background,backdrop-filter] duration-200 sm:px-6 md:px-8",
-                    isCategorySticky ? "bg-white/95 backdrop-blur-md" : "",
-                  ].join(" ")}
-                >
+              <div
+                className={[
+                  "sticky top-[48px] z-[80] -mx-4 isolate overflow-visible transition-all duration-200 sm:-mx-6 md:-mx-8",
+                  isCategorySticky
+                    ? "shadow-[0_12px_32px_rgba(15,23,42,0.07)]"
+                    : "bg-white shadow-none",
+                ].join(" ")}
+                style={
+                  isCategorySticky
+                    ? {
+                        background:
+                          "linear-gradient(135deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.42) 52%, rgba(255,255,255,0.64) 100%)",
+                        backdropFilter: "blur(22px) saturate(185%)",
+                        WebkitBackdropFilter: "blur(22px) saturate(185%)",
+                      }
+                    : undefined
+                }
+              >
+                {isCategorySticky && (
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+                  >
+                    <div
+                      className="absolute -left-10 -top-8 h-20 w-36 rounded-full opacity-70 blur-2xl"
+                      style={{
+                        background:
+                          "radial-gradient(circle, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0) 68%)",
+                      }}
+                    />
+                    <div
+                      className="absolute -right-12 -top-10 h-24 w-40 rounded-full opacity-45 blur-2xl"
+                      style={{
+                        background:
+                          "radial-gradient(circle, rgba(37,99,235,0.18) 0%, rgba(37,99,235,0) 70%)",
+                      }}
+                    />
+                    <div className="absolute inset-x-0 top-0 h-px bg-white/75" />
+                  </div>
+                )}
+
+                <div className="relative z-10 px-4 pt-0 pb-1.5 transition-all duration-200 sm:px-6 md:px-8">
                   <CategoryChips
                     categories={categoryOptions}
                     activeId={activeCategoryId}
                     onSelect={handleCategorySelect}
+                    isSticky={isCategorySticky}
                   />
                 </div>
 
                 <div
                   aria-hidden="true"
                   className={[
-                    "pointer-events-none absolute inset-x-0 top-full h-4 bg-gradient-to-b from-white/90 via-white/45 to-transparent transition-opacity duration-200",
+                    "pointer-events-none absolute inset-x-0 top-full h-10 bg-gradient-to-b from-white/45 via-white/16 to-transparent transition-opacity duration-200",
                     isCategorySticky ? "opacity-100" : "opacity-0",
                   ].join(" ")}
                 />
