@@ -95,7 +95,7 @@ export function StoreHeader({
           </svg>
         </button>
 
-        <div className="absolute inset-y-0 left-[58px] right-[58px] flex min-w-0 items-center justify-center sm:left-[66px] sm:right-[66px]">
+        <div className="pointer-events-none absolute inset-y-0 left-0 right-0 flex min-w-0 items-center justify-center px-[64px] sm:px-[72px]">
           {showCompactIdentity ? (
             <div className="flex min-w-0 max-w-full items-center justify-center gap-2 rounded-full px-1 py-[2px] transition-all duration-200">
               <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-[12px] border-0 bg-white p-0 shadow-none">
@@ -112,15 +112,15 @@ export function StoreHeader({
               </h1>
             </div>
           ) : (
-            <div className="relative flex h-full w-full max-w-[240px] items-center justify-center overflow-hidden text-center sm:max-w-[320px]">
+            <div className="relative flex h-full w-full max-w-[280px] items-center justify-center overflow-hidden text-center sm:max-w-[360px]">
               <div className="menu-header-rotating-message menu-header-rotating-message-one absolute inset-0 flex items-center justify-center">
-                <span className="menu-header-message-text max-w-full truncate px-2 py-[4px] [font-family:'Sen',Helvetica] text-[13px] font-semibold leading-none tracking-[-0.15px] text-white sm:text-[14px]">
+                <span className="menu-header-message-text max-w-full truncate px-2 py-[4px] [font-family:'Sen',Helvetica] text-[15px] font-semibold leading-none tracking-[-0.2px] text-white sm:text-[16px]">
                   Loja aberta
                 </span>
               </div>
 
               <div className="menu-header-rotating-message menu-header-rotating-message-two absolute inset-0 flex items-center justify-center">
-                <span className="menu-header-message-text max-w-full truncate px-2 py-[4px] [font-family:'Sen',Helvetica] text-[13px] font-semibold leading-none tracking-[-0.15px] text-white sm:text-[14px]">
+                <span className="menu-header-message-text max-w-full truncate px-2 py-[4px] [font-family:'Sen',Helvetica] text-[15px] font-semibold leading-none tracking-[-0.2px] text-white sm:text-[16px]">
                   Faça seu pedido
                 </span>
               </div>
