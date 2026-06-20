@@ -65,9 +65,8 @@ export function CategoryChips({
                       : {
                           background:
                             "linear-gradient(135deg, rgba(255,255,255,0.44), rgba(255,255,255,0.22))",
-                          border: "1px solid rgba(255,255,255,0.54)",
-                          boxShadow:
-                            "inset 0 1px 0 rgba(255,255,255,0.58)",
+                          border: "1px solid rgba(0,0,0,0.10)",
+                          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.58)",
                           backdropFilter: "blur(14px) saturate(175%)",
                           WebkitBackdropFilter: "blur(14px) saturate(175%)",
                         }
@@ -79,7 +78,7 @@ export function CategoryChips({
                         }
                       : {
                           background: "#ffffff",
-                          border: "1px solid #ece7e7",
+                          border: "1px solid rgba(0,0,0,0.05)",
                           boxShadow: "none",
                         }
                 }
