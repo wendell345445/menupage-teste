@@ -1,27 +1,26 @@
-import { resolveImageUrl } from "@/shared/lib/imageUrl";
+import { resolveImageUrl } from '@/shared/lib/imageUrl'
 
-const PUBLIC_FALLBACK_LOGO =
-  "/burger-or-hamburger-logo-vintage-vector-Graphics-27222106-1.jpg";
+const PUBLIC_FALLBACK_LOGO = '/burger-or-hamburger-logo-vintage-vector-Graphics-27222106-1.jpg'
 
 function getLogoImageUrl(url: string): string {
-  const resolved = resolveImageUrl(url) ?? url;
+  const resolved = resolveImageUrl(url) ?? url
 
-  if (!resolved.includes("cloudinary.com")) return resolved;
+  if (!resolved.includes('cloudinary.com')) return resolved
 
-  return resolved.replace("/upload/", "/upload/f_auto,w_120/");
+  return resolved.replace('/upload/', '/upload/f_auto,w_120/')
 }
 
 interface Props {
-  storeName: string;
-  logo?: string | null;
-  primaryColor?: string | null;
-  showCompactIdentity?: boolean;
-  searchOpen?: boolean;
-  searchValue?: string;
-  onMenuClick?: () => void;
-  onSearchClick?: () => void;
-  onSearchChange?: (value: string) => void;
-  onSearchClose?: () => void;
+  storeName: string
+  logo?: string | null
+  primaryColor?: string | null
+  showCompactIdentity?: boolean
+  searchOpen?: boolean
+  searchValue?: string
+  onMenuClick?: () => void
+  onSearchClick?: () => void
+  onSearchChange?: (value: string) => void
+  onSearchClose?: () => void
 }
 
 export function StoreHeader({
@@ -29,14 +28,14 @@ export function StoreHeader({
   logo,
   showCompactIdentity = false,
   searchOpen = false,
-  searchValue = "",
+  searchValue = '',
   onMenuClick,
   onSearchClick,
   onSearchChange,
   onSearchClose,
 }: Props) {
-  const displayLogo = logo || PUBLIC_FALLBACK_LOGO;
-  const logoUrl = getLogoImageUrl(displayLogo);
+  const displayLogo = logo || PUBLIC_FALLBACK_LOGO
+  const logoUrl = getLogoImageUrl(displayLogo)
 
   return (
     <>
@@ -86,7 +85,7 @@ export function StoreHeader({
       </style>
 
       <section
-        className="fixed left-1/2 top-0 z-[90] h-[49px] w-full max-w-[768px] -translate-x-1/2 overflow-visible bg-[var(--menu-primary)] shadow-none"
+        className="fixed inset-x-0 top-0 z-[90] mx-auto h-[49px] w-full max-w-[768px] overflow-visible bg-[var(--menu-primary)] shadow-none"
         aria-label={`Cabeçalho de ${storeName}`}
       >
         <button
@@ -96,13 +95,7 @@ export function StoreHeader({
           className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center text-white transition-transform active:scale-95 sm:left-4"
         >
           {/* Menu hamburguer estilizado (linhas escalonadas) — SVG idêntico ao MenuPanda */}
-          <svg
-            width="36"
-            height="36"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
               d="M16 7H3a1 1 0 0 1 0-2h13a1 1 0 0 1 0 2zm6 5a1 1 0 0 0-1-1H3a1 1 0 0 0 0 2h18a1 1 0 0 0 1-1zm-9 6a1 1 0 0 0-1-1H3a1 1 0 0 0 0 2h9a1 1 0 0 0 1-1z"
               fill="currentColor"
@@ -113,12 +106,7 @@ export function StoreHeader({
         <div className="absolute inset-y-0 left-[62px] right-[62px] flex min-w-0 items-center justify-center sm:left-[72px] sm:right-[72px]">
           {searchOpen ? (
             <div className="flex h-[30px] w-full max-w-[320px] items-center gap-1.5 rounded-full bg-white px-2.5 shadow-[0_6px_18px_rgba(15,23,42,0.10)] ring-1 ring-white/35">
-              <svg
-                className="h-[15px] w-[15px] shrink-0 text-[var(--menu-primary)]"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
+              <svg className="h-[15px] w-[15px] shrink-0 text-[var(--menu-primary)]" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path
                   d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
                   stroke="currentColor"
@@ -133,7 +121,7 @@ export function StoreHeader({
                 onChange={(event) => onSearchChange?.(event.target.value)}
                 autoFocus
                 placeholder="Pesquisar"
-                className="min-w-0 flex-1 bg-transparent [font-family:'Sen',Helvetica] text-[13px] font-semibold text-[#2e2828] outline-none placeholder:text-[#8b8585]"
+                className="min-w-0 flex-1 bg-transparent [font-family:'Sen',Helvetica] text-[16px] font-semibold text-[#2e2828] outline-none placeholder:text-[#8b8585] sm:text-[13px]"
               />
 
               <button
@@ -142,12 +130,7 @@ export function StoreHeader({
                 onClick={onSearchClose}
                 className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[#8b8585] transition-colors hover:bg-black/5 hover:text-[#2e2828]"
               >
-                <svg
-                  className="h-[12px] w-[12px]"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  aria-hidden="true"
-                >
+                <svg className="h-[12px] w-[12px]" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path
                     d="M18 6 6 18M6 6l12 12"
                     stroke="currentColor"
@@ -196,12 +179,7 @@ export function StoreHeader({
             onClick={onSearchClick}
             className="absolute right-4 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/20 text-white ring-1 ring-white/30 backdrop-blur-md transition-transform hover:bg-white/25 active:scale-95 sm:right-5"
           >
-            <svg
-              className="h-[17px] w-[17px]"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden="true"
-            >
+            <svg className="h-[17px] w-[17px]" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path
                 d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
                 stroke="currentColor"
@@ -216,5 +194,5 @@ export function StoreHeader({
 
       <div aria-hidden="true" className="h-[49px]" />
     </>
-  );
+  )
 }
