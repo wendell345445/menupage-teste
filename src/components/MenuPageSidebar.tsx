@@ -6,7 +6,6 @@ import {
   ReceiptText,
   ShoppingBag,
   Info,
-  Wallet,
   X,
 } from 'lucide-react'
 
@@ -54,9 +53,6 @@ function getLogoImageUrl(url?: string | null): string {
   return resolved.replace('/upload/', '/upload/f_auto,w_180/')
 }
 
-function fmtBRL(value: number) {
-  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-}
 
 export function MenuPageSidebar({
   open,
@@ -64,7 +60,6 @@ export function MenuPageSidebar({
   storeName,
   logo,
   isOpen,
-  minimumOrder,
   activeCategoryId,
   hasFeaturedProducts,
   cartQuantity,
@@ -94,59 +89,48 @@ export function MenuPageSidebar({
           <div className="relative overflow-hidden border-b border-black/5 px-5 pb-5 pt-5">
             <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/[0.045] to-transparent" />
 
-            <div className="relative flex items-start justify-between gap-3">
-              <div className="flex min-w-0 items-center gap-3">
-                <div className="h-12 w-12 shrink-0 overflow-hidden rounded-[16px] bg-white">
-                  <img
-                    src={logoUrl}
-                    alt={storeName}
-                    className="block h-full w-full object-cover object-center"
-                    loading="eager"
-                    draggable={false}
-                  />
-                </div>
+            <div className="relative flex min-w-0 items-center gap-3.5 pr-11">
+              <div className="h-14 w-14 shrink-0 overflow-hidden rounded-[17px] bg-white">
+                <img
+                  src={logoUrl}
+                  alt={storeName}
+                  className="block h-full w-full object-cover object-center"
+                  loading="eager"
+                  draggable={false}
+                />
+              </div>
 
-                <div className="min-w-0">
-                  <SheetTitle className="truncate font-sen text-[14px] font-bold leading-[1.25] tracking-[-0.25px] text-[#2e2828]">
-                    {storeName}
-                  </SheetTitle>
+              <div className="min-w-0 flex-1">
+                <SheetTitle className="truncate font-sen text-[15px] font-bold leading-[1.3] tracking-[-0.28px] text-[#2e2828]">
+                  {storeName}
+                </SheetTitle>
 
-                  <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                <span
+                  className={[
+                    'mt-1.5 inline-flex items-center gap-1.5 text-[11px] font-semibold leading-none',
+                    isOpen ? 'text-[#1f9f4a]' : 'text-[#d13f3f]',
+                  ].join(' ')}
+                >
+                  <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
+                    {isOpen && (
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#1f9f4a] opacity-60" />
+                    )}
                     <span
                       className={[
-                        'inline-flex h-6 items-center gap-1.5 px-0 text-[10px] font-bold',
-                        isOpen ? 'text-[#1f9f4a]' : 'text-[#d13f3f]',
+                        'relative inline-flex h-2 w-2 rounded-full',
+                        isOpen ? 'bg-[#1f9f4a]' : 'bg-[#d13f3f]',
                       ].join(' ')}
-                    >
-                      <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
-                        {isOpen && (
-                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#1f9f4a] opacity-60" />
-                        )}
-                        <span
-                          className={[
-                            'relative inline-flex h-2 w-2 rounded-full',
-                            isOpen ? 'bg-[#1f9f4a]' : 'bg-[#d13f3f]',
-                          ].join(' ')}
-                        />
-                      </span>
-                      {isOpen ? 'Aberto agora' : 'Fechado'}
-                    </span>
-
-                    {minimumOrder != null && minimumOrder > 0 && (
-                      <span className="inline-flex h-6 items-center gap-1 rounded-full bg-black/[0.04] px-2 text-[10px] font-bold text-[#574f4f]">
-                        <Wallet className="h-3 w-3" strokeWidth={2.2} />
-                        Mín. {fmtBRL(minimumOrder)}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                    />
+                  </span>
+                  {isOpen ? 'Aberto agora' : 'Fechado'}
+                </span>
               </div>
 
               <button
                 type="button"
                 aria-label="Fechar menu"
                 onClick={() => onOpenChange(false)}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-black text-white transition-transform hover:bg-black/90 focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 active:scale-95"
+                className="absolute right-0 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black text-white transition-transform hover:bg-black/90 focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 active:scale-95"
               >
                 <X className="h-[17px] w-[17px]" strokeWidth={2.4} />
               </button>
