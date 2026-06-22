@@ -15,6 +15,7 @@ import { CategoryChips } from "../components/CategoryChips";
 import { CartSummaryBar } from "../components/CartSummaryBar";
 import { BottomNavigation } from "../components/BottomNavigation";
 import { MenuPageSidebar } from "../components/MenuPageSidebar";
+import { MenuIntro } from "../components/MenuIntro";
 import { useCartStore } from "../store/useCartStore";
 
 import { useStoreSlug } from "@/hooks/useStoreSlug";
@@ -178,6 +179,7 @@ export function MenuPage() {
   const subtotal = useCartStore((s) => s.subtotal);
   const cartCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
 
+  const [showIntro, setShowIntro] = useState(true);
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -194,6 +196,19 @@ export function MenuPage() {
   useEffect(() => {
     if (slug && slug !== "__custom_domain__") setStore(slug);
   }, [slug, setStore]);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    const timer = window.setTimeout(
+      () => setShowIntro(false),
+      prefersReducedMotion ? 120 : 1700,
+    );
+
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     let frame = 0;
@@ -484,22 +499,28 @@ export function MenuPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-dvh bg-[#ffffff] [font-family:'Sen',Helvetica] antialiased">
-        <div className="h-[49px] bg-[#ffffff]" />
-        <div className="mx-auto grid max-w-[768px] grid-cols-1 gap-3 px-4 pt-5 sm:grid-cols-2 sm:px-6 md:px-8">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <SkeletonCard key={i} />
-          ))}
+      <>
+        <MenuIntro visible={showIntro} />
+        <div className="min-h-dvh bg-[#ffffff] [font-family:'Sen',Helvetica] antialiased">
+          <div className="h-[49px] bg-[#ffffff]" />
+          <div className="mx-auto grid max-w-[768px] grid-cols-1 gap-3 px-4 pt-5 sm:grid-cols-2 sm:px-6 md:px-8">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   if (!data) {
     return (
-      <div className="flex min-h-dvh items-center justify-center [font-family:'Sen',Helvetica] antialiased">
-        <p className="text-gray-500">Cardápio não encontrado.</p>
-      </div>
+      <>
+        <MenuIntro visible={showIntro} />
+        <div className="flex min-h-dvh items-center justify-center [font-family:'Sen',Helvetica] antialiased">
+          <p className="text-gray-500">Cardápio não encontrado.</p>
+        </div>
+      </>
     );
   }
 
@@ -507,7 +528,12 @@ export function MenuPage() {
   // retorna os produtos, mas escondemos no frontend pra não dar a falsa
   // impressão de loja operando.
   if (data.store.storeStatus === "suspended") {
-    return <SuspendedStorePage storeName={data.store.name} />;
+    return (
+      <>
+        <MenuIntro visible={showIntro} />
+        <SuspendedStorePage storeName={data.store.name} />
+      </>
+    );
   }
 
   const { store, categories } = data;
@@ -523,6 +549,8 @@ export function MenuPage() {
 
   return (
     <div className="min-h-dvh w-full overflow-x-clip bg-[#ffffff] [font-family:'Sen',Helvetica] antialiased text-menu-text">
+      <MenuIntro visible={showIntro} />
+
       {store.facebookPixelId && hasCookieConsent() && (
         <FacebookPixel pixelId={store.facebookPixelId} />
       )}
