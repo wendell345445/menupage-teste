@@ -15,7 +15,7 @@ import { CategoryChips } from "../components/CategoryChips";
 import { CartSummaryBar } from "../components/CartSummaryBar";
 import { BottomNavigation } from "../components/BottomNavigation";
 import { MenuPageSidebar } from "../components/MenuPageSidebar";
-import { MenuIntro } from "../components/MenuIntro";
+import { MenuShimmer } from "../components/MenuShimmer";
 import { useCartStore } from "../store/useCartStore";
 
 import { useStoreSlug } from "@/hooks/useStoreSlug";
@@ -23,6 +23,7 @@ import { getMenuThemeFromUrl } from "@/lib/menuThemes";
 import { resolveImageUrl } from "@/shared/lib/imageUrl";
 
 const IMAGE_SKELETON_MIN_MS = 800;
+const CONTENT_SKELETON_MIN_MS = 800;
 
 function getMinimumOrderValue(store: unknown) {
   const source = store as {
@@ -179,13 +180,13 @@ export function MenuPage() {
   const subtotal = useCartStore((s) => s.subtotal);
   const cartCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
 
-  const [showIntro, setShowIntro] = useState(true);
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isHeaderSearchOpen, setIsHeaderSearchOpen] = useState(false);
   const [isCategorySticky, setIsCategorySticky] = useState(false);
   const [showHeaderIdentity, setShowHeaderIdentity] = useState(false);
+  const [showContentSkeleton, setShowContentSkeleton] = useState(true);
   const categoryStickySentinelRef = useRef<HTMLDivElement | null>(null);
   const menuContentStartRef = useRef<HTMLDivElement | null>(null);
   const featuredSectionRef = useRef<HTMLElement | null>(null);
@@ -198,17 +199,18 @@ export function MenuPage() {
   }, [slug, setStore]);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    if (isLoading || !data) {
+      setShowContentSkeleton(true);
+      return;
+    }
 
-    const timer = window.setTimeout(
-      () => setShowIntro(false),
-      prefersReducedMotion ? 120 : 1700,
-    );
+    setShowContentSkeleton(true);
+    const timer = window.setTimeout(() => {
+      setShowContentSkeleton(false);
+    }, CONTENT_SKELETON_MIN_MS);
 
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [isLoading, data]);
 
   useEffect(() => {
     let frame = 0;
@@ -499,28 +501,106 @@ export function MenuPage() {
 
   if (isLoading) {
     return (
-      <>
-        <MenuIntro visible={showIntro} />
-        <div className="min-h-dvh bg-[#ffffff] [font-family:'Sen',Helvetica] antialiased">
-          <div className="h-[49px] bg-[#ffffff]" />
-          <div className="mx-auto grid max-w-[768px] grid-cols-1 gap-3 px-4 pt-5 sm:grid-cols-2 sm:px-6 md:px-8">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <SkeletonCard key={i} />
-            ))}
-          </div>
+      <div className="min-h-dvh w-full overflow-x-clip bg-[#ffffff] [font-family:'Sen',Helvetica] antialiased text-menu-text">
+        <ThemeInjector
+          primaryColor={selectedTheme.primaryColor}
+          secondaryColor={selectedTheme.secondaryColor}
+        />
+
+        <div
+          className="mx-auto flex min-h-dvh w-full max-w-[768px] flex-col bg-[#ffffff]"
+          style={{
+            paddingBottom: `calc(${cartCount > 0 ? 152 : 86}px + env(safe-area-inset-bottom))`,
+          }}
+        >
+          {/* A top bar permanece normal durante o carregamento, sem skeleton. */}
+          <StoreHeader
+            storeName="Cardápio"
+            logo={null}
+            primaryColor={selectedTheme.primaryColor}
+            showCompactIdentity={false}
+            searchOpen={isHeaderSearchOpen}
+            searchValue={search}
+            onMenuClick={() => setIsSidebarOpen(true)}
+            onSearchClick={() => setIsHeaderSearchOpen(true)}
+            onSearchChange={setSearch}
+            onSearchClose={() => {
+              setSearch("");
+              setIsHeaderSearchOpen(false);
+            }}
+          />
+
+          <main className="w-full flex-1 px-4 pt-5 sm:px-6 md:px-8">
+            <StoreInfo
+              name=""
+              logo={null}
+              address=""
+              isOpen
+              minimumOrder={20}
+              isLoading
+            />
+
+            <div className="h-3" aria-hidden="true" />
+
+            <CategoryChips
+              categories={[]}
+              activeId={null}
+              onSelect={() => undefined}
+              isLoading
+            />
+
+            <section className="relative z-0 mt-3" aria-label="Carregando destaques">
+              <div className="mb-2.5 flex items-center gap-1.5">
+                <MenuShimmer className="h-4 w-4 rounded-full" />
+                <MenuShimmer className="h-[18px] w-[148px] rounded-full" />
+              </div>
+
+              <div className="-mx-4 overflow-hidden px-4 pb-1 sm:-mx-6 sm:px-6 md:-mx-8 md:px-8">
+                <div className="flex items-start gap-3">
+                  {Array.from({ length: 4 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="flex w-[132px] shrink-0 flex-col sm:w-[150px]"
+                      aria-hidden="true"
+                    >
+                      <MenuShimmer className="h-[104px] w-full rounded-[10px] sm:h-[118px]" />
+                      <MenuShimmer className="mt-2 h-[12px] w-[82%] rounded-full" />
+                      <MenuShimmer className="mt-2 h-[14px] w-[70px] rounded-full" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <SkeletonCard key={i} />
+              ))}
+            </div>
+          </main>
         </div>
-      </>
+
+        <CartSummaryBar
+          quantity={cartCount}
+          total={subtotal()}
+          onClick={() => navigate("/carrinho")}
+        />
+
+        {/* A menu bar inferior também permanece normal, sem skeleton. */}
+        <BottomNavigation
+          cartQuantity={cartCount}
+          onCartClick={() => navigate("/carrinho")}
+          tableMode={isTableMode}
+        />
+      </div>
     );
   }
 
   if (!data) {
     return (
-      <>
-        <MenuIntro visible={showIntro} />
-        <div className="flex min-h-dvh items-center justify-center [font-family:'Sen',Helvetica] antialiased">
+      <div className="flex min-h-dvh items-center justify-center [font-family:'Sen',Helvetica] antialiased">
           <p className="text-gray-500">Cardápio não encontrado.</p>
-        </div>
-      </>
+      </div>
     );
   }
 
@@ -528,12 +608,7 @@ export function MenuPage() {
   // retorna os produtos, mas escondemos no frontend pra não dar a falsa
   // impressão de loja operando.
   if (data.store.storeStatus === "suspended") {
-    return (
-      <>
-        <MenuIntro visible={showIntro} />
-        <SuspendedStorePage storeName={data.store.name} />
-      </>
-    );
+    return <SuspendedStorePage storeName={data.store.name} />;
   }
 
   const { store, categories } = data;
@@ -549,8 +624,6 @@ export function MenuPage() {
 
   return (
     <div className="min-h-dvh w-full overflow-x-clip bg-[#ffffff] [font-family:'Sen',Helvetica] antialiased text-menu-text">
-      <MenuIntro visible={showIntro} />
-
       {store.facebookPixelId && hasCookieConsent() && (
         <FacebookPixel pixelId={store.facebookPixelId} />
       )}
@@ -614,6 +687,7 @@ export function MenuPage() {
             nextOpenLabel={store.nextOpenLabel}
             minimumOrder={minimumOrder}
             tableNumber={tableNumber}
+            isLoading={showContentSkeleton}
           />
 
           {!search.trim() && (
@@ -672,6 +746,7 @@ export function MenuPage() {
                     activeId={activeCategoryId}
                     onSelect={handleCategorySelect}
                     isSticky={isCategorySticky}
+                    isLoading={showContentSkeleton}
                   />
                 </div>
 
@@ -724,18 +799,30 @@ export function MenuPage() {
                   aria-labelledby="featured-products"
                 >
                   <div className="mb-2.5 flex items-center gap-1.5">
-                    <span
-                      className="flex h-4 w-4 shrink-0 items-center justify-center text-[13px] leading-none"
-                      aria-hidden="true"
-                    >
-                      🏅
-                    </span>
-                    <h2
-                      id="featured-products"
-                      className="text-[18px] font-bold leading-none tracking-[-0.35px] text-[#4a4a4a]"
-                    >
-                      Destaques do Dia
-                    </h2>
+                    {showContentSkeleton ? (
+                      <>
+                        <MenuShimmer className="h-4 w-4 shrink-0 rounded-full" />
+                        <h2 id="featured-products" className="leading-none">
+                          <MenuShimmer className="h-[18px] w-[148px] rounded-full" />
+                          <span className="sr-only">Destaques do Dia</span>
+                        </h2>
+                      </>
+                    ) : (
+                      <>
+                        <span
+                          className="flex h-4 w-4 shrink-0 items-center justify-center text-[13px] leading-none"
+                          aria-hidden="true"
+                        >
+                          🏅
+                        </span>
+                        <h2
+                          id="featured-products"
+                          className="text-[18px] font-bold leading-none tracking-[-0.35px] text-[#4a4a4a]"
+                        >
+                          Destaques do Dia
+                        </h2>
+                      </>
+                    )}
                   </div>
 
                   <div className="-mx-4 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:-mx-6 sm:px-6 md:-mx-8 md:px-8 [&::-webkit-scrollbar]:hidden">
@@ -772,18 +859,28 @@ export function MenuPage() {
                             </div>
 
                             <div className="mt-1.5 flex min-h-[58px] flex-col justify-start">
-                              <h3 className="line-clamp-1 text-[12px] font-semibold leading-tight tracking-[-0.16px] text-[#4a4a4a] sm:text-[13px]">
-                                {product.name}
-                              </h3>
+                              {showContentSkeleton ? (
+                                <MenuShimmer className="h-[12px] w-[82%] rounded-full sm:h-[13px]" />
+                              ) : (
+                                <h3 className="line-clamp-1 text-[12px] font-semibold leading-tight tracking-[-0.16px] text-[#4a4a4a] sm:text-[13px]">
+                                  {product.name}
+                                </h3>
+                              )}
 
-                              {finalPrice > 0 && (
-                                <span className="mt-1 block whitespace-nowrap text-[13px] font-black leading-none tracking-[-0.25px] text-[#1f8f18] sm:text-[14px]">
-                                  {fmtBRL(finalPrice)}
-                                </span>
+                              {showContentSkeleton ? (
+                                <MenuShimmer className="mt-1 h-[14px] w-[72px] rounded-full" />
+                              ) : (
+                                finalPrice > 0 && (
+                                  <span className="mt-1 block whitespace-nowrap text-[13px] font-black leading-none tracking-[-0.25px] text-[#1f8f18] sm:text-[14px]">
+                                    {fmtBRL(finalPrice)}
+                                  </span>
+                                )
                               )}
 
                               <div className="mt-1 flex min-h-[12px] items-center gap-1">
-                                {hasPromo ? (
+                                {showContentSkeleton ? (
+                                  <MenuShimmer className="h-[9px] w-[48px] rounded-full" />
+                                ) : hasPromo ? (
                                   <>
                                     <span className="whitespace-nowrap text-[9px] font-semibold leading-none text-[#4a4a4a] line-through sm:text-[10px]">
                                       {fmtBRL(basePrice)}
@@ -814,13 +911,35 @@ export function MenuPage() {
                   aria-labelledby={`cat-${cat.id}`}
                 >
                   <div className="flex w-fit flex-col gap-[5px]">
-                    <h2
-                      id={`cat-${cat.id}`}
-                      className="text-xl font-semibold leading-none tracking-[-0.33px] text-[#574f4f]"
-                    >
-                      {cat.name}
-                    </h2>
-                    <div className="ml-[1.5px] h-0.5 w-[calc(100%-1.5px)] rounded-full bg-menu-primary" />
+                    {showContentSkeleton ? (
+                      <>
+                        <h2 id={`cat-${cat.id}`} className="leading-none">
+                          <MenuShimmer
+                            className="h-5 rounded-full"
+                            style={{
+                              width: `${Math.min(Math.max(cat.name.length * 9, 84), 190)}px`,
+                            }}
+                          />
+                          <span className="sr-only">{cat.name}</span>
+                        </h2>
+                        <MenuShimmer
+                          className="ml-[1.5px] h-0.5 rounded-full"
+                          style={{
+                            width: `${Math.min(Math.max(cat.name.length * 9 - 2, 82), 188)}px`,
+                          }}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <h2
+                          id={`cat-${cat.id}`}
+                          className="text-xl font-semibold leading-none tracking-[-0.33px] text-[#574f4f]"
+                        >
+                          {cat.name}
+                        </h2>
+                        <div className="ml-[1.5px] h-0.5 w-[calc(100%-1.5px)] rounded-full bg-menu-primary" />
+                      </>
+                    )}
                   </div>
 
                   <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">

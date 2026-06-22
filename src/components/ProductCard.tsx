@@ -207,22 +207,26 @@ export function ProductCard({ product, onNavigate }: Props) {
             🍽️
           </div>
         )}
-        <button
-          type="button"
-          aria-label={
-            canQuickAdd
-              ? `Adicionar ${product.name} ao carrinho`
-              : `Ver opções de ${product.name}`
-          }
-          onClick={handleQuickAdd}
-          className="absolute bottom-[6px] right-[6px] flex h-5 w-5 items-center justify-center rounded-full shadow-menu-sm transition-transform active:scale-90"
-          style={{
-            background:
-              "linear-gradient(135deg, var(--menu-gradient-from) 0%, var(--menu-gradient-to) 100%)",
-          }}
-        >
-          <Plus className="h-[10px] w-[10px] text-white" strokeWidth={3} />
-        </button>
+        {showContentSkeleton ? (
+          <ShimmerSurface className="absolute bottom-[6px] right-[6px] z-20 h-5 w-5 rounded-full border border-white/70" />
+        ) : (
+          <button
+            type="button"
+            aria-label={
+              canQuickAdd
+                ? `Adicionar ${product.name} ao carrinho`
+                : `Ver opções de ${product.name}`
+            }
+            onClick={handleQuickAdd}
+            className="absolute bottom-[6px] right-[6px] z-20 flex h-5 w-5 items-center justify-center rounded-full shadow-menu-sm transition-transform active:scale-90"
+            style={{
+              background:
+                "linear-gradient(135deg, var(--menu-gradient-from) 0%, var(--menu-gradient-to) 100%)",
+            }}
+          >
+            <Plus className="h-[10px] w-[10px] text-white" strokeWidth={3} />
+          </button>
+        )}
       </div>
     </article>
   );
