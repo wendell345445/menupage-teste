@@ -703,16 +703,20 @@ export function MenuPage() {
                 className={[
                   "sticky top-[48px] z-[80] -mx-4 isolate overflow-visible transition-all duration-200 sm:-mx-6 md:-mx-8",
                   isCategorySticky
-                    ? "shadow-[0_12px_32px_rgba(15,23,42,0.07)]"
+                    ? "shadow-[0_12px_30px_rgba(15,23,42,0.07)]"
                     : "bg-white shadow-none",
                 ].join(" ")}
                 style={
                   isCategorySticky
                     ? {
                         background:
-                          "linear-gradient(135deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.42) 52%, rgba(255,255,255,0.64) 100%)",
-                        backdropFilter: "blur(22px) saturate(185%)",
-                        WebkitBackdropFilter: "blur(22px) saturate(185%)",
+                          "linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.50) 46%, rgba(255,255,255,0.66) 100%)",
+                        backdropFilter:
+                          "blur(18px) saturate(190%) brightness(1.08) contrast(1.04)",
+                        WebkitBackdropFilter:
+                          "blur(18px) saturate(190%) brightness(1.08) contrast(1.04)",
+                        boxShadow:
+                          "0 10px 28px rgba(15,23,42,0.055), inset 0 1px 0 rgba(255,255,255,0.92), inset 0 -1px 0 rgba(255,255,255,0.46)",
                       }
                     : undefined
                 }
@@ -723,24 +727,30 @@ export function MenuPage() {
                     className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
                   >
                     <div
-                      className="absolute -left-10 -top-8 h-20 w-36 rounded-full opacity-70 blur-2xl"
+                      className="absolute inset-0"
                       style={{
                         background:
-                          "radial-gradient(circle, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0) 68%)",
+                          "radial-gradient(140% 90% at 18% -35%, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.28) 31%, transparent 62%), radial-gradient(110% 80% at 86% 110%, rgba(255,255,255,0.42) 0%, transparent 54%), linear-gradient(180deg, rgba(255,255,255,0.46) 0%, rgba(255,255,255,0.08) 38%, rgba(255,255,255,0.24) 100%)",
                       }}
                     />
+
+                    <div className="absolute left-5 right-5 top-0 h-px bg-white/90" />
+
                     <div
-                      className="absolute -right-12 -top-10 h-24 w-40 rounded-full opacity-45 blur-2xl"
+                      className="absolute -inset-x-12 top-0 h-full opacity-55 blur-[0.4px]"
                       style={{
                         background:
-                          "radial-gradient(circle, color-mix(in srgb, var(--menu-primary) 18%, transparent) 0%, transparent 70%)",
+                          "linear-gradient(105deg, transparent 0%, transparent 8%, rgba(255,255,255,0.48) 14%, rgba(255,255,255,0.10) 19%, transparent 28%, transparent 66%, rgba(255,255,255,0.22) 76%, transparent 88%)",
+                        maskImage:
+                          "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
+                        WebkitMaskImage:
+                          "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
                       }}
                     />
-                    <div className="absolute inset-x-0 top-0 h-px bg-white/75" />
                   </div>
                 )}
 
-                <div className="relative z-10 px-4 pt-0 pb-1.5 transition-all duration-200 sm:px-6 md:px-8">
+                <div className="relative z-10 px-4 pt-0 pb-0.5 transition-all duration-200 sm:px-6 md:px-8">
                   <CategoryChips
                     categories={categoryOptions}
                     activeId={activeCategoryId}
@@ -753,7 +763,7 @@ export function MenuPage() {
                 <div
                   aria-hidden="true"
                   className={[
-                    "pointer-events-none absolute inset-x-0 top-full h-10 bg-gradient-to-b from-white/45 via-white/16 to-transparent transition-opacity duration-200",
+                    "pointer-events-none absolute inset-x-0 top-full h-5 bg-gradient-to-b from-white/40 via-white/12 to-transparent transition-opacity duration-200",
                     isCategorySticky ? "opacity-100" : "opacity-0",
                   ].join(" ")}
                 />
