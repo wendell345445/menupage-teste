@@ -96,6 +96,52 @@ function ImageShimmerSkeleton({
   );
 }
 
+
+function CategoryMetaGlassEffectAssets() {
+  return (
+    <style>{`
+      @keyframes category-meta-glass-drift {
+        0% { transform: translate3d(-5%, -8%, 0) scale(1.02); opacity: 0.55; }
+        50% { transform: translate3d(4%, 5%, 0) scale(1.08); opacity: 0.72; }
+        100% { transform: translate3d(7%, -3%, 0) scale(1.04); opacity: 0.58; }
+      }
+
+      @keyframes category-meta-glass-sheen {
+        0% { transform: translateX(-40%) skewX(-14deg); opacity: 0.12; }
+        50% { opacity: 0.28; }
+        100% { transform: translateX(42%) skewX(-14deg); opacity: 0.16; }
+      }
+
+      .category-meta-glass-left,
+      .category-meta-glass-right {
+        animation: category-meta-glass-drift 8s ease-in-out infinite alternate;
+        mix-blend-mode: screen;
+        will-change: transform, opacity;
+      }
+
+      .category-meta-glass-right {
+        animation-duration: 10s;
+        animation-direction: alternate-reverse;
+      }
+
+      .category-meta-glass-sheen {
+        animation: category-meta-glass-sheen 7s ease-in-out infinite alternate;
+        background: linear-gradient(105deg, transparent 0%, rgba(255,255,255,0.08) 32%, rgba(255,255,255,0.42) 48%, rgba(255,255,255,0.10) 62%, transparent 100%);
+        mix-blend-mode: screen;
+        will-change: transform, opacity;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .category-meta-glass-left,
+        .category-meta-glass-right,
+        .category-meta-glass-sheen {
+          animation: none;
+        }
+      }
+    `}</style>
+  );
+}
+
 function FeaturedProductImage({
   imageUrl,
   alt,
@@ -506,6 +552,7 @@ export function MenuPage() {
           primaryColor={selectedTheme.primaryColor}
           secondaryColor={selectedTheme.secondaryColor}
         />
+        <CategoryMetaGlassEffectAssets />
 
         <div
           className="mx-auto flex min-h-dvh w-full max-w-[768px] flex-col bg-[#ffffff]"
@@ -631,6 +678,7 @@ export function MenuPage() {
         primaryColor={selectedTheme.primaryColor}
         secondaryColor={selectedTheme.secondaryColor}
       />
+      <CategoryMetaGlassEffectAssets />
 
       <MenuPageSidebar
         open={isSidebarOpen}
@@ -703,20 +751,20 @@ export function MenuPage() {
                 className={[
                   "sticky top-[48px] z-[80] -mx-4 isolate overflow-visible transition-all duration-200 sm:-mx-6 md:-mx-8",
                   isCategorySticky
-                    ? "shadow-[0_12px_30px_rgba(15,23,42,0.07)]"
+                    ? "shadow-[0_12px_32px_rgba(15,23,42,0.07)]"
                     : "bg-white shadow-none",
                 ].join(" ")}
                 style={
                   isCategorySticky
                     ? {
                         background:
-                          "linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.50) 46%, rgba(255,255,255,0.66) 100%)",
+                          "linear-gradient(180deg, rgba(255,255,255,0.76) 0%, rgba(255,255,255,0.46) 54%, rgba(255,255,255,0.62) 100%)",
                         backdropFilter:
-                          "blur(18px) saturate(190%) brightness(1.08) contrast(1.04)",
+                          "blur(24px) saturate(205%) contrast(1.12) brightness(1.02)",
                         WebkitBackdropFilter:
-                          "blur(18px) saturate(190%) brightness(1.08) contrast(1.04)",
+                          "blur(24px) saturate(205%) contrast(1.12) brightness(1.02)",
                         boxShadow:
-                          "0 10px 28px rgba(15,23,42,0.055), inset 0 1px 0 rgba(255,255,255,0.92), inset 0 -1px 0 rgba(255,255,255,0.46)",
+                          "0 12px 32px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.88), inset 0 -1px 0 rgba(255,255,255,0.38)",
                       }
                     : undefined
                 }
@@ -727,26 +775,21 @@ export function MenuPage() {
                     className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
                   >
                     <div
-                      className="absolute inset-0"
+                      className="category-meta-glass-left absolute -left-10 -top-8 h-20 w-36 rounded-full opacity-70 blur-2xl"
                       style={{
                         background:
-                          "radial-gradient(140% 90% at 18% -35%, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.28) 31%, transparent 62%), radial-gradient(110% 80% at 86% 110%, rgba(255,255,255,0.42) 0%, transparent 54%), linear-gradient(180deg, rgba(255,255,255,0.46) 0%, rgba(255,255,255,0.08) 38%, rgba(255,255,255,0.24) 100%)",
+                          "radial-gradient(ellipse at center, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.30) 34%, rgba(255,255,255,0) 70%)",
                       }}
                     />
-
-                    <div className="absolute left-5 right-5 top-0 h-px bg-white/90" />
-
                     <div
-                      className="absolute -inset-x-12 top-0 h-full opacity-55 blur-[0.4px]"
+                      className="category-meta-glass-right absolute -right-12 -top-10 h-24 w-40 rounded-full opacity-45 blur-2xl"
                       style={{
                         background:
-                          "linear-gradient(105deg, transparent 0%, transparent 8%, rgba(255,255,255,0.48) 14%, rgba(255,255,255,0.10) 19%, transparent 28%, transparent 66%, rgba(255,255,255,0.22) 76%, transparent 88%)",
-                        maskImage:
-                          "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
-                        WebkitMaskImage:
-                          "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
+                          "radial-gradient(ellipse at center, color-mix(in srgb, var(--menu-primary) 12%, rgba(255,255,255,0.26)) 0%, rgba(255,255,255,0.12) 40%, transparent 72%)",
                       }}
                     />
+                    <div className="category-meta-glass-sheen absolute inset-y-0 -left-16 right-[-4rem]" />
+                    <div className="absolute inset-x-0 top-0 h-px bg-white/75" />
                   </div>
                 )}
 
@@ -763,7 +806,7 @@ export function MenuPage() {
                 <div
                   aria-hidden="true"
                   className={[
-                    "pointer-events-none absolute inset-x-0 top-full h-5 bg-gradient-to-b from-white/40 via-white/12 to-transparent transition-opacity duration-200",
+                    "pointer-events-none absolute inset-x-0 top-full h-7 bg-gradient-to-b from-white/45 via-white/16 to-transparent transition-opacity duration-200",
                     isCategorySticky ? "opacity-100" : "opacity-0",
                   ].join(" ")}
                 />
