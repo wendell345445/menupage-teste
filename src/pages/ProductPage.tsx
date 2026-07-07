@@ -207,8 +207,7 @@ function cleanDescription(
   value?: string | null,
   fallback = fallbackPizzaDescription,
 ) {
-  const text = value?.trim() || fallback;
-  return text.length > 98 ? `${text.slice(0, 95).trim()}...` : text;
+  return value?.trim() || fallback;
 }
 
 function toPizzaOptionView(option: ProductOption): PizzaOptionView {
@@ -316,7 +315,7 @@ function useProductScreenData(product: Product | null) {
 
 function RequiredBadge() {
   return (
-    <span className="rounded-[7px] bg-[#2E2F31] px-2.5 py-1 text-[11px] font-normal leading-none text-white">
+    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-[#2E2F31] px-2.5 py-1 text-[11px] font-normal leading-none text-white">
       Obrigatório
     </span>
   );
@@ -324,7 +323,7 @@ function RequiredBadge() {
 
 function CountBadge({ current, total }: { current: number; total: number }) {
   return (
-    <span className="rounded-[7px] bg-white px-2.5 py-1 text-[11px] font-normal leading-none text-[#2E2F31]">
+    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-white px-2.5 py-1 text-[11px] font-normal leading-none text-[#2E2F31]">
       {current} de {total}
     </span>
   );
@@ -340,7 +339,7 @@ function MissingBadge({ missing }: { missing: number }) {
 
 function CompletedBadge() {
   return (
-    <span className="rounded-[7px] bg-[#14BE39] px-2.5 py-1 text-[11px] font-bold leading-none text-white">
+    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-[#14BE39] px-2.5 py-1 text-[11px] font-bold leading-none text-white">
       Concluído
     </span>
   );
@@ -348,7 +347,7 @@ function CompletedBadge() {
 
 function OptionalBadge() {
   return (
-    <span className="rounded-[7px] bg-white px-2.5 py-1 text-[11px] font-normal leading-none text-[#2E2F31]">
+    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-white px-2.5 py-1 text-[11px] font-normal leading-none text-[#2E2F31]">
       Opcional
     </span>
   );
@@ -356,7 +355,7 @@ function OptionalBadge() {
 
 function SelectedItemsBadge({ count }: { count: number }) {
   return (
-    <span className="rounded-[7px] bg-[#FF8800] px-2.5 py-1 text-[11px] font-bold leading-none text-white">
+    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-[#FF8800] px-2.5 py-1 text-[11px] font-bold leading-none text-white">
       {count === 1 ? "1 item" : `${count} itens`}
     </span>
   );
@@ -393,17 +392,17 @@ function SectionHeader({
   const shouldShowSelectedItemsBadge = optional && selectedCount > 0;
 
   return (
-    <div className="sticky top-0 z-30 flex min-h-[64px] items-start justify-between gap-3 bg-[#F3F3F3] px-[13px] py-[13px] shadow-[0_1px_0_rgba(0,0,0,0.04)] sm:px-6">
+    <div className="sticky top-0 z-30 flex min-h-[70px] items-center justify-between gap-3 bg-[#F3F3F3] px-[13px] py-[14px] shadow-[0_1px_0_rgba(0,0,0,0.04)] sm:px-6">
       <div className="min-w-0">
-        <h2 className="text-[14px] font-bold leading-none text-[#2E2F31] sm:text-[15px]">
+        <h2 className="text-[16px] font-bold leading-none text-[#2E2F31] sm:text-[17px]">
           {title}
         </h2>
-        <p className="mt-[8px] text-[11px] font-normal leading-none text-[#2E2F31] sm:text-[12px]">
+        <p className="mt-[8px] text-[13px] font-normal leading-none text-[#2E2F31] sm:text-[14px]">
           {helper}
         </p>
       </div>
 
-      <div className="flex shrink-0 items-center gap-1.5">
+      <div className="flex shrink-0 items-center self-center gap-1.5">
         {shouldShowSelectedItemsBadge ? (
           <SelectedItemsBadge count={selectedCount} />
         ) : optional ? (
@@ -580,10 +579,13 @@ export function ProductPage() {
   const totalSelectedOrderBumps = Object.values(
     selectedOrderBumpQuantities,
   ).reduce((sum, value) => sum + value, 0);
-  const pizzaPrice =
-    selectedPizzaOptions.length > 0
-      ? Math.max(...selectedPizzaOptions.map((option) => option.priceValue))
-      : 0;
+  const highestPricedPizzaOption = selectedPizzaOptions.reduce<
+    (typeof selectedPizzaOptions)[number] | null
+  >((highest, option) => {
+    if (!highest || option.priceValue > highest.priceValue) return option;
+    return highest;
+  }, null);
+  const pizzaPrice = highestPricedPizzaOption?.priceValue ?? 0;
   const borderPrice = selectedBorderOption?.priceValue ?? 0;
   const orderBumpPrice = selectedOrderBumpOptions.reduce(
     (sum, option) => sum + option.priceValue * option.quantity,
@@ -705,7 +707,10 @@ export function ProductPage() {
             option.quantity > 1
               ? `${option.name} x${option.quantity}`
               : option.name,
-          price: option.priceValue,
+          price:
+            option.id === highestPricedPizzaOption?.id
+              ? highestPricedPizzaOption.priceValue
+              : 0,
           groupId: "sabores-grande",
           groupName: screen.pizzaGroupTitle,
         })),
@@ -748,8 +753,8 @@ export function ProductPage() {
   };
 
   return (
-    <main className="min-h-dvh w-full bg-white font-lato text-[#2E2F31] antialiased">
-      <div className="mx-auto flex min-h-dvh w-full max-w-[768px] flex-col bg-white pb-[104px]">
+    <main className="min-h-[100svh] w-full bg-white font-lato text-[#2E2F31] antialiased">
+      <div className="mx-auto flex min-h-[100svh] w-full max-w-[768px] flex-col bg-white pb-[calc(136px+env(safe-area-inset-bottom))]">
         <section
           aria-label="Imagem do produto"
           className="relative aspect-[390/327] w-full overflow-hidden bg-[#F3F3F3]"
@@ -872,7 +877,7 @@ export function ProductPage() {
                     <span className="block truncate text-[14px] font-bold leading-[1.15] text-[#2E2F31] sm:text-[15px]">
                       {option.name}
                     </span>
-                    <p className="mt-[6px] line-clamp-2 max-w-[430px] text-[11px] font-normal leading-[1.35] text-[#2E2F31] sm:text-[12px] sm:leading-[1.35]">
+                    <p className="mt-[6px] max-w-[430px] whitespace-normal break-words text-[11px] font-normal leading-[1.35] text-[#2E2F31] sm:text-[12px] sm:leading-[1.35]">
                       {option.description}
                     </p>
                     <span className="mt-[6px] block text-[12px] font-bold leading-none text-[#2E2F31] sm:text-[13px]">
@@ -933,7 +938,7 @@ export function ProductPage() {
                     <span className="block truncate text-[14px] font-bold leading-[1.15] text-[#2E2F31] sm:text-[15px]">
                       {option.name}
                     </span>
-                    <p className="mt-[6px] line-clamp-2 max-w-[430px] text-[11px] font-normal leading-[1.35] text-[#2E2F31] sm:text-[12px] sm:leading-[1.35]">
+                    <p className="mt-[6px] max-w-[430px] whitespace-normal break-words text-[11px] font-normal leading-[1.35] text-[#2E2F31] sm:text-[12px] sm:leading-[1.35]">
                       {option.description}
                     </p>
                     <span className="mt-[6px] block text-[12px] font-bold leading-none text-[#2E2F31] sm:text-[13px]">
@@ -989,7 +994,7 @@ export function ProductPage() {
                     <span className="block truncate text-[14px] font-bold leading-[1.15] text-[#2E2F31] sm:text-[15px]">
                       {option.name}
                     </span>
-                    <p className="mt-[6px] line-clamp-2 max-w-[430px] text-[11px] font-normal leading-[1.35] text-[#2E2F31] sm:text-[12px] sm:leading-[1.35]">
+                    <p className="mt-[6px] max-w-[430px] whitespace-normal break-words text-[11px] font-normal leading-[1.35] text-[#2E2F31] sm:text-[12px] sm:leading-[1.35]">
                       {option.description}
                     </p>
                     <span className="mt-[6px] block text-[12px] font-bold leading-none text-[#2E2F31] sm:text-[13px]">
@@ -1033,9 +1038,9 @@ export function ProductPage() {
         </section>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[768px] border-t border-[#E8E8E8] bg-white/96 px-[13px] py-3 shadow-[0_-8px_22px_rgba(0,0,0,0.08)] backdrop-blur-xl sm:px-6">
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 shrink-0 items-center overflow-hidden rounded-[7px]">
+      <div className="fixed bottom-0 left-1/2 z-[60] w-full max-w-[768px] -translate-x-1/2 border-t border-[#E8E8E8] bg-white px-[13px] pb-[calc(12px+env(safe-area-inset-bottom))] pt-3 shadow-[0_-8px_22px_rgba(0,0,0,0.08)] transform-gpu sm:px-6">
+        <div className="flex min-h-11 items-center gap-3">
+          <div className="flex h-11 min-h-11 shrink-0 items-center overflow-hidden rounded-[7px]">
             <button
               type="button"
               aria-label="Diminuir quantidade"
@@ -1060,7 +1065,7 @@ export function ProductPage() {
           <button
             type="button"
             onClick={handleAddToCart}
-            className={`flex h-11 min-w-0 flex-1 items-center justify-center rounded-[7px] px-4 text-[14px] font-bold active:scale-[0.99] sm:text-[15px] ${
+            className={`flex h-11 min-h-11 min-w-0 flex-1 shrink-0 items-center justify-center rounded-[7px] px-4 text-[14px] font-bold leading-none active:scale-[0.99] sm:text-[15px] ${
               canAdd || shouldShowMissingState
                 ? "bg-[#FF8800] text-white"
                 : "bg-[#D9D9D9] text-[#5B5858]"
