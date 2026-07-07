@@ -331,7 +331,7 @@ function CountBadge({ current, total }: { current: number; total: number }) {
 
 function MissingBadge({ missing }: { missing: number }) {
   return (
-    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-[#FF8800] px-2.5 py-1 text-[11px] font-bold leading-none text-white">
+    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-[#ffe1c0] px-2.5 py-1 text-[11px] font-bold leading-none text-[#ff8018]">
       {missing === 1 ? "Falta 1" : `Faltam ${missing}`}
     </span>
   );
@@ -339,7 +339,7 @@ function MissingBadge({ missing }: { missing: number }) {
 
 function CompletedBadge() {
   return (
-    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-[#14BE39] px-2.5 py-1 text-[11px] font-bold leading-none text-white">
+    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-[#07a028] px-2.5 py-1 text-[11px] font-normal leading-none text-white">
       Concluído
     </span>
   );
@@ -358,6 +358,116 @@ function SelectedItemsBadge({ count }: { count: number }) {
     <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-[#FF8800] px-2.5 py-1 text-[11px] font-bold leading-none text-white">
       {count === 1 ? "1 item" : `${count} itens`}
     </span>
+  );
+}
+
+function SkeletonBlock({ className = "" }: { className?: string }) {
+  return (
+    <span
+      className={`menu-page-product-shimmer block rounded-[7px] bg-[#ECECEC] ${className}`}
+      aria-hidden="true"
+    />
+  );
+}
+
+function ProductPageSkeleton() {
+  const optionRows = Array.from({ length: 4 });
+  const borderRows = Array.from({ length: 3 });
+  const drinkRows = Array.from({ length: 3 });
+
+  return (
+    <main
+      className="fixed inset-0 h-[100svh] w-full overflow-hidden bg-white font-lato tracking-wide text-[#2E2F31] antialiased"
+      aria-label="Carregando produto"
+      aria-busy="true"
+    >
+      <style>{`
+        @keyframes menuPageProductShimmer {
+          0% { background-position: -260px 0; }
+          100% { background-position: 260px 0; }
+        }
+
+        .menu-page-product-shimmer {
+          background-image: linear-gradient(90deg, #ECECEC 0%, #F7F7F7 48%, #ECECEC 100%);
+          background-size: 260px 100%;
+          animation: menuPageProductShimmer 1.5s ease-in-out infinite;
+        }
+      `}</style>
+
+      <div className="mx-auto flex h-full w-full max-w-[768px] flex-col overflow-y-auto overscroll-y-contain bg-white pb-[calc(152px+env(safe-area-inset-bottom))] [-webkit-overflow-scrolling:touch]">
+        <section className="relative aspect-[390/327] w-full shrink-0 overflow-hidden bg-[#F3F3F3]">
+          <SkeletonBlock className="h-full w-full rounded-none" />
+          <SkeletonBlock className="absolute left-[13px] top-[26px] h-[33px] w-9" />
+          <SkeletonBlock className="absolute bottom-[7px] right-3 h-[30px] w-[30px]" />
+        </section>
+
+        <SkeletonBlock className="h-[3px] min-h-[3px] w-full shrink-0 rounded-none" />
+
+        <section className="px-[13px] pb-[24px] pt-[13px] sm:px-6 sm:pt-5">
+          <SkeletonBlock className="h-[24px] w-4/5 max-w-[360px]" />
+          <SkeletonBlock className="mt-[10px] h-[14px] w-full max-w-[600px]" />
+          <SkeletonBlock className="mt-[7px] h-[14px] w-[72%] max-w-[440px]" />
+        </section>
+
+        <SkeletonSection rows={optionRows} withImage />
+        <SkeletonSection rows={borderRows} className="mt-[18px]" />
+        <SkeletonSection rows={drinkRows} withImage className="mt-[18px]" />
+
+        <section className="mt-[18px] px-[13px] pb-8 sm:px-6">
+          <SkeletonBlock className="h-[16px] w-[170px]" />
+          <SkeletonBlock className="mt-3 h-[96px] w-full" />
+        </section>
+      </div>
+
+      <div className="fixed bottom-0 left-1/2 z-[60] w-full max-w-[768px] -translate-x-1/2 border-t border-[#E8E8E8] bg-white px-[13px] pb-[calc(14px+env(safe-area-inset-bottom))] pt-3 shadow-[0_-8px_22px_rgba(0,0,0,0.08)] transform-gpu sm:px-6">
+        <div className="flex min-h-11 items-center gap-3">
+          <SkeletonBlock className="h-11 w-[116px] shrink-0" />
+          <SkeletonBlock className="h-11 min-w-0 flex-1" />
+        </div>
+      </div>
+    </main>
+  );
+}
+
+function SkeletonSection({
+  rows,
+  withImage = false,
+  className = "",
+}: {
+  rows: unknown[];
+  withImage?: boolean;
+  className?: string;
+}) {
+  return (
+    <section className={`w-full ${className}`}>
+      <div className="sticky top-0 z-30 flex min-h-[70px] items-center justify-between gap-3 bg-[#F3F3F3] px-[13px] py-[14px] shadow-[0_1px_0_rgba(0,0,0,0.04)] sm:px-6">
+        <div className="min-w-0 flex-1">
+          <SkeletonBlock className="h-[17px] w-[58%] max-w-[240px]" />
+          <SkeletonBlock className="mt-[8px] h-[13px] w-[44%] max-w-[180px]" />
+        </div>
+        <SkeletonBlock className="h-[21px] w-[78px] shrink-0" />
+      </div>
+
+      {rows.map((_, index) => (
+        <div
+          key={index}
+          className={
+            withImage
+              ? "relative grid min-h-[76px] grid-cols-[44px_minmax(0,1fr)_auto] items-center gap-3 rounded-[7px] px-[13px] py-[11px] after:absolute after:bottom-0 after:left-[13px] after:right-[13px] after:h-px after:origin-bottom after:scale-y-50 after:bg-[#E6E6E6] after:content-[''] last:after:hidden sm:grid-cols-[48px_minmax(0,1fr)_auto] sm:px-6 sm:py-3 sm:after:left-6 sm:after:right-6"
+              : "relative grid min-h-[68px] grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-[7px] px-[13px] py-[11px] after:absolute after:bottom-0 after:left-[13px] after:right-[13px] after:h-px after:origin-bottom after:scale-y-50 after:bg-[#E6E6E6] after:content-[''] last:after:hidden sm:px-6 sm:py-3 sm:after:left-6 sm:after:right-6"
+          }
+        >
+          {withImage ? <SkeletonBlock className="h-11 w-11 shrink-0 sm:h-12 sm:w-12" /> : null}
+          <div className="min-w-0">
+            <SkeletonBlock className="h-[15px] w-[70%] max-w-[260px]" />
+            <SkeletonBlock className="mt-[7px] h-[12px] w-full max-w-[430px]" />
+            <SkeletonBlock className="mt-[7px] h-[12px] w-[58%] max-w-[300px]" />
+            <SkeletonBlock className="mt-[7px] h-[13px] w-[72px]" />
+          </div>
+          <SkeletonBlock className="h-10 w-10 shrink-0 rounded-full" />
+        </div>
+      ))}
+    </section>
   );
 }
 
@@ -545,6 +655,7 @@ export function ProductPage() {
   const [quantity, setQuantity] = useState(1);
   const [orderNote, setOrderNote] = useState("");
   const [showRequiredFeedback, setShowRequiredFeedback] = useState(false);
+  const [isProductSkeletonVisible, setIsProductSkeletonVisible] = useState(true);
   const pizzaGroupName = useId();
   const borderSectionRef = useRef<HTMLElement | null>(null);
   const orderBumpSectionRef = useRef<HTMLElement | null>(null);
@@ -576,6 +687,14 @@ export function ProductPage() {
       html.style.overscrollBehavior = previousHtmlOverscroll;
       body.style.overscrollBehavior = previousBodyOverscroll;
     };
+  }, []);
+
+  useEffect(() => {
+    const skeletonTimer = window.setTimeout(() => {
+      setIsProductSkeletonVisible(false);
+    }, 1500);
+
+    return () => window.clearTimeout(skeletonTimer);
   }, []);
 
   useEffect(() => {
@@ -798,6 +917,10 @@ export function ProductPage() {
 
     navigate("/carrinho");
   };
+
+  if (isProductSkeletonVisible) {
+    return <ProductPageSkeleton />;
+  }
 
   return (
     <main className="fixed inset-0 h-[100svh] w-full overflow-hidden bg-white font-lato tracking-wide text-[#2E2F31] antialiased">
@@ -1118,7 +1241,7 @@ export function ProductPage() {
             onClick={handleAddToCart}
             className={`flex h-11 min-h-11 min-w-0 flex-1 shrink-0 items-center justify-center rounded-[7px] px-4 text-[14px] font-bold leading-none active:scale-[0.99] sm:text-[15px] ${
               canAdd || shouldShowMissingState
-                ? "bg-[#FF8800] text-white"
+                ? "bg-[#ffe1c0] text-[#ff8018]"
                 : "bg-[#D9D9D9] text-[#5B5858]"
             }`}
           >
