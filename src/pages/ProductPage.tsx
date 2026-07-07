@@ -547,7 +547,9 @@ export function ProductPage() {
   const [showRequiredFeedback, setShowRequiredFeedback] = useState(false);
   const pizzaGroupName = useId();
   const borderSectionRef = useRef<HTMLElement | null>(null);
+  const orderBumpSectionRef = useRef<HTMLElement | null>(null);
   const wasPizzaSelectionCompletedRef = useRef(false);
+  const wasBorderSelectionCompletedRef = useRef(false);
 
   useEffect(() => {
     setSelectedBorder((current) => {
@@ -624,6 +626,24 @@ export function ProductPage() {
 
     wasPizzaSelectionCompletedRef.current = isPizzaSelectionCompleted;
   }, [screen.pizzaMax, totalSelectedPizzas]);
+
+  useEffect(() => {
+    const isBorderSelectionCompleted = Boolean(selectedBorder);
+
+    if (
+      isBorderSelectionCompleted &&
+      !wasBorderSelectionCompletedRef.current
+    ) {
+      window.setTimeout(() => {
+        orderBumpSectionRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 120);
+    }
+
+    wasBorderSelectionCompletedRef.current = isBorderSelectionCompleted;
+  }, [selectedBorder]);
 
   const incrementPizzaSelection = (optionId: string) => {
     setSelectedPizzaQuantities((current) => {
@@ -953,7 +973,11 @@ export function ProductPage() {
           </fieldset>
         </section>
 
-        <section aria-labelledby="bebidas-heading" className="mt-[18px] w-full">
+        <section
+          ref={orderBumpSectionRef}
+          aria-labelledby="bebidas-heading"
+          className="mt-[18px] scroll-mt-0 w-full"
+        >
           <SectionHeader
             title={screen.orderBumpGroupTitle}
             helper={screen.orderBumpGroupHelper}
