@@ -398,7 +398,7 @@ function ProductPageSkeleton() {
         <section className="relative aspect-[390/327] w-full shrink-0 overflow-hidden bg-[#F3F3F3] leading-none">
           <SkeletonBlock className="absolute inset-0 h-full w-full rounded-none" />
           <SkeletonBlock className="absolute inset-x-0 bottom-0 z-10 h-[3px] min-h-[3px] w-full rounded-none" />
-          <SkeletonBlock className="absolute left-[13px] top-[24px] z-20 h-10 w-10 rounded-full" />
+          <SkeletonBlock className="absolute left-[13px] top-4 z-20 h-9 w-9 rounded-full" />
         </section>
 
         <section className="px-[13px] pb-[24px] pt-[13px] sm:px-6 sm:pt-5">
@@ -569,7 +569,8 @@ function PizzaQuantityControl({
       <button
         type="button"
         onClick={onIncrement}
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full active:scale-95"
+        disabled={incrementDisabled}
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full active:scale-95 disabled:cursor-not-allowed disabled:opacity-30 disabled:active:scale-100"
         aria-label={`Adicionar ${itemLabel}`}
       >
         <PlusIcon />
@@ -594,7 +595,7 @@ function PizzaQuantityControl({
         type="button"
         onClick={onIncrement}
         disabled={incrementDisabled}
-        className="flex h-full w-10 items-center justify-center active:scale-95 disabled:opacity-35"
+        className="flex h-full w-10 items-center justify-center active:scale-95 disabled:cursor-not-allowed disabled:opacity-30 disabled:active:scale-100"
         aria-label={`Adicionar mais deste ${itemLabel}`}
       >
         <PlusIcon />
@@ -656,6 +657,7 @@ export function ProductPage() {
   const [orderNote, setOrderNote] = useState("");
   const [showRequiredFeedback, setShowRequiredFeedback] = useState(false);
   const [isProductSkeletonVisible, setIsProductSkeletonVisible] = useState(true);
+  const [isPhotoPreviewOpen, setIsPhotoPreviewOpen] = useState(false);
   const pizzaGroupName = useId();
   const borderSectionRef = useRef<HTMLElement | null>(null);
   const orderBumpSectionRef = useRef<HTMLElement | null>(null);
@@ -935,16 +937,23 @@ export function ProductPage() {
             src={screen.productImage}
           />
 
-          <div className="absolute inset-x-0 bottom-0 z-10 h-[3px] min-h-[3px] w-full bg-[#EBA320]" />
+          <button
+            type="button"
+            aria-label="Abrir foto do produto"
+            onClick={() => setIsPhotoPreviewOpen(true)}
+            className="absolute inset-0 z-10 cursor-zoom-in bg-transparent"
+          />
+
+          <div className="absolute inset-x-0 bottom-0 z-[11] h-[3px] min-h-[3px] w-full bg-[#EBA320]" />
 
           <button
             type="button"
             aria-label="Voltar"
             onClick={handleBack}
-            className="absolute left-[13px] top-[24px] z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-[0_8px_22px_rgba(0,0,0,0.18)] ring-1 ring-black/5 transition-transform duration-150 active:scale-95"
+            className="absolute left-[13px] top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-[0_7px_18px_rgba(0,0,0,0.16)] ring-1 ring-black/5 transition-transform duration-150 active:scale-95"
           >
             <img
-              className="block h-[17px] w-[10px] object-contain"
+              className="block h-[15px] w-[9px] object-contain"
               alt=""
               aria-hidden="true"
               src="/product-page/vector-3.svg"
@@ -992,7 +1001,9 @@ export function ProductPage() {
             {screen.pizzaOptions.map((option) => {
               const optionQuantity = selectedPizzaQuantities[option.id] ?? 0;
               const checked = optionQuantity > 0;
-              const incrementDisabled = totalSelectedPizzas >= screen.pizzaMax;
+              const pizzaLimitReached = totalSelectedPizzas >= screen.pizzaMax;
+              const optionLocked = !checked && pizzaLimitReached;
+              const incrementDisabled = pizzaLimitReached;
 
               return (
                 <div
@@ -1028,10 +1039,11 @@ export function ProductPage() {
                   <button
                     type="button"
                     onClick={() => {
-                      if (checked) return;
+                      if (checked || optionLocked) return;
                       incrementPizzaSelection(option.id);
                     }}
-                    className="min-w-0 pr-1 text-left"
+                    disabled={optionLocked}
+                    className="min-w-0 pr-1 text-left disabled:cursor-not-allowed"
                   >
                     <span className="block truncate text-[14px] font-bold leading-[1.15] text-[#2E2F31] sm:text-[15px]">
                       {option.name}
@@ -1200,6 +1212,30 @@ export function ProductPage() {
           </label>
         </section>
       </div>
+
+      {isPhotoPreviewOpen ? (
+        <div
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-black/95 px-4 py-[calc(18px+env(safe-area-inset-top))]"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Foto do produto"
+        >
+          <button
+            type="button"
+            aria-label="Fechar foto"
+            onClick={() => setIsPhotoPreviewOpen(false)}
+            className="absolute right-4 top-[calc(16px+env(safe-area-inset-top))] z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white text-[24px] font-normal leading-none text-[#2E2F31] shadow-[0_8px_22px_rgba(0,0,0,0.22)] ring-1 ring-white/20 transition-transform duration-150 active:scale-95"
+          >
+            ×
+          </button>
+
+          <img
+            className="max-h-[86svh] w-full max-w-[768px] rounded-[12px] object-contain"
+            alt={screen.productTitle}
+            src={screen.productImage}
+          />
+        </div>
+      ) : null}
 
       <div className="fixed bottom-0 left-1/2 z-[60] w-full max-w-[768px] -translate-x-1/2 border-t border-[#E8E8E8] bg-white px-[13px] pb-[calc(14px+env(safe-area-inset-bottom))] pt-3 shadow-[0_-8px_22px_rgba(0,0,0,0.08)] transform-gpu sm:px-6">
         <div className="flex min-h-11 items-center gap-3">

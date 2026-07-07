@@ -68,7 +68,7 @@ function ShimmerSurface({ className = "" }: { className?: string }) {
       aria-hidden="true"
       style={{
         background:
-          "linear-gradient(90deg, #eeeeee 0%, #f8f8f8 42%, #eeeeee 84%)",
+          "linear-gradient(90deg, #e9e9e9 0%, #f3f3f3 42%, #e9e9e9 84%)",
         backgroundSize: "240% 100%",
         animation: "menu-image-shimmer 1.25s ease-in-out infinite",
       }}
@@ -166,23 +166,14 @@ export function ProductCard({ product, onNavigate }: Props) {
         }
       }}
       className={[
-        "relative min-h-[122px] w-full cursor-pointer overflow-hidden rounded-[14px] p-3 pr-[136px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-transform active:scale-[0.99]",
+        "relative min-h-[122px] w-full cursor-pointer overflow-hidden rounded-[14px] p-3 pr-[136px] transition-transform active:scale-[0.99]",
         showContentSkeleton
-          ? "border border-transparent bg-transparent"
-          : "border border-menu-card-border bg-white",
+          ? "border-0 bg-[#eeeeee] shadow-none"
+          : "border border-menu-card-border bg-white shadow-[0_4px_16px_rgba(0,0,0,0.08)]",
       ].join(" ")}
       aria-label={`Ver detalhes de ${product.name}`}
     >
       <ShimmerStyles />
-
-      {showContentSkeleton && (
-        <div
-          className="pointer-events-none absolute inset-0 z-0 rounded-[14px]"
-          aria-hidden="true"
-        >
-          <ShimmerSurface className="h-full w-full rounded-[14px] opacity-100" />
-        </div>
-      )}
 
       {showContentSkeleton ? (
         <ProductTextSkeleton />
@@ -221,7 +212,7 @@ export function ProductCard({ product, onNavigate }: Props) {
       <div
         className={[
           "absolute bottom-[12px] right-[10px] top-[12px] z-10 w-[116px] overflow-hidden rounded-[12px]",
-          showContentSkeleton ? "bg-transparent" : "bg-[#f3eeee]",
+          showContentSkeleton ? "bg-[#e9e9e9]" : "bg-[#f3eeee]",
         ].join(" ")}
       >
         {product.imageUrl ? (
