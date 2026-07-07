@@ -182,10 +182,12 @@ export function StoreInfo({
               onLoad={() => setIsLogoLoaded(true)}
             />
 
-            <span
-              className="pointer-events-none absolute inset-0 z-20 rounded-[22px] border border-[#DDDDDD]"
-              aria-hidden="true"
-            />
+            {!showLogoSkeleton && (
+              <span
+                className="pointer-events-none absolute inset-0 z-20 rounded-[22px] border border-[#DDDDDD]"
+                aria-hidden="true"
+              />
+            )}
           </div>
         </div>
 

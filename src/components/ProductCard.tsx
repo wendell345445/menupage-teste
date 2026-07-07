@@ -165,14 +165,22 @@ export function ProductCard({ product, onNavigate }: Props) {
           onNavigate();
         }
       }}
-      className="relative min-h-[122px] w-full cursor-pointer overflow-hidden rounded-[14px] border border-menu-card-border bg-white p-3 pr-[136px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-transform active:scale-[0.99]"
+      className={[
+        "relative min-h-[122px] w-full cursor-pointer overflow-hidden rounded-[14px] p-3 pr-[136px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-transform active:scale-[0.99]",
+        showContentSkeleton
+          ? "border border-transparent bg-transparent"
+          : "border border-menu-card-border bg-white",
+      ].join(" ")}
       aria-label={`Ver detalhes de ${product.name}`}
     >
       <ShimmerStyles />
 
       {showContentSkeleton && (
-        <div className="pointer-events-none absolute inset-0 z-0 rounded-[14px] bg-[#fbfbfb]" aria-hidden="true">
-          <ShimmerSurface className="h-full w-full opacity-45" />
+        <div
+          className="pointer-events-none absolute inset-0 z-0 rounded-[14px]"
+          aria-hidden="true"
+        >
+          <ShimmerSurface className="h-full w-full rounded-[14px] opacity-100" />
         </div>
       )}
 
@@ -210,7 +218,12 @@ export function ProductCard({ product, onNavigate }: Props) {
         </div>
       )}
 
-      <div className="absolute bottom-[12px] right-[10px] top-[12px] z-10 w-[116px] overflow-hidden rounded-[12px] bg-[#f3eeee]">
+      <div
+        className={[
+          "absolute bottom-[12px] right-[10px] top-[12px] z-10 w-[116px] overflow-hidden rounded-[12px]",
+          showContentSkeleton ? "bg-transparent" : "bg-[#f3eeee]",
+        ].join(" ")}
+      >
         {product.imageUrl ? (
           <>
             {showImageSkeleton && <ImageShimmerSkeleton />}
@@ -231,7 +244,7 @@ export function ProductCard({ product, onNavigate }: Props) {
           </div>
         )}
         {showContentSkeleton ? (
-          <ShimmerSurface className="absolute bottom-[6px] right-[6px] z-20 h-5 w-5 rounded-full border border-white/70" />
+          <ShimmerSurface className="absolute bottom-[6px] right-[6px] z-20 h-5 w-5 rounded-full" />
         ) : (
           <button
             type="button"

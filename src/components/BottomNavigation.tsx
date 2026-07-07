@@ -2,6 +2,7 @@ import { ShoppingBag } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 const THEME_COLOR = 'var(--menu-primary)'
+const INACTIVE_COLOR = '#747474'
 const HOME_ICON_SRC = '/home%202.svg'
 const ORDERS_ICON_SRC = '/pedidos.svg'
 
@@ -46,14 +47,14 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
 
         <NavItem
           label="Início"
-          icon={<SvgMaskIcon src={HOME_ICON_SRC} />}
+          icon={<SvgMaskIcon src={HOME_ICON_SRC} active={isHome} />}
           active={isHome}
           onClick={() => navigate('/')}
         />
 
         <NavItem
           label="Carrinho"
-          icon={<ShoppingBag className="h-[21px] w-[21px] text-[var(--menu-primary)]" strokeWidth={1.9} />}
+          icon={<ShoppingBag className="h-[21px] w-[21px]" style={{ color: INACTIVE_COLOR }} strokeWidth={1.9} />}
           active={false}
           onClick={onCartClick}
           badge={cartQuantity > 0 ? cartQuantity : undefined}
@@ -61,7 +62,7 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
 
         <NavItem
           label={tableMode ? 'Comanda' : 'Pedidos'}
-          icon={<SvgMaskIcon src={ORDERS_ICON_SRC} />}
+          icon={<SvgMaskIcon src={ORDERS_ICON_SRC} active={isOrders} />}
           active={isOrders}
           onClick={() => navigate(ordersPath)}
         />
@@ -72,15 +73,16 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
 
 interface SvgMaskIconProps {
   src: string
+  active: boolean
 }
 
-function SvgMaskIcon({ src }: SvgMaskIconProps) {
+function SvgMaskIcon({ src, active }: SvgMaskIconProps) {
   return (
     <span
       aria-hidden="true"
       className="block h-[22px] w-[22px] transition-opacity duration-200"
       style={{
-        backgroundColor: THEME_COLOR,
+        backgroundColor: active ? THEME_COLOR : INACTIVE_COLOR,
         opacity: 1,
         WebkitMaskImage: `url("${src}")`,
         maskImage: `url("${src}")`,
@@ -126,7 +128,7 @@ function NavItem({ label, icon, active, onClick, badge }: NavItemProps) {
         />
       )}
 
-      <div className="relative text-[var(--menu-primary)]">
+      <div className="relative" style={{ color: active ? THEME_COLOR : INACTIVE_COLOR }}>
         {icon}
         {badge != null && badge > 0 && (
           <span
@@ -138,7 +140,7 @@ function NavItem({ label, icon, active, onClick, badge }: NavItemProps) {
         )}
       </div>
 
-      <span className="text-[10px] font-semibold tracking-[0.1px] text-[var(--menu-primary)]">
+      <span className="text-[10px] font-semibold tracking-[0.1px]" style={{ color: active ? THEME_COLOR : INACTIVE_COLOR }}>
         {label}
       </span>
     </button>

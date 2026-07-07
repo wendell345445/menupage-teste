@@ -49,13 +49,11 @@ export function CategoryChips({
         >
           {isLoading
             ? SKELETON_WIDTHS.map((width, index) => (
-                <div
+                <MenuShimmer
                   key={`${width}-${index}`}
-                  className="relative z-20 h-[36px] shrink-0 overflow-hidden rounded-[16px] border border-[#DDDDDD] bg-white"
+                  className="relative z-20 h-[36px] shrink-0 overflow-hidden rounded-[16px]"
                   style={{ width }}
-                >
-                  <MenuShimmer className="absolute inset-0 rounded-[16px]" />
-                </div>
+                />
               ))
             : categories.map((category) => {
                 const isActive = activeId === category.id;
@@ -69,47 +67,24 @@ export function CategoryChips({
                     onClick={() => onSelect(category.id)}
                     className="relative z-20 flex h-[36px] shrink-0 items-center justify-center overflow-hidden rounded-[16px] px-5 transition-all duration-200"
                     style={
-                      isSticky
-                        ? isActive
-                          ? {
-                              background:
-                                "linear-gradient(135deg, color-mix(in srgb, var(--menu-primary) 98%, transparent), color-mix(in srgb, var(--menu-gradient-to) 92%, transparent))",
-                              border: "1px solid rgba(255,255,255,0.95)",
-                              boxShadow: "none",
-                              backdropFilter: "blur(14px) saturate(175%)",
-                              WebkitBackdropFilter:
-                                "blur(14px) saturate(175%)",
-                            }
-                          : {
-                              background:
-                                "linear-gradient(135deg, rgba(255,255,255,0.44), rgba(255,255,255,0.22))",
-                              border: "1px solid #DDDDDD",
-                              boxShadow:
-                                "inset 0 1px 0 rgba(255,255,255,0.58)",
-                              backdropFilter: "blur(14px) saturate(175%)",
-                              WebkitBackdropFilter:
-                                "blur(14px) saturate(175%)",
-                            }
-                        : isActive
-                          ? {
-                              background: "var(--menu-primary)",
-                              border: "1px solid var(--menu-primary)",
-                              boxShadow: "none",
-                            }
-                          : {
-                              background: "#ffffff",
-                              border: "1px solid #DDDDDD",
-                              boxShadow: "none",
-                            }
+                      isActive
+                        ? {
+                            background: "var(--menu-primary)",
+                            border: "1px solid var(--menu-primary)",
+                            boxShadow: "none",
+                          }
+                        : {
+                            background: "#ffffff",
+                            border: "1px solid #DDDDDD",
+                            boxShadow: "none",
+                          }
                     }
                   >
                     <span
                       className={`relative whitespace-nowrap text-[14px] leading-none ${
                         isActive
                           ? "font-semibold tracking-[0.5px] text-white"
-                          : isSticky
-                            ? "font-semibold tracking-[0.2px] text-[#1f2937]"
-                            : "font-semibold tracking-[0.2px] text-[#5c5555]"
+                          : "font-semibold tracking-[0.2px] text-[#5c5555]"
                       }`}
                     >
                       {category.name}
