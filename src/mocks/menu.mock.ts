@@ -16,8 +16,8 @@ export const mockMenuData: MenuData = {
     description:
       "Cardápio digital de demonstração para editar a aparência real da MenuPage.",
     logo: null,
-    primaryColor: "#000000",
-    secondaryColor: "#000000",
+    primaryColor: "#EBA320",
+    secondaryColor: "#C98514",
     address: "Rua das Palmeiras, 120 - Centro\nSalinas - MG",
     storeStatus: "open",
     nextOpenLabel: null,

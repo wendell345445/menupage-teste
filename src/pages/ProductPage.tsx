@@ -355,7 +355,7 @@ function OptionalBadge() {
 
 function SelectedItemsBadge({ count }: { count: number }) {
   return (
-    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-[#FF8800] px-2.5 py-1 text-[11px] font-bold leading-none text-white">
+    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-[#EBA320] px-2.5 py-1 text-[11px] font-bold leading-none text-white">
       {count === 1 ? "1 item" : `${count} itens`}
     </span>
   );
@@ -397,8 +397,7 @@ function ProductPageSkeleton() {
       <div className="mx-auto flex h-full w-full max-w-[768px] flex-col overflow-y-auto overscroll-y-contain bg-white pb-[calc(152px+env(safe-area-inset-bottom))] [-webkit-overflow-scrolling:touch]">
         <section className="relative aspect-[390/327] w-full shrink-0 overflow-hidden bg-[#F3F3F3]">
           <SkeletonBlock className="h-full w-full rounded-none" />
-          <SkeletonBlock className="absolute left-[13px] top-[26px] h-[33px] w-9" />
-          <SkeletonBlock className="absolute bottom-[7px] right-3 h-[30px] w-[30px]" />
+          <SkeletonBlock className="absolute left-[13px] top-[24px] h-10 w-10 rounded-full" />
         </section>
 
         <SkeletonBlock className="h-[3px] min-h-[3px] w-full shrink-0 rounded-none" />
@@ -545,7 +544,7 @@ function PlusIcon({ className = "h-[17px] w-[17px]" }: { className?: string }) {
 function MinusIcon({ className = "w-[17px]" }: { className?: string }) {
   return (
     <span
-      className={`block h-[3px] shrink-0 rounded-full bg-[#FF8800] ${className}`}
+      className={`block h-[3px] shrink-0 rounded-full bg-[#EBA320] ${className}`}
       aria-hidden="true"
     />
   );
@@ -939,29 +938,18 @@ export function ProductPage() {
             type="button"
             aria-label="Voltar"
             onClick={handleBack}
-            className="absolute left-[13px] top-[26px] flex h-[33px] w-9 items-center justify-center rounded-[7px] bg-[#F2F2F2]/75 active:scale-95"
+            className="absolute left-[13px] top-[24px] flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-[0_8px_22px_rgba(0,0,0,0.18)] ring-1 ring-black/5 transition-transform duration-150 active:scale-95"
           >
             <img
-              className="h-[17px] w-[17px]"
+              className="h-[17px] w-[10px] object-contain"
               alt=""
               aria-hidden="true"
               src="/product-page/vector-3.svg"
             />
           </button>
-
-          <button
-            type="button"
-            aria-label="Expandir imagem"
-            className="absolute bottom-[7px] right-3 flex h-[30px] w-[30px] items-center justify-center rounded-[7px] bg-[#F2F2F2]/75 active:scale-95"
-          >
-            <span
-              className="h-3.5 w-3.5 bg-[url('/product-page/vector-4.svg')] bg-contain bg-center bg-no-repeat"
-              aria-hidden="true"
-            />
-          </button>
         </section>
 
-        <div className="relative z-10 h-[3px] min-h-[3px] w-full shrink-0 bg-[#FF8800]" />
+        <div className="relative z-10 h-[3px] min-h-[3px] w-full shrink-0 bg-[#EBA320]" />
 
         <section
           aria-labelledby="pizza-title"
@@ -1206,7 +1194,7 @@ export function ProductPage() {
               onChange={(event) => setOrderNote(event.target.value)}
               placeholder="Ex: tirar cebola, deixar bem assada..."
               maxLength={180}
-              className="mt-3 min-h-[96px] w-full resize-none rounded-[7px] border border-[#E6E6E6] bg-white px-3.5 py-3 text-[13px] font-normal leading-[1.35] text-[#2E2F31] outline-none placeholder:text-[#9A9A9A] focus:border-[#FF8800] focus:ring-2 focus:ring-[#FF8800]/15 sm:text-[14px]"
+              className="mt-3 min-h-[96px] w-full resize-none rounded-[7px] border border-[#E6E6E6] bg-white px-3.5 py-3 text-[13px] font-normal leading-[1.35] text-[#2E2F31] outline-none placeholder:text-[#9A9A9A] focus:border-[#EBA320] focus:ring-2 focus:ring-[#EBA320]/15 sm:text-[14px]"
             />
           </label>
         </section>
@@ -1241,7 +1229,7 @@ export function ProductPage() {
             onClick={handleAddToCart}
             className={`flex h-11 min-h-11 min-w-0 flex-1 shrink-0 items-center justify-center rounded-[7px] px-4 text-[14px] font-bold leading-none active:scale-[0.99] sm:text-[15px] ${
               canAdd || shouldShowMissingState
-                ? "bg-[#ffe1c0] text-[#ff8018]"
+                ? "bg-[#EBA320] text-white"
                 : "bg-[#D9D9D9] text-[#5B5858]"
             }`}
           >

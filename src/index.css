@@ -11,9 +11,9 @@
   --menu-text-soft: #877c7c;
   --menu-divider: rgba(64, 57, 57, 0.12);
   --menu-card-border: rgba(191, 180, 180, 0.38);
-  --menu-primary: #000000;
-  --menu-gradient-from: #000000;
-  --menu-gradient-to: #000000;
+  --menu-primary: #EBA320;
+  --menu-gradient-from: #EBA320;
+  --menu-gradient-to: #C98514;
 
   /* shadcn/ui tokens compatíveis com Tailwind 3 */
   --background: 0 0% 100%;
