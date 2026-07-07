@@ -552,6 +552,36 @@ export function ProductPage() {
   const wasBorderSelectionCompletedRef = useRef(false);
 
   useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    const previousHtmlHeight = html.style.height;
+    const previousBodyHeight = body.style.height;
+    const previousBodyOverflow = body.style.overflow;
+    const previousBodyPosition = body.style.position;
+    const previousBodyWidth = body.style.width;
+    const previousBodyInset = body.style.inset;
+    const previousBodyOverscroll = body.style.overscrollBehavior;
+
+    html.style.height = "100%";
+    body.style.height = "100%";
+    body.style.overflow = "hidden";
+    body.style.position = "fixed";
+    body.style.width = "100%";
+    body.style.inset = "0";
+    body.style.overscrollBehavior = "none";
+
+    return () => {
+      html.style.height = previousHtmlHeight;
+      body.style.height = previousBodyHeight;
+      body.style.overflow = previousBodyOverflow;
+      body.style.position = previousBodyPosition;
+      body.style.width = previousBodyWidth;
+      body.style.inset = previousBodyInset;
+      body.style.overscrollBehavior = previousBodyOverscroll;
+    };
+  }, []);
+
+  useEffect(() => {
     setSelectedBorder((current) => {
       if (!current) return "";
       return screen.borderOptions.some((option) => option.id === current)
@@ -773,8 +803,8 @@ export function ProductPage() {
   };
 
   return (
-    <main className="min-h-[100svh] w-full bg-white font-lato text-[#2E2F31] antialiased">
-      <div className="mx-auto flex min-h-[100svh] w-full max-w-[768px] flex-col bg-white pb-[calc(136px+env(safe-area-inset-bottom))]">
+    <main className="fixed inset-0 h-[100svh] w-full overflow-hidden bg-white font-lato text-[#2E2F31] antialiased">
+      <div className="mx-auto flex h-full w-full max-w-[768px] flex-col overflow-y-auto overscroll-contain bg-white pb-[calc(152px+env(safe-area-inset-bottom))] [-webkit-overflow-scrolling:touch]">
         <section
           aria-label="Imagem do produto"
           className="relative aspect-[390/327] w-full overflow-hidden bg-[#F3F3F3]"
@@ -1062,7 +1092,7 @@ export function ProductPage() {
         </section>
       </div>
 
-      <div className="fixed bottom-0 left-1/2 z-[60] w-full max-w-[768px] -translate-x-1/2 border-t border-[#E8E8E8] bg-white px-[13px] pb-[calc(12px+env(safe-area-inset-bottom))] pt-3 shadow-[0_-8px_22px_rgba(0,0,0,0.08)] transform-gpu sm:px-6">
+      <div className="fixed bottom-0 left-1/2 z-[60] w-full max-w-[768px] -translate-x-1/2 border-t border-[#E8E8E8] bg-white px-[13px] pb-[calc(14px+env(safe-area-inset-bottom))] pt-3 shadow-[0_-8px_22px_rgba(0,0,0,0.08)] transform-gpu sm:px-6">
         <div className="flex min-h-11 items-center gap-3">
           <div className="flex h-11 min-h-11 shrink-0 items-center overflow-hidden rounded-[7px]">
             <button
