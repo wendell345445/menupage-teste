@@ -451,8 +451,8 @@ function SkeletonSection({
           key={index}
           className={
             withImage
-              ? "relative grid min-h-[76px] grid-cols-[44px_minmax(0,1fr)_auto] items-center gap-3 rounded-[7px] px-[13px] py-[11px] after:absolute after:bottom-0 after:left-[13px] after:right-[13px] after:h-px after:origin-bottom after:scale-y-50 after:bg-[#E6E6E6] after:content-[''] last:after:hidden sm:grid-cols-[48px_minmax(0,1fr)_auto] sm:px-6 sm:py-3 sm:after:left-6 sm:after:right-6"
-              : "relative grid min-h-[68px] grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-[7px] px-[13px] py-[11px] after:absolute after:bottom-0 after:left-[13px] after:right-[13px] after:h-px after:origin-bottom after:scale-y-50 after:bg-[#E6E6E6] after:content-[''] last:after:hidden sm:px-6 sm:py-3 sm:after:left-6 sm:after:right-6"
+              ? "relative grid min-h-[76px] grid-cols-[44px_minmax(0,1fr)_auto] items-center gap-2 rounded-[7px] px-[13px] py-[11px] after:absolute after:bottom-0 after:left-[13px] after:right-[13px] after:h-px after:origin-bottom after:scale-y-50 after:bg-[#E6E6E6] after:content-[''] last:after:hidden sm:grid-cols-[48px_minmax(0,1fr)_auto] sm:px-6 sm:py-3 sm:after:left-6 sm:after:right-6"
+              : "relative grid min-h-[68px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[7px] px-[13px] py-[11px] after:absolute after:bottom-0 after:left-[13px] after:right-[13px] after:h-px after:origin-bottom after:scale-y-50 after:bg-[#E6E6E6] after:content-[''] last:after:hidden sm:px-6 sm:py-3 sm:after:left-6 sm:after:right-6"
           }
         >
           {withImage ? <SkeletonBlock className="h-11 w-11 shrink-0 sm:h-12 sm:w-12" /> : null}
@@ -502,10 +502,10 @@ function SectionHeader({
   return (
     <div className="sticky top-0 z-30 flex min-h-[70px] items-center justify-between gap-3 bg-[#F3F3F3] px-[13px] py-[14px] shadow-[0_1px_0_rgba(0,0,0,0.04)] sm:px-6">
       <div className="min-w-0">
-        <h2 className="text-[16px] font-bold leading-none text-[#2E2F31] sm:text-[17px]">
+        <h2 className="text-[15px] font-bold leading-none text-[#2E2F31]">
           {title}
         </h2>
-        <p className="mt-[8px] text-[13px] font-normal leading-none text-[#2E2F31] sm:text-[14px]">
+        <p className="mt-[8px] text-[11px] font-normal leading-none text-[#2E2F31]">
           {helper}
         </p>
       </div>
@@ -579,23 +579,23 @@ function PizzaQuantityControl({
   }
 
   return (
-    <div className="flex h-10 shrink-0 items-center overflow-hidden rounded-full">
+    <div className="flex h-9 shrink-0 items-center overflow-hidden rounded-full">
       <button
         type="button"
         onClick={onDecrement}
-        className="flex h-full w-10 items-center justify-center active:scale-95"
+        className="flex h-full w-8 items-center justify-center active:scale-95"
         aria-label={`Remover ${itemLabel}`}
       >
         <MinusIcon />
       </button>
-      <span className="min-w-5 text-center text-[13px] font-bold leading-none text-[#2E2F31]">
+      <span className="min-w-[18px] text-center text-[13px] font-bold leading-none text-[#2E2F31]">
         {quantity}
       </span>
       <button
         type="button"
         onClick={onIncrement}
         disabled={incrementDisabled}
-        className="flex h-full w-10 items-center justify-center active:scale-95 disabled:cursor-not-allowed disabled:opacity-30 disabled:active:scale-100"
+        className="flex h-full w-8 items-center justify-center active:scale-95 disabled:cursor-not-allowed disabled:opacity-30 disabled:active:scale-100"
         aria-label={`Adicionar mais deste ${itemLabel}`}
       >
         <PlusIcon />
@@ -1008,7 +1008,7 @@ export function ProductPage() {
               return (
                 <div
                   key={option.id}
-                  className="relative grid min-h-[76px] grid-cols-[44px_minmax(0,1fr)_auto] items-center gap-3 rounded-[7px] px-[13px] py-[11px] after:absolute after:bottom-0 after:left-[13px] after:right-[13px] after:h-px after:origin-bottom after:scale-y-50 after:bg-[#E6E6E6] after:content-[''] last:after:hidden sm:grid-cols-[48px_minmax(0,1fr)_auto] sm:px-6 sm:py-3 sm:after:left-6 sm:after:right-6"
+                  className="relative grid min-h-[76px] grid-cols-[44px_minmax(0,1fr)_auto] items-center gap-2 rounded-[7px] px-[13px] py-[11px] after:absolute after:bottom-0 after:left-[13px] after:right-[13px] after:h-px after:origin-bottom after:scale-y-50 after:bg-[#E6E6E6] after:content-[''] last:after:hidden sm:grid-cols-[48px_minmax(0,1fr)_auto] sm:px-6 sm:py-3 sm:after:left-6 sm:after:right-6"
                 >
                   <input
                     type="checkbox"
@@ -1043,7 +1043,7 @@ export function ProductPage() {
                       incrementPizzaSelection(option.id);
                     }}
                     disabled={optionLocked}
-                    className="min-w-0 pr-1 text-left disabled:cursor-not-allowed"
+                    className="min-w-0 pr-0 text-left disabled:cursor-not-allowed"
                   >
                     <span className="block truncate text-[14px] font-bold leading-[1.15] text-[#2E2F31] sm:text-[15px]">
                       {option.name}
@@ -1094,7 +1094,7 @@ export function ProductPage() {
               return (
                 <label
                   key={option.id}
-                  className="relative grid min-h-[68px] cursor-pointer grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-[7px] px-[13px] py-[11px] after:absolute after:bottom-0 after:left-[13px] after:right-[13px] after:h-px after:origin-bottom after:scale-y-50 after:bg-[#E6E6E6] after:content-[''] last:after:hidden sm:px-6 sm:py-3 sm:after:left-6 sm:after:right-6"
+                  className="relative grid min-h-[68px] cursor-pointer grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[7px] px-[13px] py-[11px] after:absolute after:bottom-0 after:left-[13px] after:right-[13px] after:h-px after:origin-bottom after:scale-y-50 after:bg-[#E6E6E6] after:content-[''] last:after:hidden sm:px-6 sm:py-3 sm:after:left-6 sm:after:right-6"
                 >
                   <input
                     type="radio"
@@ -1148,7 +1148,7 @@ export function ProductPage() {
               return (
                 <div
                   key={option.id}
-                  className="relative grid min-h-[76px] grid-cols-[44px_minmax(0,1fr)_auto] items-center gap-3 rounded-[7px] px-[13px] py-[11px] after:absolute after:bottom-0 after:left-[13px] after:right-[13px] after:h-px after:origin-bottom after:scale-y-50 after:bg-[#E6E6E6] after:content-[''] last:after:hidden sm:grid-cols-[48px_minmax(0,1fr)_auto] sm:px-6 sm:py-3 sm:after:left-6 sm:after:right-6"
+                  className="relative grid min-h-[76px] grid-cols-[44px_minmax(0,1fr)_auto] items-center gap-2 rounded-[7px] px-[13px] py-[11px] after:absolute after:bottom-0 after:left-[13px] after:right-[13px] after:h-px after:origin-bottom after:scale-y-50 after:bg-[#E6E6E6] after:content-[''] last:after:hidden sm:grid-cols-[48px_minmax(0,1fr)_auto] sm:px-6 sm:py-3 sm:after:left-6 sm:after:right-6"
                 >
                   <img
                     className="h-11 w-11 self-center rounded-[7px] bg-[#F8F8F8] object-contain p-1 sm:h-12 sm:w-12"
