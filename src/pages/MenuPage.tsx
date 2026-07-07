@@ -96,7 +96,6 @@ function ImageShimmerSkeleton({
   );
 }
 
-
 function CategoryMetaGlassEffectAssets() {
   return (
     <style>{`
@@ -596,7 +595,10 @@ export function MenuPage() {
               isLoading
             />
 
-            <section className="relative z-0 mt-3" aria-label="Carregando destaques">
+            <section
+              className="relative z-0 mt-3"
+              aria-label="Carregando destaques"
+            >
               <div className="mb-2.5 flex items-center gap-1.5">
                 <MenuShimmer className="h-4 w-4 rounded-full" />
                 <MenuShimmer className="h-[18px] w-[148px] rounded-full" />
@@ -646,7 +648,7 @@ export function MenuPage() {
   if (!data) {
     return (
       <div className="flex min-h-dvh items-center justify-center [font-family:'Sen',Helvetica] antialiased">
-          <p className="text-gray-500">Cardápio não encontrado.</p>
+        <p className="text-gray-500">Cardápio não encontrado.</p>
       </div>
     );
   }

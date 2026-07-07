@@ -15,6 +15,27 @@ export interface ProductAddonLink {
   }
 }
 
+export interface ProductOption {
+  id: string
+  name: string
+  price: number
+  description?: string | null
+  imageUrl?: string | null
+  isActive?: boolean
+}
+
+export interface ProductOptionGroup {
+  id: string
+  title: string
+  helperText?: string | null
+  required?: boolean
+  min?: number
+  max?: number
+  selectionType: 'checkbox' | 'radio'
+  pricingStrategy?: 'sum' | 'highest'
+  options: ProductOption[]
+}
+
 export interface Product {
   id: string
   name: string
@@ -24,6 +45,7 @@ export interface Product {
   promoPrice?: number | null
   variations: ProductVariation[]
   addons: ProductAddonLink[]
+  optionGroups?: ProductOptionGroup[]
 
   /** Campos opcionais que podem vir do backend para alimentar "Destaques do Dia". */
   isFeatured?: boolean

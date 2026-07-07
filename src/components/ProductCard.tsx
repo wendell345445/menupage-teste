@@ -22,6 +22,32 @@ function fmtBRL(v: number) {
   return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
+function getProductStartingPrice(product: Product) {
+  const activeVariations = product.variations.filter(
+    (variation) => variation.isActive && variation.price != null,
+  );
+
+  if (activeVariations.length > 0) {
+    return Math.min(...activeVariations.map((variation) => variation.price));
+  }
+
+  if (product.basePrice != null) {
+    return product.basePrice;
+  }
+
+  const activeOptionPrices =
+    product.optionGroups
+      ?.flatMap((group) => group.options)
+      .filter((option) => option.isActive !== false && option.price != null)
+      .map((option) => option.price) ?? [];
+
+  if (activeOptionPrices.length > 0) {
+    return Math.min(...activeOptionPrices);
+  }
+
+  return null;
+}
+
 const IMAGE_SKELETON_MIN_MS = 800;
 
 function ShimmerStyles() {
@@ -92,13 +118,10 @@ export function ProductCard({ product, onNavigate }: Props) {
 
   const addItem = useCartStore((s) => s.addItem);
   const hasVariations = product.variations.filter((v) => v.isActive).length > 0;
+  const hasOptionGroups = Boolean(product.optionGroups?.length);
   // v2.9: addons via ProductAddon. Filtra addon ativo.
   const hasAdditionals = product.addons.some((link) => link.addon.isActive);
-  const displayPrice = hasVariations
-    ? Math.min(
-        ...product.variations.filter((v) => v.isActive).map((v) => v.price),
-      )
-    : product.basePrice;
+  const displayPrice = getProductStartingPrice(product);
 
   // Promo por produto só se aplica quando não há variations.
   const hasActivePromo =
@@ -110,7 +133,7 @@ export function ProductCard({ product, onNavigate }: Props) {
   // Quick-add: só aplica se o produto não tem variação nem adicional. Caso
   // contrário precisa abrir a página do produto pra cliente escolher.
   const canQuickAdd =
-    !hasVariations && !hasAdditionals && product.basePrice != null;
+    !hasVariations && !hasAdditionals && !hasOptionGroups && product.basePrice != null;
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.stopPropagation();

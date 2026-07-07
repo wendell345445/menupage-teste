@@ -4,6 +4,8 @@ interface CartAdditional {
   id?: string
   name?: string
   price?: number
+  groupId?: string
+  groupName?: string
 }
 
 interface CartItem {
@@ -35,6 +37,23 @@ function setState(partial: Partial<CartState>) {
   emit()
 }
 
+function normalizeAdditionalSignature(additional: CartAdditional) {
+  return [
+    additional.groupId ?? '',
+    additional.id ?? '',
+    additional.name ?? '',
+    additional.price ?? 0,
+  ].join(':')
+}
+
+function getCartItemSignature(item: CartItem) {
+  return [
+    item.productId,
+    item.unitPrice,
+    ...item.additionals.map(normalizeAdditionalSignature).sort(),
+  ].join('|')
+}
+
 state = {
   storeSlug: null,
   items: [],
@@ -42,11 +61,9 @@ state = {
     if (state.storeSlug !== slug) setState({ storeSlug: slug })
   },
   addItem: (item: CartItem) => {
+    const incomingSignature = getCartItemSignature(item)
     const existing = state.items.find(
-      (cartItem) =>
-        cartItem.productId === item.productId &&
-        cartItem.unitPrice === item.unitPrice &&
-        cartItem.additionals.length === item.additionals.length
+      (cartItem) => getCartItemSignature(cartItem) === incomingSignature
     )
 
     if (existing) {
