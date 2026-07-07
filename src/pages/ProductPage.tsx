@@ -395,12 +395,11 @@ function ProductPageSkeleton() {
       `}</style>
 
       <div className="mx-auto flex h-full w-full max-w-[768px] flex-col overflow-y-auto overscroll-y-contain bg-white pb-[calc(152px+env(safe-area-inset-bottom))] [-webkit-overflow-scrolling:touch]">
-        <section className="relative aspect-[390/327] w-full shrink-0 overflow-hidden bg-[#F3F3F3]">
-          <SkeletonBlock className="h-full w-full rounded-none" />
-          <SkeletonBlock className="absolute left-[13px] top-[24px] h-10 w-10 rounded-full" />
+        <section className="relative aspect-[390/327] w-full shrink-0 overflow-hidden bg-[#F3F3F3] leading-none">
+          <SkeletonBlock className="absolute inset-0 h-full w-full rounded-none" />
+          <SkeletonBlock className="absolute inset-x-0 bottom-0 z-10 h-[3px] min-h-[3px] w-full rounded-none" />
+          <SkeletonBlock className="absolute left-[13px] top-[24px] z-20 h-10 w-10 rounded-full" />
         </section>
-
-        <SkeletonBlock className="h-[3px] min-h-[3px] w-full shrink-0 rounded-none" />
 
         <section className="px-[13px] pb-[24px] pt-[13px] sm:px-6 sm:pt-5">
           <SkeletonBlock className="h-[24px] w-4/5 max-w-[360px]" />
@@ -532,10 +531,12 @@ function SectionHeader({
 
 function PlusIcon({ className = "h-[17px] w-[17px]" }: { className?: string }) {
   return (
-    <img
-      className={`block shrink-0 object-contain ${className}`}
-      src="/product-page/vector-2.svg"
-      alt=""
+    <span
+      className={`block shrink-0 bg-[#EBA320] ${className}`}
+      style={{
+        WebkitMask: "url('/product-page/vector-2.svg') center / contain no-repeat",
+        mask: "url('/product-page/vector-2.svg') center / contain no-repeat",
+      }}
       aria-hidden="true"
     />
   );
@@ -926,30 +927,30 @@ export function ProductPage() {
       <div className="mx-auto flex h-full w-full max-w-[768px] flex-col overflow-y-auto overscroll-y-contain bg-white pb-[calc(152px+env(safe-area-inset-bottom))] [-webkit-overflow-scrolling:touch]">
         <section
           aria-label="Imagem do produto"
-          className="relative aspect-[390/327] w-full shrink-0 overflow-hidden bg-[#F3F3F3]"
+          className="relative aspect-[390/327] w-full shrink-0 overflow-hidden bg-[#F3F3F3] leading-none"
         >
           <img
-            className="h-full w-full object-cover"
+            className="absolute inset-0 block h-full w-full object-cover align-middle"
             alt={screen.productTitle}
             src={screen.productImage}
           />
+
+          <div className="absolute inset-x-0 bottom-0 z-10 h-[3px] min-h-[3px] w-full bg-[#EBA320]" />
 
           <button
             type="button"
             aria-label="Voltar"
             onClick={handleBack}
-            className="absolute left-[13px] top-[24px] flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-[0_8px_22px_rgba(0,0,0,0.18)] ring-1 ring-black/5 transition-transform duration-150 active:scale-95"
+            className="absolute left-[13px] top-[24px] z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-[0_8px_22px_rgba(0,0,0,0.18)] ring-1 ring-black/5 transition-transform duration-150 active:scale-95"
           >
             <img
-              className="h-[17px] w-[10px] object-contain"
+              className="block h-[17px] w-[10px] object-contain"
               alt=""
               aria-hidden="true"
               src="/product-page/vector-3.svg"
             />
           </button>
         </section>
-
-        <div className="relative z-10 h-[3px] min-h-[3px] w-full shrink-0 bg-[#EBA320]" />
 
         <section
           aria-labelledby="pizza-title"
