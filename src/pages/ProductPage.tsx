@@ -792,7 +792,7 @@ export function ProductPage() {
             className="absolute left-[13px] top-[26px] flex h-[33px] w-9 items-center justify-center rounded-[7px] bg-[#F2F2F2]/75 active:scale-95"
           >
             <img
-              className="h-[17px] w-[17px] rotate-90"
+              className="h-[17px] w-[17px]"
               alt=""
               aria-hidden="true"
               src="/product-page/vector-3.svg"
