@@ -552,6 +552,33 @@ export function ProductPage() {
   const wasBorderSelectionCompletedRef = useRef(false);
 
   useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    const previousHtmlHeight = html.style.height;
+    const previousBodyHeight = body.style.height;
+    const previousHtmlOverflow = html.style.overflow;
+    const previousBodyOverflow = body.style.overflow;
+    const previousHtmlOverscroll = html.style.overscrollBehavior;
+    const previousBodyOverscroll = body.style.overscrollBehavior;
+
+    html.style.height = "100%";
+    body.style.height = "100%";
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    html.style.overscrollBehavior = "none";
+    body.style.overscrollBehavior = "none";
+
+    return () => {
+      html.style.height = previousHtmlHeight;
+      body.style.height = previousBodyHeight;
+      html.style.overflow = previousHtmlOverflow;
+      body.style.overflow = previousBodyOverflow;
+      html.style.overscrollBehavior = previousHtmlOverscroll;
+      body.style.overscrollBehavior = previousBodyOverscroll;
+    };
+  }, []);
+
+  useEffect(() => {
     setSelectedBorder((current) => {
       if (!current) return "";
       return screen.borderOptions.some((option) => option.id === current)
@@ -773,11 +800,11 @@ export function ProductPage() {
   };
 
   return (
-    <main className="min-h-[100svh] w-full overflow-x-hidden bg-white font-lato text-[#2E2F31] antialiased">
-      <div className="mx-auto w-full max-w-[768px] bg-white pb-[calc(152px+env(safe-area-inset-bottom))]">
+    <main className="fixed inset-0 h-[100svh] w-full overflow-hidden bg-white font-lato text-[#2E2F31] antialiased">
+      <div className="mx-auto flex h-full w-full max-w-[768px] flex-col overflow-y-auto overscroll-y-contain bg-white pb-[calc(152px+env(safe-area-inset-bottom))] [-webkit-overflow-scrolling:touch]">
         <section
           aria-label="Imagem do produto"
-          className="relative aspect-[390/327] w-full overflow-hidden bg-[#F3F3F3]"
+          className="relative aspect-[390/327] w-full shrink-0 overflow-hidden bg-[#F3F3F3]"
         >
           <img
             className="h-full w-full object-cover"
