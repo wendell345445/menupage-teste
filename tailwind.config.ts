@@ -69,10 +69,9 @@ export default {
         'menu-xl': '0 12px 32px rgba(64,57,57,0.22)',
       },
       fontFamily: {
-        poppins: ['Poppins', 'Helvetica', 'Arial', 'sans-serif'],
-        lato: ['Poppins', 'Helvetica', 'Arial', 'sans-serif'],
-        sen: ['Poppins', 'Helvetica', 'Arial', 'sans-serif'],
-        sans: ['Poppins', 'Helvetica', 'Arial', 'sans-serif'],
+        lato: ['Lato', 'Helvetica', 'Arial', 'sans-serif'],
+        sen: ['Sen', 'Helvetica', 'Arial', 'sans-serif'],
+        sans: ['Sen', 'Helvetica', 'Arial', 'sans-serif'],
       },
     },
   },

@@ -184,7 +184,7 @@ export function ProductCard({ product, onNavigate }: Props) {
           </h3>
 
           {product.description && (
-            <p className="line-clamp-2 max-h-[45.112px] max-w-[190px] overflow-hidden pt-[9px] text-[14.0975px] font-normal leading-[18.3267px] tracking-normal text-[#6c757d]">
+            <p className="mt-[9px] line-clamp-2 w-full overflow-hidden text-[14.0975px] font-normal leading-[18.3267px] tracking-normal text-[#6c757d]">
               {product.description}
             </p>
           )}

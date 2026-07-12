@@ -377,7 +377,7 @@ function ProductPageSkeleton() {
 
   return (
     <main
-      className="fixed inset-0 h-[100svh] w-full overflow-hidden bg-white font-lato tracking-wide text-[#2E2F31] antialiased"
+      className="fixed inset-0 h-[100svh] w-full overflow-hidden bg-white font-sen tracking-wide text-[#2E2F31] antialiased"
       aria-label="Carregando produto"
       aria-busy="true"
     >
@@ -925,7 +925,7 @@ export function ProductPage() {
   }
 
   return (
-    <main className="fixed inset-0 h-[100svh] w-full overflow-hidden bg-white font-lato tracking-wide text-[#2E2F31] antialiased">
+    <main className="fixed inset-0 h-[100svh] w-full overflow-hidden bg-white font-sen tracking-wide text-[#2E2F31] antialiased">
       <div className="mx-auto flex h-full w-full max-w-[768px] flex-col overflow-y-auto overscroll-y-contain bg-white pb-[calc(152px+env(safe-area-inset-bottom))] [-webkit-overflow-scrolling:touch]">
         <section
           aria-label="Imagem do produto"
@@ -1048,7 +1048,7 @@ export function ProductPage() {
                     <span className="block truncate text-[14px] font-bold leading-[1.15] text-[#4b4949] sm:text-[15px]">
                       {option.name}
                     </span>
-                    <p className="mt-[6px] max-w-[430px] whitespace-normal break-words text-[11px] font-normal leading-[1.35] tracking-wide text-[#6c757d] sm:text-[12px] sm:leading-[1.35]">
+                    <p className="mt-[6px] line-clamp-2 max-w-[430px] overflow-hidden text-[11px] font-normal leading-[1.35] tracking-wide text-[#6c757d] sm:text-[12px] sm:leading-[1.35]">
                       {option.description}
                     </p>
                     <span className="mt-[6px] block text-[12px] font-bold leading-none text-[#2E2F31] sm:text-[13px]">
@@ -1109,7 +1109,7 @@ export function ProductPage() {
                     <span className="block truncate text-[14px] font-bold leading-[1.15] text-[#4b4949] sm:text-[15px]">
                       {option.name}
                     </span>
-                    <p className="mt-[6px] max-w-[430px] whitespace-normal break-words text-[11px] font-normal leading-[1.35] tracking-wide text-[#6c757d] sm:text-[12px] sm:leading-[1.35]">
+                    <p className="mt-[6px] line-clamp-2 max-w-[430px] overflow-hidden text-[11px] font-normal leading-[1.35] tracking-wide text-[#6c757d] sm:text-[12px] sm:leading-[1.35]">
                       {option.description}
                     </p>
                     <span className="mt-[6px] block text-[12px] font-bold leading-none text-[#2E2F31] sm:text-[13px]">
@@ -1169,7 +1169,7 @@ export function ProductPage() {
                     <span className="block truncate text-[14px] font-bold leading-[1.15] text-[#4b4949] sm:text-[15px]">
                       {option.name}
                     </span>
-                    <p className="mt-[6px] max-w-[430px] whitespace-normal break-words text-[11px] font-normal leading-[1.35] tracking-wide text-[#6c757d] sm:text-[12px] sm:leading-[1.35]">
+                    <p className="mt-[6px] line-clamp-2 max-w-[430px] overflow-hidden text-[11px] font-normal leading-[1.35] tracking-wide text-[#6c757d] sm:text-[12px] sm:leading-[1.35]">
                       {option.description}
                     </p>
                     <span className="mt-[6px] block text-[12px] font-bold leading-none text-[#2E2F31] sm:text-[13px]">

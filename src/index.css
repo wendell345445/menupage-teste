@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Sen:wght@400;500;600;700;800&display=swap');
 @import "tw-animate-css";
 
 @tailwind base;
@@ -90,7 +90,7 @@ body {
   margin: 0;
   background: var(--menu-bg);
   color: var(--menu-text);
-  font-family: 'Poppins', Helvetica, Arial, sans-serif;
+  font-family: 'Sen', Helvetica, Arial, sans-serif;
 }
 
 button,
