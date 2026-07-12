@@ -502,7 +502,7 @@ function SectionHeader({
   return (
     <div className="sticky top-0 z-30 flex min-h-[70px] items-center justify-between gap-3 bg-[#F3F3F3] px-[13px] py-[14px] shadow-[0_1px_0_rgba(0,0,0,0.04)] sm:px-6">
       <div className="min-w-0">
-        <h2 className="text-[15px] font-bold leading-none text-[#2E2F31]">
+        <h2 className="text-[15px] font-bold leading-none text-[#4b4949]">
           {title}
         </h2>
         <p className="mt-[8px] text-[11px] font-normal leading-none text-[#2E2F31]">
@@ -967,11 +967,11 @@ export function ProductPage() {
         >
           <h1
             id="pizza-title"
-            className="text-[21px] font-bold leading-[1.12] text-[#2E2F31] sm:text-[23px]"
+            className="text-[21px] font-bold leading-[1.12] text-[#4b4949] sm:text-[23px]"
           >
             {screen.productTitle}
           </h1>
-          <p className="mt-[10px] max-w-[620px] text-[13px] font-normal leading-[1.38] tracking-wide text-[#2E2F31] sm:text-[14px]">
+          <p className="mt-[10px] max-w-[620px] text-[13px] font-normal leading-[1.38] tracking-wide text-[#6c757d] sm:text-[14px]">
             {screen.productDescription}
           </p>
         </section>
@@ -1045,10 +1045,10 @@ export function ProductPage() {
                     disabled={optionLocked}
                     className="min-w-0 pr-0 text-left disabled:cursor-not-allowed"
                   >
-                    <span className="block truncate text-[14px] font-bold leading-[1.15] text-[#2E2F31] sm:text-[15px]">
+                    <span className="block truncate text-[14px] font-bold leading-[1.15] text-[#4b4949] sm:text-[15px]">
                       {option.name}
                     </span>
-                    <p className="mt-[6px] max-w-[430px] whitespace-normal break-words text-[11px] font-normal leading-[1.35] tracking-wide text-[#2E2F31] sm:text-[12px] sm:leading-[1.35]">
+                    <p className="mt-[6px] max-w-[430px] whitespace-normal break-words text-[11px] font-normal leading-[1.35] tracking-wide text-[#6c757d] sm:text-[12px] sm:leading-[1.35]">
                       {option.description}
                     </p>
                     <span className="mt-[6px] block text-[12px] font-bold leading-none text-[#2E2F31] sm:text-[13px]">
@@ -1106,10 +1106,10 @@ export function ProductPage() {
                   />
 
                   <div className="min-w-0">
-                    <span className="block truncate text-[14px] font-bold leading-[1.15] text-[#2E2F31] sm:text-[15px]">
+                    <span className="block truncate text-[14px] font-bold leading-[1.15] text-[#4b4949] sm:text-[15px]">
                       {option.name}
                     </span>
-                    <p className="mt-[6px] max-w-[430px] whitespace-normal break-words text-[11px] font-normal leading-[1.35] tracking-wide text-[#2E2F31] sm:text-[12px] sm:leading-[1.35]">
+                    <p className="mt-[6px] max-w-[430px] whitespace-normal break-words text-[11px] font-normal leading-[1.35] tracking-wide text-[#6c757d] sm:text-[12px] sm:leading-[1.35]">
                       {option.description}
                     </p>
                     <span className="mt-[6px] block text-[12px] font-bold leading-none text-[#2E2F31] sm:text-[13px]">
@@ -1166,10 +1166,10 @@ export function ProductPage() {
                     onClick={() => incrementOrderBumpSelection(option.id)}
                     className="min-w-0 text-left"
                   >
-                    <span className="block truncate text-[14px] font-bold leading-[1.15] text-[#2E2F31] sm:text-[15px]">
+                    <span className="block truncate text-[14px] font-bold leading-[1.15] text-[#4b4949] sm:text-[15px]">
                       {option.name}
                     </span>
-                    <p className="mt-[6px] max-w-[430px] whitespace-normal break-words text-[11px] font-normal leading-[1.35] tracking-wide text-[#2E2F31] sm:text-[12px] sm:leading-[1.35]">
+                    <p className="mt-[6px] max-w-[430px] whitespace-normal break-words text-[11px] font-normal leading-[1.35] tracking-wide text-[#6c757d] sm:text-[12px] sm:leading-[1.35]">
                       {option.description}
                     </p>
                     <span className="mt-[6px] block text-[12px] font-bold leading-none text-[#2E2F31] sm:text-[13px]">
@@ -1197,7 +1197,7 @@ export function ProductPage() {
           <label htmlFor="order-note" className="block">
             <span
               id="observacao-heading"
-              className="block text-[14px] font-bold leading-none text-[#2E2F31] sm:text-[15px]"
+              className="block text-[14px] font-bold leading-none text-[#4b4949] sm:text-[15px]"
             >
               Alguma observação?
             </span>

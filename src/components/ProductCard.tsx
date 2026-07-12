@@ -169,7 +169,7 @@ export function ProductCard({ product, onNavigate }: Props) {
         "relative min-h-[122px] w-full cursor-pointer overflow-hidden rounded-[14px] p-3 pr-[136px] transition-transform active:scale-[0.99]",
         showContentSkeleton
           ? "border-0 bg-[#eeeeee] shadow-none"
-          : "border border-menu-card-border bg-white shadow-[0_4px_16px_rgba(0,0,0,0.08)]",
+          : "border-[0.50px] border-[#f1f1f1] bg-white shadow-[0_4px_16px_rgba(0,0,0,0.08)]",
       ].join(" ")}
       aria-label={`Ver detalhes de ${product.name}`}
     >
@@ -179,12 +179,12 @@ export function ProductCard({ product, onNavigate }: Props) {
         <ProductTextSkeleton />
       ) : (
         <div className="relative z-10">
-          <h3 className="line-clamp-1 text-[16px] font-bold leading-[1.25] tracking-[-0.4px] text-[#2e2828]">
+          <h3 className="line-clamp-1 text-[16.0975px] font-semibold leading-[20.9268px] tracking-normal text-[#2e2828]">
             {product.name}
           </h3>
 
           {product.description && (
-            <p className="mt-2 line-clamp-2 max-w-[190px] text-[12px] font-normal leading-[1.45] tracking-[-0.2px] text-menu-text-soft">
+            <p className="line-clamp-2 max-h-[45.112px] max-w-[190px] overflow-hidden pt-[9px] text-[14.0975px] font-normal leading-[18.3267px] tracking-normal text-[#6c757d]">
               {product.description}
             </p>
           )}
