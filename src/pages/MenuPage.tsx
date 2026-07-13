@@ -556,7 +556,7 @@ export function MenuPage() {
         <div
           className="mx-auto flex min-h-dvh w-full max-w-[768px] flex-col bg-[#ffffff]"
           style={{
-            paddingBottom: `calc(${cartCount > 0 ? 152 : 86}px + env(safe-area-inset-bottom))`,
+            paddingBottom: `calc(${cartCount > 0 ? 138 : 86}px + env(safe-area-inset-bottom))`,
           }}
         >
           {/* A top bar permanece normal durante o carregamento, sem skeleton. */}
@@ -708,7 +708,7 @@ export function MenuPage() {
       <div
         className="mx-auto flex min-h-dvh w-full max-w-[768px] flex-col bg-[#ffffff]"
         style={{
-          paddingBottom: `calc(${cartCount > 0 ? 152 : 86}px + env(safe-area-inset-bottom))`,
+          paddingBottom: `calc(${cartCount > 0 ? 138 : 86}px + env(safe-area-inset-bottom))`,
         }}
       >
         <StoreHeader
