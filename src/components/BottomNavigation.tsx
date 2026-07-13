@@ -24,11 +24,11 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
   return (
     <nav
       className="fixed bottom-0 left-1/2 z-50 w-full max-w-[768px] -translate-x-1/2"
-      style={{ height: '56px' }}
+      style={{ height: '64px' }}
       aria-label="Navegação inferior"
     >
       <div
-        className="relative flex h-full w-full items-end justify-around border-t border-[#f1f1f1] bg-white px-1"
+        className="relative flex h-full w-full items-center justify-around border-t border-[#f1f1f1] bg-white px-1"
       >
         <NavItem
           label="Início"
@@ -101,10 +101,10 @@ function NavItem({ label, icon, active, onClick, badge }: NavItemProps) {
       type="button"
       onClick={onClick}
       aria-current={active ? 'page' : undefined}
-      className="relative flex h-[54px] w-20 flex-col items-center justify-center gap-1 transition-transform duration-200 active:scale-95"
+      className="relative flex h-full w-20 flex-col items-center justify-center gap-1 pt-[2px] transition-transform duration-200 active:scale-95"
     >
       {active && (
-        <span className="absolute left-1/2 top-0 h-[2px] w-8 -translate-x-1/2 bg-[var(--menu-primary)]" />
+        <span className="absolute left-1/2 top-[8px] h-[2px] w-8 -translate-x-1/2 bg-[var(--menu-primary)]" />
       )}
 
       <div

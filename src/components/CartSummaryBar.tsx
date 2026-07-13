@@ -12,7 +12,7 @@ function fmt(value: number) {
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
 
-export function CartSummaryBar({ quantity, total, onClick, bottomOffset = 56 }: Props) {
+export function CartSummaryBar({ quantity, total, onClick, bottomOffset = 64 }: Props) {
   if (quantity <= 0) return null
 
   return (
@@ -31,7 +31,7 @@ export function CartSummaryBar({ quantity, total, onClick, bottomOffset = 56 }: 
           <ShoppingBag className="h-[23px] w-[23px] text-white" strokeWidth={2} />
         </span>
 
-        <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-[14px] font-bold leading-none tracking-[0.1px] text-white">
+        <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-[14px] font-normal leading-none tracking-[0.1px] text-white">
           Ver sacola
         </span>
 
