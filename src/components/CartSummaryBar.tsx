@@ -12,13 +12,13 @@ function fmt(value: number) {
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
 
-export function CartSummaryBar({ quantity, total, onClick, bottomOffset = 60 }: Props) {
+export function CartSummaryBar({ quantity, total, onClick, bottomOffset = 56 }: Props) {
   if (quantity <= 0) return null
 
   return (
     <aside
       className="fixed left-1/2 z-[51] w-full max-w-[768px] -translate-x-1/2"
-      style={{ bottom: `calc(${bottomOffset}px + max(4px, calc(env(safe-area-inset-bottom) - 10px)))` }}
+      style={{ bottom: `${bottomOffset}px` }}
       aria-label="Resumo da sacola"
     >
       <button

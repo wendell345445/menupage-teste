@@ -24,14 +24,11 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
   return (
     <nav
       className="fixed bottom-0 left-1/2 z-50 w-full max-w-[768px] -translate-x-1/2"
-      style={{ height: 'calc(60px + max(4px, calc(env(safe-area-inset-bottom) - 10px)))' }}
+      style={{ height: '56px' }}
       aria-label="Navegação inferior"
     >
       <div
         className="relative flex h-full w-full items-end justify-around border-t border-[#f1f1f1] bg-white px-1"
-        style={{
-          paddingBottom: 'max(4px, calc(env(safe-area-inset-bottom) - 10px))',
-        }}
       >
         <NavItem
           label="Início"
