@@ -28,23 +28,11 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
       aria-label="Navegação inferior"
     >
       <div
-        className="relative flex h-full w-full items-end justify-around rounded-t-[28px] px-1"
+        className="relative flex h-full w-full items-end justify-around border-t border-[#f1f1f1] bg-white px-1"
         style={{
           paddingBottom: 'calc(10px + env(safe-area-inset-bottom))',
-          background: 'linear-gradient(180deg,rgba(255,255,255,0.75) 0%,rgba(255,255,255,0.97) 30%)',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          boxShadow: '0 -1px 0 rgba(0,0,0,0.06), 0 -8px 40px rgba(0,0,0,0.08)',
         }}
       >
-        <span
-          className="absolute left-0 top-0 h-px w-full"
-          style={{
-            background:
-              'linear-gradient(90deg, transparent 5%, color-mix(in srgb, var(--menu-primary) 22%, transparent) 40%, color-mix(in srgb, var(--menu-primary) 22%, transparent) 60%, transparent 95%)',
-          }}
-        />
-
         <NavItem
           label="Início"
           icon={<SvgMaskIcon src={HOME_ICON_SRC} active={isHome} />}
@@ -54,7 +42,13 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
 
         <NavItem
           label="Carrinho"
-          icon={<ShoppingBag className="h-[21px] w-[21px]" style={{ color: INACTIVE_COLOR }} strokeWidth={1.9} />}
+          icon={
+            <ShoppingBag
+              className="h-[21px] w-[21px]"
+              color={INACTIVE_COLOR}
+              strokeWidth={1.9}
+            />
+          }
           active={false}
           onClick={onCartClick}
           badge={cartQuantity > 0 ? cartQuantity : undefined}
@@ -80,10 +74,9 @@ function SvgMaskIcon({ src, active }: SvgMaskIconProps) {
   return (
     <span
       aria-hidden="true"
-      className="block h-[22px] w-[22px] transition-opacity duration-200"
+      className="block h-[22px] w-[22px] transition-colors duration-200"
       style={{
         backgroundColor: active ? THEME_COLOR : INACTIVE_COLOR,
-        opacity: 1,
         WebkitMaskImage: `url("${src}")`,
         maskImage: `url("${src}")`,
         WebkitMaskRepeat: 'no-repeat',
@@ -111,36 +104,28 @@ function NavItem({ label, icon, active, onClick, badge }: NavItemProps) {
       type="button"
       onClick={onClick}
       aria-current={active ? 'page' : undefined}
-      className="relative flex h-[58px] w-20 flex-col items-center justify-center gap-1 rounded-[20px] transition-all duration-200 active:scale-95"
-      style={
-        active
-          ? {
-              background: 'linear-gradient(160deg, color-mix(in srgb, var(--menu-primary) 8%, transparent) 0%, color-mix(in srgb, var(--menu-primary) 14%, transparent) 100%)',
-              boxShadow: '0 2px 16px color-mix(in srgb, var(--menu-primary) 10%, transparent), inset 0 1px 0 rgba(255,255,255,0.8)',
-            }
-          : undefined
-      }
+      className="relative flex h-[58px] w-20 flex-col items-center justify-center gap-1 transition-transform duration-200 active:scale-95"
     >
       {active && (
-        <span
-          className="absolute left-1/2 top-0 h-[3.5px] w-9 -translate-x-1/2 rounded-b-full bg-[var(--menu-primary)]"
-          style={{ boxShadow: '0 1px 6px color-mix(in srgb, var(--menu-primary) 22%, transparent)' }}
-        />
+        <span className="absolute left-1/2 top-0 h-[2px] w-8 -translate-x-1/2 bg-[var(--menu-primary)]" />
       )}
 
-      <div className="relative" style={{ color: active ? THEME_COLOR : INACTIVE_COLOR }}>
+      <div
+        className="relative"
+        style={{ color: active ? THEME_COLOR : INACTIVE_COLOR }}
+      >
         {icon}
         {badge != null && badge > 0 && (
-          <span
-            className="absolute -right-[7px] -top-[6px] flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[var(--menu-primary)] px-[3px] text-[9px] font-bold text-white"
-            style={{ boxShadow: '0 2px 8px color-mix(in srgb, var(--menu-primary) 25%, transparent)' }}
-          >
+          <span className="absolute -right-[7px] -top-[6px] flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[var(--menu-primary)] px-[3px] text-[9px] font-bold text-white">
             {badge}
           </span>
         )}
       </div>
 
-      <span className="text-[10px] font-semibold tracking-[0.1px]" style={{ color: active ? THEME_COLOR : INACTIVE_COLOR }}>
+      <span
+        className="text-[10px] font-semibold tracking-[0.1px] transition-colors duration-200"
+        style={{ color: active ? THEME_COLOR : INACTIVE_COLOR }}
+      >
         {label}
       </span>
     </button>
