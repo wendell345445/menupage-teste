@@ -588,7 +588,7 @@ function PizzaQuantityControl({
       >
         <MinusIcon />
       </button>
-      <span className="min-w-[18px] text-center text-[13px] font-bold leading-none text-[#2E2F31]">
+      <span className="min-w-[18px] text-center text-[13px] font-normal leading-none text-[#2E2F31]">
         {quantity}
       </span>
       <button
@@ -1248,7 +1248,7 @@ export function ProductPage() {
             >
               <MinusIcon />
             </button>
-            <span className="min-w-7 text-center text-[14px] font-bold text-[#2E2F31]">
+            <span className="min-w-7 text-center text-[14px] font-normal text-[#2E2F31]">
               {quantity}
             </span>
             <button

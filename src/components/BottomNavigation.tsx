@@ -104,7 +104,7 @@ function NavItem({ label, icon, active, onClick, badge }: NavItemProps) {
       >
         {icon}
         {badge != null && badge > 0 && (
-          <span className="absolute -right-[7px] -top-[6px] flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[var(--menu-primary)] px-[3px] text-[9px] font-bold text-white">
+          <span className="absolute -right-[7px] -top-[6px] flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[var(--menu-primary)] px-[3px] text-[9px] font-normal text-white">
             {badge}
           </span>
         )}
