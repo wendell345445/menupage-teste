@@ -133,7 +133,10 @@ export function ProductCard({ product, onNavigate }: Props) {
   // Quick-add: só aplica se o produto não tem variação nem adicional. Caso
   // contrário precisa abrir a página do produto pra cliente escolher.
   const canQuickAdd =
-    !hasVariations && !hasAdditionals && !hasOptionGroups && product.basePrice != null;
+    !hasVariations &&
+    !hasAdditionals &&
+    !hasOptionGroups &&
+    product.basePrice != null;
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -184,7 +187,7 @@ export function ProductCard({ product, onNavigate }: Props) {
           </h3>
 
           {product.description && (
-            <p className="mt-[9px] line-clamp-2 w-full overflow-hidden text-[14.0975px] font-normal leading-[18.3267px] tracking-normal text-[#6c757d]">
+            <p className="mt-[9px] line-clamp-2 w-full overflow-hidden text-[14.0975px] font-normal leading-[18.3267px] tracking-normal text-[#6c7d70]">
               {product.description}
             </p>
           )}
@@ -195,7 +198,7 @@ export function ProductCard({ product, onNavigate }: Props) {
                 <span className="text-[11px] text-gray-400 line-through">
                   {fmtBRL(displayPrice!)}
                 </span>
-                <span className="whitespace-nowrap text-[17px] font-bold leading-none tracking-[-0.5px] text-menu-primary">
+                <span className="whitespace-nowrap text-[17px] font-bold leading-none tracking-[-0.5px] text-[#4bb363]">
                   {fmtBRL(product.promoPrice!)}
                 </span>
               </div>

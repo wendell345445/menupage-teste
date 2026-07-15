@@ -926,7 +926,7 @@ export function MenuPage() {
                                 <MenuShimmer className="mt-1 h-[14px] w-[72px] rounded-full" />
                               ) : (
                                 finalPrice > 0 && (
-                                  <span className="mt-1 block whitespace-nowrap text-[13px] font-black leading-none tracking-[-0.25px] text-[#1f8f18] sm:text-[14px]">
+                                  <span className="mt-1 block whitespace-nowrap text-[13px] font-normal leading-none tracking-[-0.25px] text-[#4bb363] sm:text-[14px]">
                                     {fmtBRL(finalPrice)}
                                   </span>
                                 )
@@ -937,11 +937,11 @@ export function MenuPage() {
                                   <MenuShimmer className="h-[9px] w-[48px] rounded-full" />
                                 ) : hasPromo ? (
                                   <>
-                                    <span className="whitespace-nowrap text-[9px] font-semibold leading-none text-[#4a4a4a] line-through sm:text-[10px]">
+                                    <span className="whitespace-nowrap text-[9px] font-normal leading-none text-[#4a4a4a] line-through sm:text-[10px]">
                                       {fmtBRL(basePrice)}
                                     </span>
 
-                                    <span className="rounded-[2px] bg-[#1f8f18] px-1 py-[1.5px] text-[7px] font-bold leading-none text-white">
+                                    <span className="rounded-[2px] bg-[#4bb363] px-1 py-[1.5px] text-[7px] font-bold leading-none text-white">
                                       {discount}%
                                     </span>
                                   </>

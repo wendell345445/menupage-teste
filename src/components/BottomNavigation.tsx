@@ -1,10 +1,10 @@
-import { ShoppingBag } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 const THEME_COLOR = 'var(--menu-primary)'
 const INACTIVE_COLOR = '#747474'
 const HOME_ICON_SRC = '/home%202.svg'
 const ORDERS_ICON_SRC = '/pedidos.svg'
+const SHOPPING_BAG_ICON_SRC = '/shopping-bag.svg'
 
 interface Props {
   cartQuantity: number
@@ -38,14 +38,8 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
         />
 
         <NavItem
-          label="Carrinho"
-          icon={
-            <ShoppingBag
-              className="h-[21px] w-[21px]"
-              color={INACTIVE_COLOR}
-              strokeWidth={1.9}
-            />
-          }
+          label="Sacola"
+          icon={<SvgMaskIcon src={SHOPPING_BAG_ICON_SRC} active={false} maskSize="115%" />}
           active={false}
           onClick={onCartClick}
           badge={cartQuantity > 0 ? cartQuantity : undefined}
@@ -65,9 +59,10 @@ export function BottomNavigation({ cartQuantity, onCartClick, tableMode = false 
 interface SvgMaskIconProps {
   src: string
   active: boolean
+  maskSize?: string
 }
 
-function SvgMaskIcon({ src, active }: SvgMaskIconProps) {
+function SvgMaskIcon({ src, active, maskSize = 'contain' }: SvgMaskIconProps) {
   return (
     <span
       aria-hidden="true"
@@ -80,8 +75,8 @@ function SvgMaskIcon({ src, active }: SvgMaskIconProps) {
         maskRepeat: 'no-repeat',
         WebkitMaskPosition: 'center',
         maskPosition: 'center',
-        WebkitMaskSize: 'contain',
-        maskSize: 'contain',
+        WebkitMaskSize: maskSize,
+        maskSize,
       }}
     />
   )
@@ -103,10 +98,6 @@ function NavItem({ label, icon, active, onClick, badge }: NavItemProps) {
       aria-current={active ? 'page' : undefined}
       className="relative flex h-full w-20 flex-col items-center justify-center gap-1 pt-[2px] transition-transform duration-200 active:scale-95"
     >
-      {active && (
-        <span className="absolute left-1/2 top-[8px] h-[2px] w-8 -translate-x-1/2 bg-[var(--menu-primary)]" />
-      )}
-
       <div
         className="relative"
         style={{ color: active ? THEME_COLOR : INACTIVE_COLOR }}
