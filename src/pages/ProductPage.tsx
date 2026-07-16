@@ -46,6 +46,7 @@ const fallbackProduct = {
   description:
     "A pizza portuguesa é um clássico brasileiro criado por padeiros de origem lusa, e não um prato tradicional de Portugal.",
   imageUrl: "/product-page/pizza-portuguesa.png",
+  basePrice: 49.99,
 };
 
 const fallbackPizzaOptions: PizzaOptionView[] = [
@@ -271,6 +272,66 @@ function getBasePrice(product: Product | null) {
   return 0;
 }
 
+function getProductStartingPrice(product: Product | null) {
+  if (!product) return fallbackProduct.basePrice;
+
+  const activeVariationPrices = product.variations
+    .filter((variation) => variation.isActive && variation.price != null)
+    .map((variation) => variation.price);
+
+  if (activeVariationPrices.length > 0) {
+    return Math.min(...activeVariationPrices);
+  }
+
+  if (product.basePrice != null) {
+    const hasPromo =
+      product.promoPrice != null && product.promoPrice < product.basePrice;
+
+    return hasPromo ? product.promoPrice! : product.basePrice;
+  }
+
+  const activeOptionPrices =
+    product.optionGroups
+      ?.flatMap((group) => group.options)
+      .filter((option) => option.isActive !== false && option.price != null)
+      .map((option) => option.price) ?? [];
+
+  return activeOptionPrices.length > 0
+    ? Math.min(...activeOptionPrices)
+    : null;
+}
+
+function hasActiveProductPromo(product: Product | null) {
+  if (!product || product.variations.some((variation) => variation.isActive)) {
+    return false;
+  }
+
+  return (
+    product.basePrice != null &&
+    product.promoPrice != null &&
+    product.promoPrice < product.basePrice
+  );
+}
+
+function shouldShowStartingFrom(product: Product | null) {
+  if (!product) return true;
+
+  if (product.variations.some((variation) => variation.isActive)) {
+    return true;
+  }
+
+  return (
+    product.basePrice == null &&
+    Boolean(
+      product.optionGroups?.some((group) =>
+        group.options.some(
+          (option) => option.isActive !== false && option.price != null,
+        ),
+      ),
+    )
+  );
+}
+
 function useProductScreenData(product: Product | null) {
   return useMemo(() => {
     const groups = product?.optionGroups ?? [];
@@ -282,6 +343,7 @@ function useProductScreenData(product: Product | null) {
     const orderBumpOptions = getActiveOptions(orderBumpGroup).map(
       toOrderBumpOptionView,
     );
+    const hasActivePromo = hasActiveProductPromo(product);
 
     return {
       productId: product?.id || fallbackProduct.id,
@@ -293,6 +355,10 @@ function useProductScreenData(product: Product | null) {
       productImage:
         resolvePublicImage(product?.imageUrl) || fallbackProduct.imageUrl,
       basePrice: getBasePrice(product),
+      displayPrice: getProductStartingPrice(product),
+      originalPrice: hasActivePromo ? product?.basePrice ?? null : null,
+      hasActivePromo,
+      showStartingFrom: shouldShowStartingFrom(product),
       pizzaGroupTitle: pizzaGroup?.title || "Pizzas (Grande)",
       pizzaGroupHelper: pizzaGroup?.helperText || "Escolha até 2 opções",
       pizzaMax: pizzaGroup?.max ?? 2,
@@ -355,7 +421,7 @@ function OptionalBadge() {
 
 function SelectedItemsBadge({ count }: { count: number }) {
   return (
-    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-[#EBA320] px-2.5 py-1 text-[11px] font-bold leading-none text-white">
+    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-[#000000] px-2.5 py-1 text-[11px] font-bold leading-none text-white">
       {count === 1 ? "1 item" : `${count} itens`}
     </span>
   );
@@ -405,6 +471,7 @@ function ProductPageSkeleton() {
           <SkeletonBlock className="h-[24px] w-4/5 max-w-[360px]" />
           <SkeletonBlock className="mt-[10px] h-[14px] w-full max-w-[600px]" />
           <SkeletonBlock className="mt-[7px] h-[14px] w-[72%] max-w-[440px]" />
+          <SkeletonBlock className="mt-[12px] h-[18px] w-[128px]" />
         </section>
 
         <SkeletonSection rows={optionRows} withImage />
@@ -532,7 +599,7 @@ function SectionHeader({
 function PlusIcon({ className = "h-[17px] w-[17px]" }: { className?: string }) {
   return (
     <span
-      className={`block shrink-0 bg-[#EBA320] ${className}`}
+      className={`block shrink-0 bg-[#000000] ${className}`}
       style={{
         WebkitMask: "url('/product-page/vector-2.svg') center / contain no-repeat",
         mask: "url('/product-page/vector-2.svg') center / contain no-repeat",
@@ -545,7 +612,7 @@ function PlusIcon({ className = "h-[17px] w-[17px]" }: { className?: string }) {
 function MinusIcon({ className = "w-[17px]" }: { className?: string }) {
   return (
     <span
-      className={`block h-[3px] shrink-0 rounded-full bg-[#EBA320] ${className}`}
+      className={`block h-[3px] shrink-0 rounded-full bg-[#000000] ${className}`}
       aria-hidden="true"
     />
   );
@@ -944,7 +1011,7 @@ export function ProductPage() {
             className="absolute inset-0 z-10 cursor-zoom-in bg-transparent"
           />
 
-          <div className="absolute inset-x-0 bottom-0 z-[11] h-[3px] min-h-[3px] w-full bg-[#EBA320]" />
+          <div className="absolute inset-x-0 bottom-0 z-[11] h-[3px] min-h-[3px] w-full bg-[#000000]" />
 
           <button
             type="button"
@@ -974,6 +1041,27 @@ export function ProductPage() {
           <p className="mt-[10px] max-w-[620px] text-[13px] font-normal leading-[1.38] tracking-wide text-[#6c757d] sm:text-[14px]">
             {screen.productDescription}
           </p>
+
+          {screen.displayPrice != null ? (
+            <div className="mt-[12px] flex items-baseline gap-2">
+              {screen.hasActivePromo && screen.originalPrice != null ? (
+                <span className="text-[12px] font-normal text-[#9A9A9A] line-through">
+                  {fmtBRL(screen.originalPrice)}
+                </span>
+              ) : null}
+
+              <span
+                className={`text-[18px] font-bold leading-none tracking-[-0.35px] ${
+                  screen.hasActivePromo ? "text-[#4bb363]" : "text-[#4b4949]"
+                }`}
+              >
+                {!screen.hasActivePromo && screen.showStartingFrom
+                  ? "A partir de "
+                  : ""}
+                {fmtBRL(screen.displayPrice)}
+              </span>
+            </div>
+          ) : null}
         </section>
 
         <section aria-labelledby="sabores-heading" className="w-full">
@@ -1207,7 +1295,7 @@ export function ProductPage() {
               onChange={(event) => setOrderNote(event.target.value)}
               placeholder="Ex: tirar cebola, deixar bem assada..."
               maxLength={180}
-              className="mt-3 min-h-[96px] w-full resize-none rounded-[7px] border border-[#E6E6E6] bg-white px-3.5 py-3 text-[13px] font-normal leading-[1.35] text-[#2E2F31] outline-none placeholder:text-[#9A9A9A] focus:border-[#EBA320] focus:ring-2 focus:ring-[#EBA320]/15 sm:text-[14px]"
+              className="mt-3 min-h-[96px] w-full resize-none rounded-[7px] border border-[#E6E6E6] bg-white px-3.5 py-3 text-[13px] font-normal leading-[1.35] text-[#2E2F31] outline-none placeholder:text-[#9A9A9A] focus:border-[#000000] focus:ring-2 focus:ring-[#000000]/15 sm:text-[14px]"
             />
           </label>
         </section>
@@ -1243,8 +1331,9 @@ export function ProductPage() {
             <button
               type="button"
               aria-label="Diminuir quantidade"
+              disabled={quantity <= 1}
               onClick={() => setQuantity((current) => Math.max(1, current - 1))}
-              className="flex h-full w-11 items-center justify-center active:scale-95"
+              className="flex h-full w-11 items-center justify-center transition-opacity active:scale-95 disabled:cursor-default disabled:opacity-25 disabled:active:scale-100"
             >
               <MinusIcon />
             </button>
@@ -1266,7 +1355,7 @@ export function ProductPage() {
             onClick={handleAddToCart}
             className={`flex h-11 min-h-11 min-w-0 flex-1 shrink-0 items-center justify-center rounded-[7px] px-4 text-[14px] font-bold leading-none active:scale-[0.99] sm:text-[15px] ${
               canAdd || shouldShowMissingState
-                ? "bg-[#EBA320] text-white"
+                ? "bg-[#000000] text-white"
                 : "bg-[#D9D9D9] text-[#5B5858]"
             }`}
           >

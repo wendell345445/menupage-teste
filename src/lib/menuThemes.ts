@@ -1,4 +1,4 @@
-export type MenuThemeKey = 'gold' | 'blue' | 'red' | 'black'
+export type MenuThemeKey = 'blue' | 'red' | 'black'
 
 export interface MenuTheme {
   key: MenuThemeKey
@@ -8,12 +8,6 @@ export interface MenuTheme {
 }
 
 export const menuThemes = {
-  gold: {
-    key: 'gold',
-    name: 'Dourado',
-    primaryColor: '#EBA320',
-    secondaryColor: '#C98514',
-  },
   blue: {
     key: 'blue',
     name: 'Azul',
@@ -29,12 +23,12 @@ export const menuThemes = {
   black: {
     key: 'black',
     name: 'Preto',
-    primaryColor: '#111111',
-    secondaryColor: '#2B2B2B',
+    primaryColor: '#000000',
+    secondaryColor: '#000000',
   },
 } satisfies Record<MenuThemeKey, MenuTheme>
 
-export const DEFAULT_MENU_THEME = menuThemes.gold
+export const DEFAULT_MENU_THEME = menuThemes.black
 
 export function getMenuThemeFromUrl(): MenuTheme {
   if (typeof window === 'undefined') return DEFAULT_MENU_THEME
