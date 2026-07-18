@@ -22,6 +22,27 @@ function fmtBRL(v: number) {
   return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
+function getPriceDefiningOptionGroup(product: Product) {
+  const groups = product.optionGroups ?? [];
+  const hasActivePricedOptions = (group: (typeof groups)[number]) =>
+    group.options.some(
+      (option) => option.isActive !== false && option.price != null,
+    );
+
+  return (
+    groups.find(
+      (group) =>
+        group.pricingStrategy === "highest" && hasActivePricedOptions(group),
+    ) ??
+    groups.find(
+      (group) =>
+        (group.required || (group.min ?? 0) > 0) &&
+        hasActivePricedOptions(group),
+    ) ??
+    null
+  );
+}
+
 function getProductStartingPrice(product: Product) {
   const activeVariations = product.variations.filter(
     (variation) => variation.isActive && variation.price != null,
@@ -35,17 +56,28 @@ function getProductStartingPrice(product: Product) {
     return product.basePrice;
   }
 
+  const priceGroup = getPriceDefiningOptionGroup(product);
   const activeOptionPrices =
-    product.optionGroups
-      ?.flatMap((group) => group.options)
+    priceGroup?.options
       .filter((option) => option.isActive !== false && option.price != null)
       .map((option) => option.price) ?? [];
 
-  if (activeOptionPrices.length > 0) {
-    return Math.min(...activeOptionPrices);
+  return activeOptionPrices.length > 0
+    ? Math.min(...activeOptionPrices)
+    : null;
+}
+
+function shouldShowStartingFrom(product: Product) {
+  if (product.variations.some((variation) => variation.isActive)) {
+    return true;
   }
 
-  return null;
+  const priceGroup = getPriceDefiningOptionGroup(product);
+  return (
+    product.basePrice == null &&
+    priceGroup != null &&
+    priceGroup.pricingStrategy === "highest"
+  );
 }
 
 const IMAGE_SKELETON_MIN_MS = 800;
@@ -122,6 +154,7 @@ export function ProductCard({ product, onNavigate }: Props) {
   // v2.9: addons via ProductAddon. Filtra addon ativo.
   const hasAdditionals = product.addons.some((link) => link.addon.isActive);
   const displayPrice = getProductStartingPrice(product);
+  const showStartingFrom = shouldShowStartingFrom(product);
 
   // Promo por produto só se aplica quando não há variations.
   const hasActivePromo =
@@ -133,10 +166,7 @@ export function ProductCard({ product, onNavigate }: Props) {
   // Quick-add: só aplica se o produto não tem variação nem adicional. Caso
   // contrário precisa abrir a página do produto pra cliente escolher.
   const canQuickAdd =
-    !hasVariations &&
-    !hasAdditionals &&
-    !hasOptionGroups &&
-    product.basePrice != null;
+    !hasVariations && !hasAdditionals && !hasOptionGroups && product.basePrice != null;
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -187,7 +217,7 @@ export function ProductCard({ product, onNavigate }: Props) {
           </h3>
 
           {product.description && (
-            <p className="mt-[9px] line-clamp-2 w-full overflow-hidden text-[14.0975px] font-normal leading-[18.3267px] tracking-normal text-[#6c7d70]">
+            <p className="mt-[9px] line-clamp-2 w-full overflow-hidden text-[14.0975px] font-normal leading-[18.3267px] tracking-normal text-[#6c757d]">
               {product.description}
             </p>
           )}
@@ -204,7 +234,7 @@ export function ProductCard({ product, onNavigate }: Props) {
               </div>
             ) : displayPrice != null ? (
               <span className="whitespace-nowrap text-[17px] font-bold leading-none tracking-[-0.5px] text-[#4a4a4a]">
-                {hasVariations ? "A partir de " : ""}
+                {showStartingFrom ? "A partir de " : ""}
                 {fmtBRL(displayPrice)}
               </span>
             ) : null}

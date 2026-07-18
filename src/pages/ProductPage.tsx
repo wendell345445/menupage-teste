@@ -290,9 +290,23 @@ function getProductStartingPrice(product: Product | null) {
     return hasPromo ? product.promoPrice! : product.basePrice;
   }
 
+  const groups = product.optionGroups ?? [];
+  const hasActivePricedOptions = (group: ProductOptionGroup) =>
+    group.options.some(
+      (option) => option.isActive !== false && option.price != null,
+    );
+  const priceGroup =
+    groups.find(
+      (group) =>
+        group.pricingStrategy === "highest" && hasActivePricedOptions(group),
+    ) ??
+    groups.find(
+      (group) =>
+        (group.required || (group.min ?? 0) > 0) &&
+        hasActivePricedOptions(group),
+    );
   const activeOptionPrices =
-    product.optionGroups
-      ?.flatMap((group) => group.options)
+    priceGroup?.options
       .filter((option) => option.isActive !== false && option.price != null)
       .map((option) => option.price) ?? [];
 
@@ -323,10 +337,12 @@ function shouldShowStartingFrom(product: Product | null) {
   return (
     product.basePrice == null &&
     Boolean(
-      product.optionGroups?.some((group) =>
-        group.options.some(
-          (option) => option.isActive !== false && option.price != null,
-        ),
+      product.optionGroups?.some(
+        (group) =>
+          group.pricingStrategy === "highest" &&
+          group.options.some(
+            (option) => option.isActive !== false && option.price != null,
+          ),
       ),
     )
   );
@@ -362,6 +378,7 @@ function useProductScreenData(product: Product | null) {
       pizzaGroupTitle: pizzaGroup?.title || "Pizzas (Grande)",
       pizzaGroupHelper: pizzaGroup?.helperText || "Escolha até 2 opções",
       pizzaMax: pizzaGroup?.max ?? 2,
+      pizzaPricingStrategy: pizzaGroup?.pricingStrategy ?? "highest",
       pizzaOptions:
         pizzaOptions.length > 0 ? pizzaOptions : fallbackPizzaOptions,
       borderGroupTitle: borderGroup?.title || "Qual sabor da borda?",
@@ -802,7 +819,13 @@ export function ProductPage() {
     if (!highest || option.priceValue > highest.priceValue) return option;
     return highest;
   }, null);
-  const pizzaPrice = highestPricedPizzaOption?.priceValue ?? 0;
+  const pizzaPrice =
+    screen.pizzaPricingStrategy === "highest"
+      ? highestPricedPizzaOption?.priceValue ?? 0
+      : selectedPizzaOptions.reduce(
+          (sum, option) => sum + option.priceValue * option.quantity,
+          0,
+        );
   const borderPrice = selectedBorderOption?.priceValue ?? 0;
   const orderBumpPrice = selectedOrderBumpOptions.reduce(
     (sum, option) => sum + option.priceValue * option.quantity,
@@ -943,9 +966,11 @@ export function ProductPage() {
               ? `${option.name} x${option.quantity}`
               : option.name,
           price:
-            option.id === highestPricedPizzaOption?.id
-              ? highestPricedPizzaOption.priceValue
-              : 0,
+            screen.pizzaPricingStrategy === "highest"
+              ? option.id === highestPricedPizzaOption?.id
+                ? highestPricedPizzaOption.priceValue
+                : 0
+              : option.priceValue * option.quantity,
           groupId: "sabores-grande",
           groupName: screen.pizzaGroupTitle,
         })),
@@ -1074,6 +1099,13 @@ export function ProductPage() {
             missingCount={missingPizzaCount}
             showMissing={showRequiredFeedback}
           />
+
+          {screen.pizzaPricingStrategy === "highest" &&
+          screen.pizzaMax > 1 ? (
+            <p className="border-b border-[#EEEEEE] bg-white px-[13px] py-[10px] text-[11px] font-normal leading-[1.35] text-[#6c757d] sm:px-6">
+              Em pizzas com mais de um sabor, será cobrado o sabor de maior valor.
+            </p>
+          ) : null}
 
           <fieldset
             className="m-0 border-0 p-0"

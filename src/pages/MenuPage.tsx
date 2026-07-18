@@ -194,10 +194,39 @@ function FeaturedProductImage({
   );
 }
 
-function getProductBasePrice(product: {
+type PriceableMenuProduct = {
   variations?: Array<{ isActive?: boolean; price?: number | null }>;
   basePrice?: number | null;
-}) {
+  optionGroups?: Array<{
+    required?: boolean;
+    min?: number;
+    pricingStrategy?: "sum" | "highest";
+    options: Array<{ isActive?: boolean; price?: number | null }>;
+  }>;
+};
+
+function getPriceDefiningOptionGroup(product: PriceableMenuProduct) {
+  const groups = product.optionGroups ?? [];
+  const hasActivePricedOptions = (group: (typeof groups)[number]) =>
+    group.options.some(
+      (option) => option.isActive !== false && option.price != null,
+    );
+
+  return (
+    groups.find(
+      (group) =>
+        group.pricingStrategy === "highest" && hasActivePricedOptions(group),
+    ) ??
+    groups.find(
+      (group) =>
+        (group.required || (group.min ?? 0) > 0) &&
+        hasActivePricedOptions(group),
+    ) ??
+    null
+  );
+}
+
+function getProductStartingPrice(product: PriceableMenuProduct) {
   const activeVariations =
     product.variations?.filter(
       (variation) => variation.isActive && variation.price != null,
@@ -209,7 +238,32 @@ function getProductBasePrice(product: {
     );
   }
 
-  return product.basePrice ?? 0;
+  if (product.basePrice != null) {
+    return product.basePrice;
+  }
+
+  const priceGroup = getPriceDefiningOptionGroup(product);
+  const activeOptionPrices =
+    priceGroup?.options
+      .filter((option) => option.isActive !== false && option.price != null)
+      .map((option) => option.price ?? 0) ?? [];
+
+  return activeOptionPrices.length > 0
+    ? Math.min(...activeOptionPrices)
+    : null;
+}
+
+function shouldShowStartingFrom(product: PriceableMenuProduct) {
+  if (product.variations?.some((variation) => variation.isActive)) {
+    return true;
+  }
+
+  const priceGroup = getPriceDefiningOptionGroup(product);
+  return (
+    product.basePrice == null &&
+    priceGroup != null &&
+    priceGroup.pricingStrategy === "highest"
+  );
 }
 
 export function MenuPage() {
@@ -883,20 +937,24 @@ export function MenuPage() {
                   <div className="-mx-4 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:-mx-6 sm:px-6 md:-mx-8 md:px-8 [&::-webkit-scrollbar]:hidden">
                     <div className="flex snap-x snap-mandatory items-start gap-3">
                       {featuredProducts.slice(0, 8).map((product) => {
-                        const basePrice = getProductBasePrice(product);
+                        const basePrice = getProductStartingPrice(product);
+                        const showStartingFrom =
+                          shouldShowStartingFrom(product);
                         const hasPromo =
                           product.promoPrice != null &&
                           product.promoPrice > 0 &&
+                          basePrice != null &&
                           basePrice > 0 &&
                           product.promoPrice < basePrice;
                         const finalPrice = hasPromo
                           ? product.promoPrice!
                           : basePrice;
-                        const discount = hasPromo
-                          ? Math.round(
-                              ((basePrice - finalPrice) / basePrice) * 100,
-                            )
-                          : 0;
+                        const discount =
+                          hasPromo && basePrice != null && finalPrice != null
+                            ? Math.round(
+                                ((basePrice - finalPrice) / basePrice) * 100,
+                              )
+                            : 0;
 
                         return (
                           <button
@@ -925,8 +983,12 @@ export function MenuPage() {
                               {showContentSkeleton ? (
                                 <MenuShimmer className="mt-1 h-[14px] w-[72px] rounded-full" />
                               ) : (
+                                finalPrice != null &&
                                 finalPrice > 0 && (
                                   <span className="mt-1 block whitespace-nowrap text-[13px] font-bold leading-none tracking-[-0.25px] text-[#4bb363] sm:text-[14px]">
+                                    {!hasPromo && showStartingFrom
+                                      ? "A partir de "
+                                      : ""}
                                     {fmtBRL(finalPrice)}
                                   </span>
                                 )

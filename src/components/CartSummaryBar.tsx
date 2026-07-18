@@ -1,51 +1,35 @@
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag } from 'lucide-react'
 
 interface Props {
-  quantity: number;
-  total: number;
-  onClick: () => void;
+  quantity: number
+  total: number
+  onClick: () => void
   /** Altura da navegação inferior para manter a barra colada logo acima dela. */
-  bottomOffset?: number;
+  bottomOffset?: number
 }
 
 function fmt(value: number) {
-  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
 
-export function CartSummaryBar({
-  quantity,
-  total,
-  onClick,
-  bottomOffset = 64,
-}: Props) {
-  if (quantity <= 0) return null;
+export function CartSummaryBar({ quantity, total, onClick, bottomOffset = 64 }: Props) {
+  if (quantity <= 0) return null
 
   return (
     <aside
-      className="fixed left-1/2 z-[51] w-full max-w-[768px] -translate-x-1/2"
+      className="fixed inset-x-0 z-[51] mx-auto w-full max-w-[768px] overflow-hidden bg-[var(--menu-primary)]"
       style={{ bottom: `${bottomOffset}px` }}
       aria-label="Resumo da sacola"
     >
       <button
         type="button"
         onClick={onClick}
-        className="relative flex h-[54px] w-full items-center justify-between bg-[var(--menu-primary)] px-4 text-white shadow-[0_-5px_18px_rgba(47,39,23,0.12)] transition-[filter,transform] active:scale-[0.995] active:brightness-[0.97]"
-        aria-label={`${quantity} ${quantity === 1 ? "item" : "itens"} na sacola. Ver sacola. Total ${fmt(total)}`}
+        className="relative flex h-[54px] w-full items-center justify-between border-0 bg-[var(--menu-primary)] px-4 text-white shadow-[0_-5px_18px_rgba(47,39,23,0.12)] transition-[filter] active:brightness-[0.97]"
+        aria-label={`${quantity} ${quantity === 1 ? 'item' : 'itens'} na sacola. Ver sacola. Total ${fmt(total)}`}
       >
-        <span
-          aria-hidden="true"
-          className="block h-7 w-7 shrink-0 bg-white"
-          style={{
-            WebkitMaskImage: 'url("/shopping-bag.svg")',
-            maskImage: 'url("/shopping-bag.svg")',
-            WebkitMaskRepeat: "no-repeat",
-            maskRepeat: "no-repeat",
-            WebkitMaskPosition: "center",
-            maskPosition: "center",
-            WebkitMaskSize: "contain",
-            maskSize: "contain",
-          }}
-        />
+        <span className="flex h-9 w-9 shrink-0 items-center justify-start" aria-hidden="true">
+          <ShoppingBag className="h-[23px] w-[23px] text-white" strokeWidth={2} />
+        </span>
 
         <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-[14px] font-normal leading-none tracking-[0.1px] text-white">
           Ver sacola
@@ -56,5 +40,5 @@ export function CartSummaryBar({
         </strong>
       </button>
     </aside>
-  );
+  )
 }
