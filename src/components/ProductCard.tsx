@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 
 import { type Product } from "../services/menu.service";
+import { ProductImagePlaceholder } from "./ProductImagePlaceholder";
 import { useCartStore } from "../store/useCartStore";
 
 import { resolveImageUrl } from "@/shared/lib/imageUrl";
@@ -129,10 +130,12 @@ function ProductTextSkeleton() {
 
 export function ProductCard({ product, onNavigate }: Props) {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [hasImageError, setHasImageError] = useState(false);
   const [canHideImageSkeleton, setCanHideImageSkeleton] = useState(false);
 
   useEffect(() => {
     setIsImageLoaded(false);
+    setHasImageError(false);
     setCanHideImageSkeleton(false);
 
     const timer = window.setTimeout(() => {
@@ -142,10 +145,12 @@ export function ProductCard({ product, onNavigate }: Props) {
     return () => window.clearTimeout(timer);
   }, [product.imageUrl]);
 
+  const hasProductImage = Boolean(product.imageUrl) && !hasImageError;
   const showImageSkeleton =
-    Boolean(product.imageUrl) && (!isImageLoaded || !canHideImageSkeleton);
+    !canHideImageSkeleton || (hasProductImage && !isImageLoaded);
   const showProductImage =
-    Boolean(product.imageUrl) && isImageLoaded && canHideImageSkeleton;
+    hasProductImage && isImageLoaded && canHideImageSkeleton;
+  const showPlaceholder = !hasProductImage && canHideImageSkeleton;
   const showContentSkeleton = showImageSkeleton;
 
   const addItem = useCartStore((s) => s.addItem);
@@ -235,7 +240,7 @@ export function ProductCard({ product, onNavigate }: Props) {
             ) : displayPrice != null ? (
               <span className="whitespace-nowrap text-[17px] font-bold leading-none tracking-[-0.5px] text-[#4a4a4a]">
                 {showStartingFrom ? (
-                  <span className="mr-1 text-[12px] font-normal tracking-normal">
+                  <span className="mr-1.5 text-[12px] font-normal tracking-normal">
                     A partir de
                   </span>
                 ) : null}
@@ -252,25 +257,25 @@ export function ProductCard({ product, onNavigate }: Props) {
           showContentSkeleton ? "bg-[#e9e9e9]" : "bg-[#f3eeee]",
         ].join(" ")}
       >
-        {product.imageUrl ? (
-          <>
-            {showImageSkeleton && <ImageShimmerSkeleton />}
-            <img
-              className={`block h-full w-full object-cover transition-opacity duration-300 ${
-                showProductImage ? "opacity-100" : "opacity-0"
-              }`}
-              alt={product.name}
-              src={getCloudinaryUrl(product.imageUrl)}
-              loading="lazy"
-              onLoad={() => setIsImageLoaded(true)}
-              onError={() => setIsImageLoaded(true)}
-            />
-          </>
-        ) : (
-          <div className="flex h-full w-full items-center justify-center text-3xl text-gray-300">
-            🍽️
-          </div>
-        )}
+        {showImageSkeleton ? <ImageShimmerSkeleton /> : null}
+
+        {hasProductImage ? (
+          <img
+            className={`block h-full w-full object-cover transition-opacity duration-300 ${
+              showProductImage ? "opacity-100" : "opacity-0"
+            }`}
+            alt={product.name}
+            src={getCloudinaryUrl(product.imageUrl!)}
+            loading="lazy"
+            onLoad={() => setIsImageLoaded(true)}
+            onError={() => {
+              setHasImageError(true);
+              setIsImageLoaded(true);
+            }}
+          />
+        ) : showPlaceholder ? (
+          <ProductImagePlaceholder iconClassName="h-11 w-11" />
+        ) : null}
         {showContentSkeleton ? (
           <ShimmerSurface className="absolute bottom-[6px] right-[6px] z-20 h-5 w-5 rounded-full" />
         ) : (

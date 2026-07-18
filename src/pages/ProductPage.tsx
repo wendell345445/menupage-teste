@@ -10,6 +10,7 @@ import type {
   ProductOptionGroup,
 } from "@/services/menu.service";
 import { useCartStore } from "@/store/useCartStore";
+import { ProductImagePlaceholder } from "@/components/ProductImagePlaceholder";
 
 type PizzaOptionView = {
   id: string;
@@ -17,7 +18,7 @@ type PizzaOptionView = {
   priceValue: number;
   price: string;
   description: string;
-  image: string;
+  image: string | null;
 };
 
 type BorderOptionView = {
@@ -29,7 +30,7 @@ type BorderOptionView = {
 };
 
 type OrderBumpOptionView = BorderOptionView & {
-  image: string;
+  image: string | null;
 };
 
 const fallbackPizzaDescription =
@@ -90,7 +91,7 @@ const fallbackPizzaOptions: PizzaOptionView[] = [
     price: "+ R$ 54,99",
     description:
       "Mussarela, provolone, parmesão e catupiry em uma combinação cremosa.",
-    image: "/product-page/adicionais-1.png",
+    image: null,
   },
   {
     id: "marguerita",
@@ -212,21 +213,13 @@ function cleanDescription(
 }
 
 function toPizzaOptionView(option: ProductOption): PizzaOptionView {
-  const isFrangoCatupiry =
-    option.id === "frango-catupiry" ||
-    option.name.toLowerCase().includes("frango");
-
   return {
     id: option.id,
     name: option.name,
     priceValue: option.price ?? 0,
     price: fmtOptionPrice(option.price),
     description: cleanDescription(option.description, fallbackPizzaDescription),
-    image:
-      resolvePublicImage(option.imageUrl) ||
-      (isFrangoCatupiry
-        ? "/product-page/frango-catupiry.png"
-        : "/product-page/adicionais-3.png"),
+    image: resolvePublicImage(option.imageUrl),
   };
 }
 
@@ -250,8 +243,7 @@ function toOrderBumpOptionView(option: ProductOption): OrderBumpOptionView {
     priceValue: option.price ?? 0,
     price: fmtOptionPrice(option.price),
     description: cleanDescription(option.description, fallbackDrinkDescription),
-    image:
-      resolvePublicImage(option.imageUrl) || drinkImageFallback(option.name),
+    image: resolvePublicImage(option.imageUrl),
   };
 }
 
@@ -368,8 +360,7 @@ function useProductScreenData(product: Product | null) {
         product?.description,
         fallbackProduct.description,
       ),
-      productImage:
-        resolvePublicImage(product?.imageUrl) || fallbackProduct.imageUrl,
+      productImage: resolvePublicImage(product?.imageUrl),
       basePrice: getBasePrice(product),
       displayPrice: getProductStartingPrice(product),
       originalPrice: hasActivePromo ? product?.basePrice ?? null : null,
@@ -701,24 +692,43 @@ function RadioMark({ checked }: { checked: boolean }) {
   );
 }
 
-function optionImageFallback(optionName: string) {
-  return optionName.toLowerCase().includes("frango")
-    ? "/product-page/frango-catupiry.png"
-    : "/product-page/adicionais-3.png";
-}
+function ProductOptionImage({
+  src,
+  className,
+  iconClassName = "h-5 w-5 sm:h-[22px] sm:w-[22px]",
+  objectFitClassName = "object-cover",
+}: {
+  src?: string | null;
+  className: string;
+  iconClassName?: string;
+  objectFitClassName?: string;
+}) {
+  const [imageFailed, setImageFailed] = useState(!src);
 
-function drinkImageFallback(optionName: string) {
-  const normalized = optionName.toLowerCase();
+  useEffect(() => {
+    setImageFailed(!src);
+  }, [src]);
 
-  if (normalized.includes("guaran")) return "/product-page/bebida-guarana.png";
-  if (normalized.includes("suco") || normalized.includes("laranja")) {
-    return "/product-page/bebida-suco-laranja.png";
+  if (!src || imageFailed) {
+    return (
+      <div className={`${className} aspect-square shrink-0 overflow-hidden`}>
+        <ProductImagePlaceholder
+          className="h-full w-full"
+          iconClassName={iconClassName}
+        />
+      </div>
+    );
   }
-  if (normalized.includes("água") || normalized.includes("agua")) {
-    return "/product-page/bebida-agua-mineral.png";
-  }
 
-  return "/product-page/bebida-coca-cola.png";
+  return (
+    <img
+      className={`${className} aspect-square shrink-0 ${objectFitClassName}`}
+      alt=""
+      aria-hidden="true"
+      src={src}
+      onError={() => setImageFailed(true)}
+    />
+  );
 }
 
 export function ProductPage() {
@@ -742,6 +752,8 @@ export function ProductPage() {
   const [showRequiredFeedback, setShowRequiredFeedback] = useState(false);
   const [isProductSkeletonVisible, setIsProductSkeletonVisible] = useState(true);
   const [isPhotoPreviewOpen, setIsPhotoPreviewOpen] = useState(false);
+  const [isProductImageUnavailable, setIsProductImageUnavailable] =
+    useState(false);
   const pizzaGroupName = useId();
   const borderSectionRef = useRef<HTMLElement | null>(null);
   const orderBumpSectionRef = useRef<HTMLElement | null>(null);
@@ -782,6 +794,11 @@ export function ProductPage() {
 
     return () => window.clearTimeout(skeletonTimer);
   }, []);
+
+  useEffect(() => {
+    setIsProductImageUnavailable(false);
+    setIsPhotoPreviewOpen(false);
+  }, [screen.productImage]);
 
   useEffect(() => {
     setSelectedBorder((current) => {
@@ -1023,18 +1040,28 @@ export function ProductPage() {
           aria-label="Imagem do produto"
           className="relative aspect-[390/327] w-full shrink-0 overflow-hidden bg-[#F3F3F3] leading-none"
         >
-          <img
-            className="absolute inset-0 block h-full w-full object-cover align-middle"
-            alt={screen.productTitle}
-            src={screen.productImage}
-          />
+          {screen.productImage && !isProductImageUnavailable ? (
+            <>
+              <img
+                className="absolute inset-0 block h-full w-full object-cover align-middle"
+                alt={screen.productTitle}
+                src={screen.productImage}
+                onError={() => {
+                  setIsProductImageUnavailable(true);
+                  setIsPhotoPreviewOpen(false);
+                }}
+              />
 
-          <button
-            type="button"
-            aria-label="Abrir foto do produto"
-            onClick={() => setIsPhotoPreviewOpen(true)}
-            className="absolute inset-0 z-10 cursor-zoom-in bg-transparent"
-          />
+              <button
+                type="button"
+                aria-label="Abrir foto do produto"
+                onClick={() => setIsPhotoPreviewOpen(true)}
+                className="absolute inset-0 z-10 cursor-zoom-in bg-transparent"
+              />
+            </>
+          ) : (
+            <ProductImagePlaceholder iconClassName="h-20 w-20 sm:h-24 sm:w-24" />
+          )}
 
           <div className="absolute inset-x-0 bottom-0 z-[11] h-[3px] min-h-[3px] w-full bg-[#000000]" />
 
@@ -1081,7 +1108,7 @@ export function ProductPage() {
                 }`}
               >
                 {!screen.hasActivePromo && screen.showStartingFrom ? (
-                  <span className="mr-1 text-[12px] font-normal tracking-normal sm:text-[13px]">
+                  <span className="mr-1.5 text-[12px] font-normal tracking-normal sm:text-[13px]">
                     A partir de
                   </span>
                 ) : null}
@@ -1145,17 +1172,9 @@ export function ProductPage() {
                     aria-label={`${option.name} ${option.price}`}
                   />
 
-                  <img
-                    className="h-11 w-11 self-center rounded-[7px] object-cover sm:h-12 sm:w-12"
-                    alt=""
-                    aria-hidden="true"
+                  <ProductOptionImage
                     src={option.image}
-                    onError={(event) => {
-                      event.currentTarget.onerror = null;
-                      event.currentTarget.src = optionImageFallback(
-                        option.name,
-                      );
-                    }}
+                    className="h-11 w-11 self-center rounded-[7px] sm:h-12 sm:w-12"
                   />
 
                   <button
@@ -1272,15 +1291,10 @@ export function ProductPage() {
                   key={option.id}
                   className="relative grid min-h-[76px] grid-cols-[44px_minmax(0,1fr)_auto] items-center gap-2 rounded-[7px] px-[13px] py-[11px] after:absolute after:bottom-0 after:left-[13px] after:right-[13px] after:h-px after:origin-bottom after:scale-y-50 after:bg-[#E6E6E6] after:content-[''] last:after:hidden sm:grid-cols-[48px_minmax(0,1fr)_auto] sm:px-6 sm:py-3 sm:after:left-6 sm:after:right-6"
                 >
-                  <img
-                    className="h-11 w-11 self-center rounded-[7px] bg-[#F8F8F8] object-contain p-1 sm:h-12 sm:w-12"
-                    alt=""
-                    aria-hidden="true"
+                  <ProductOptionImage
                     src={option.image}
-                    onError={(event) => {
-                      event.currentTarget.onerror = null;
-                      event.currentTarget.src = drinkImageFallback(option.name);
-                    }}
+                    className="h-11 w-11 self-center rounded-[7px] sm:h-12 sm:w-12"
+                    objectFitClassName="bg-[#F8F8F8] object-contain p-1"
                   />
 
                   <button
@@ -1335,7 +1349,7 @@ export function ProductPage() {
         </section>
       </div>
 
-      {isPhotoPreviewOpen ? (
+      {isPhotoPreviewOpen && screen.productImage && !isProductImageUnavailable ? (
         <div
           className="fixed inset-0 z-[90] flex items-center justify-center bg-black/95 px-4 py-[calc(18px+env(safe-area-inset-top))]"
           role="dialog"

@@ -55,7 +55,7 @@ export const mockMenuData: MenuData = {
           id: 'smash-house',
           name: 'Smash House',
           description: 'Smash burger com cebola caramelizada, queijo prato e molho levemente defumado.',
-          imageUrl: img('photo-1594212699903-ec8a3eca50f5'),
+          imageUrl: null,
           basePrice: 24.9,
           promoPrice: null,
           variations: [],

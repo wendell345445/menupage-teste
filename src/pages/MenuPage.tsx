@@ -21,6 +21,7 @@ import { useCartStore } from "../store/useCartStore";
 import { useStoreSlug } from "@/hooks/useStoreSlug";
 import { getMenuThemeFromUrl } from "@/lib/menuThemes";
 import { resolveImageUrl } from "@/shared/lib/imageUrl";
+import { ProductImagePlaceholder } from "@/components/ProductImagePlaceholder";
 
 const IMAGE_SKELETON_MIN_MS = 800;
 const CONTENT_SKELETON_MIN_MS = 800;
@@ -149,10 +150,12 @@ function FeaturedProductImage({
   alt: string;
 }) {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [hasImageError, setHasImageError] = useState(false);
   const [canHideImageSkeleton, setCanHideImageSkeleton] = useState(false);
 
   useEffect(() => {
     setIsImageLoaded(false);
+    setHasImageError(false);
     setCanHideImageSkeleton(false);
 
     const timer = window.setTimeout(() => {
@@ -162,14 +165,15 @@ function FeaturedProductImage({
     return () => window.clearTimeout(timer);
   }, [imageUrl]);
 
+  const hasProductImage = Boolean(imageUrl) && !hasImageError;
   const showImageSkeleton =
-    Boolean(imageUrl) && (!isImageLoaded || !canHideImageSkeleton);
+    hasProductImage && (!isImageLoaded || !canHideImageSkeleton);
   const showProductImage =
-    Boolean(imageUrl) && isImageLoaded && canHideImageSkeleton;
+    hasProductImage && isImageLoaded && canHideImageSkeleton;
 
   return (
     <div className="relative h-[104px] w-full overflow-hidden rounded-[10px] bg-[#eeeeee] shadow-[0_2px_8px_rgba(0,0,0,0.06)] sm:h-[118px]">
-      {imageUrl ? (
+      {hasProductImage ? (
         <>
           {showImageSkeleton && (
             <ImageShimmerSkeleton roundedClass="rounded-[10px]" />
@@ -182,13 +186,14 @@ function FeaturedProductImage({
             }`}
             loading="lazy"
             onLoad={() => setIsImageLoaded(true)}
-            onError={() => setIsImageLoaded(true)}
+            onError={() => {
+              setHasImageError(true);
+              setIsImageLoaded(true);
+            }}
           />
         </>
       ) : (
-        <div className="flex h-full w-full items-center justify-center text-3xl text-gray-300 sm:text-4xl">
-          🍔
-        </div>
+        <ProductImagePlaceholder iconClassName="h-10 w-10 sm:h-12 sm:w-12" />
       )}
     </div>
   );
@@ -987,7 +992,7 @@ export function MenuPage() {
                                 finalPrice > 0 && (
                                   <span className="mt-1 block whitespace-nowrap text-[13px] font-bold leading-none tracking-[-0.25px] text-[#4bb363] sm:text-[14px]">
                                     {!hasPromo && showStartingFrom ? (
-                                      <span className="mr-1 text-[10px] font-normal tracking-normal sm:text-[11px]">
+                                      <span className="mr-1.5 text-[10px] font-normal tracking-normal sm:text-[11px]">
                                         A partir de
                                       </span>
                                     ) : null}
