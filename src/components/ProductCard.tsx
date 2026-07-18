@@ -234,7 +234,11 @@ export function ProductCard({ product, onNavigate }: Props) {
               </div>
             ) : displayPrice != null ? (
               <span className="whitespace-nowrap text-[17px] font-bold leading-none tracking-[-0.5px] text-[#4a4a4a]">
-                {showStartingFrom ? "A partir de " : ""}
+                {showStartingFrom ? (
+                  <span className="mr-1 text-[12px] font-normal tracking-normal">
+                    A partir de
+                  </span>
+                ) : null}
                 {fmtBRL(displayPrice)}
               </span>
             ) : null}

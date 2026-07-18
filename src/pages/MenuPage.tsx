@@ -986,9 +986,11 @@ export function MenuPage() {
                                 finalPrice != null &&
                                 finalPrice > 0 && (
                                   <span className="mt-1 block whitespace-nowrap text-[13px] font-bold leading-none tracking-[-0.25px] text-[#4bb363] sm:text-[14px]">
-                                    {!hasPromo && showStartingFrom
-                                      ? "A partir de "
-                                      : ""}
+                                    {!hasPromo && showStartingFrom ? (
+                                      <span className="mr-1 text-[10px] font-normal tracking-normal sm:text-[11px]">
+                                        A partir de
+                                      </span>
+                                    ) : null}
                                     {fmtBRL(finalPrice)}
                                   </span>
                                 )

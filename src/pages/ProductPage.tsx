@@ -1080,9 +1080,11 @@ export function ProductPage() {
                   screen.hasActivePromo ? "text-[#4bb363]" : "text-[#4b4949]"
                 }`}
               >
-                {!screen.hasActivePromo && screen.showStartingFrom
-                  ? "A partir de "
-                  : ""}
+                {!screen.hasActivePromo && screen.showStartingFrom ? (
+                  <span className="mr-1 text-[12px] font-normal tracking-normal sm:text-[13px]">
+                    A partir de
+                  </span>
+                ) : null}
                 {fmtBRL(screen.displayPrice)}
               </span>
             </div>
