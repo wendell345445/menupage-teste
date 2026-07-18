@@ -145,9 +145,11 @@ function CategoryMetaGlassEffectAssets() {
 function FeaturedProductImage({
   imageUrl,
   alt,
+  isLoading = false,
 }: {
   imageUrl?: string | null;
   alt: string;
+  isLoading?: boolean;
 }) {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [hasImageError, setHasImageError] = useState(false);
@@ -167,34 +169,39 @@ function FeaturedProductImage({
 
   const hasProductImage = Boolean(imageUrl) && !hasImageError;
   const showImageSkeleton =
-    hasProductImage && (!isImageLoaded || !canHideImageSkeleton);
+    isLoading || (hasProductImage && (!isImageLoaded || !canHideImageSkeleton));
   const showProductImage =
-    hasProductImage && isImageLoaded && canHideImageSkeleton;
+    !isLoading && hasProductImage && isImageLoaded && canHideImageSkeleton;
+  const showPlaceholder = !isLoading && !hasProductImage;
 
   return (
-    <div className="relative h-[104px] w-full overflow-hidden rounded-[10px] bg-[#eeeeee] shadow-[0_2px_8px_rgba(0,0,0,0.06)] sm:h-[118px]">
+    <div
+      className="relative h-[104px] w-full overflow-hidden rounded-[10px] bg-[#eeeeee] shadow-[0_2px_8px_rgba(0,0,0,0.06)] sm:h-[118px]"
+      aria-busy={showImageSkeleton}
+    >
+      {showImageSkeleton ? (
+        <ImageShimmerSkeleton roundedClass="rounded-[10px]" />
+      ) : null}
+
       {hasProductImage ? (
-        <>
-          {showImageSkeleton && (
-            <ImageShimmerSkeleton roundedClass="rounded-[10px]" />
-          )}
-          <img
-            src={getFeaturedImageUrl(imageUrl)}
-            alt={alt}
-            className={`block h-full w-full object-cover object-center transition-opacity duration-300 ${
-              showProductImage ? "opacity-100" : "opacity-0"
-            }`}
-            loading="lazy"
-            onLoad={() => setIsImageLoaded(true)}
-            onError={() => {
-              setHasImageError(true);
-              setIsImageLoaded(true);
-            }}
-          />
-        </>
-      ) : (
+        <img
+          src={getFeaturedImageUrl(imageUrl)}
+          alt={alt}
+          className={`block h-full w-full object-cover object-center transition-opacity duration-300 ${
+            showProductImage ? "opacity-100" : "opacity-0"
+          }`}
+          loading="lazy"
+          onLoad={() => setIsImageLoaded(true)}
+          onError={() => {
+            setHasImageError(true);
+            setIsImageLoaded(true);
+          }}
+        />
+      ) : null}
+
+      {showPlaceholder ? (
         <ProductImagePlaceholder iconClassName="h-10 w-10 sm:h-12 sm:w-12" />
-      )}
+      ) : null}
     </div>
   );
 }
@@ -973,6 +980,7 @@ export function MenuPage() {
                               <FeaturedProductImage
                                 imageUrl={product.imageUrl}
                                 alt={product.name}
+                                isLoading={showContentSkeleton}
                               />
                             </div>
 
