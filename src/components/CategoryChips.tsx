@@ -67,14 +67,16 @@ export function CategoryChips({
                     type="button"
                     aria-pressed={isActive}
                     onClick={() => onSelect(category.id)}
-                    className="relative z-20 flex h-[36px] shrink-0 items-center justify-center overflow-hidden rounded-[13px] px-5 transition-all duration-200"
+                    className="relative z-20 isolate [contain:paint] flex h-[36px] shrink-0 items-center justify-center overflow-hidden rounded-[13px] px-5 transition-all duration-200"
                     style={
                       isSticky
                         ? isActive
                           ? {
                               background:
                                 "linear-gradient(135deg, color-mix(in srgb, var(--menu-primary) 98%, transparent), color-mix(in srgb, var(--menu-gradient-to) 92%, transparent))",
-                              border: "1px solid rgba(255,255,255,0.95)",
+                              border: "1px solid #FFFFFF",
+                              backgroundClip: "padding-box",
+                              WebkitBackgroundClip: "padding-box",
                               boxShadow: "none",
                               backdropFilter: "blur(14px) saturate(175%)",
                               WebkitBackdropFilter:
@@ -94,6 +96,8 @@ export function CategoryChips({
                           ? {
                               background: "var(--menu-primary)",
                               border: "1px solid var(--menu-primary)",
+                              backgroundClip: "padding-box",
+                              WebkitBackgroundClip: "padding-box",
                               boxShadow: "none",
                             }
                           : {
