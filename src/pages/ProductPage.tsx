@@ -302,9 +302,7 @@ function getProductStartingPrice(product: Product | null) {
       .filter((option) => option.isActive !== false && option.price != null)
       .map((option) => option.price) ?? [];
 
-  return activeOptionPrices.length > 0
-    ? Math.min(...activeOptionPrices)
-    : null;
+  return activeOptionPrices.length > 0 ? Math.min(...activeOptionPrices) : null;
 }
 
 function hasActiveProductPromo(product: Product | null) {
@@ -363,7 +361,7 @@ function useProductScreenData(product: Product | null) {
       productImage: resolvePublicImage(product?.imageUrl),
       basePrice: getBasePrice(product),
       displayPrice: getProductStartingPrice(product),
-      originalPrice: hasActivePromo ? product?.basePrice ?? null : null,
+      originalPrice: hasActivePromo ? (product?.basePrice ?? null) : null,
       hasActivePromo,
       showStartingFrom: shouldShowStartingFrom(product),
       pizzaGroupTitle: pizzaGroup?.title || "Pizzas (Grande)",
@@ -405,7 +403,7 @@ function CountBadge({ current, total }: { current: number; total: number }) {
 
 function MissingBadge({ missing }: { missing: number }) {
   return (
-    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-[#ffe1c0] px-2.5 py-1 text-[11px] font-bold leading-none text-[#ff8018]">
+    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-[#ffffff] px-2.5 py-1 text-[11px] font-regular leading-none text-[#4b4b4b]">
       {missing === 1 ? "Falta 1" : `Faltam ${missing}`}
     </span>
   );
@@ -530,7 +528,9 @@ function SkeletonSection({
               : "relative grid min-h-[68px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[7px] px-[13px] py-[11px] after:absolute after:bottom-0 after:left-[13px] after:right-[13px] after:h-px after:origin-bottom after:scale-y-50 after:bg-[#E6E6E6] after:content-[''] last:after:hidden sm:px-6 sm:py-3 sm:after:left-6 sm:after:right-6"
           }
         >
-          {withImage ? <SkeletonBlock className="h-11 w-11 shrink-0 sm:h-12 sm:w-12" /> : null}
+          {withImage ? (
+            <SkeletonBlock className="h-11 w-11 shrink-0 sm:h-12 sm:w-12" />
+          ) : null}
           <div className="min-w-0">
             <SkeletonBlock className="h-[15px] w-[70%] max-w-[260px]" />
             <SkeletonBlock className="mt-[7px] h-[12px] w-full max-w-[430px]" />
@@ -609,7 +609,8 @@ function PlusIcon({ className = "h-[17px] w-[17px]" }: { className?: string }) {
     <span
       className={`block shrink-0 bg-[#000000] ${className}`}
       style={{
-        WebkitMask: "url('/product-page/vector-2.svg') center / contain no-repeat",
+        WebkitMask:
+          "url('/product-page/vector-2.svg') center / contain no-repeat",
         mask: "url('/product-page/vector-2.svg') center / contain no-repeat",
       }}
       aria-hidden="true"
@@ -750,7 +751,8 @@ export function ProductPage() {
   const [quantity, setQuantity] = useState(1);
   const [orderNote, setOrderNote] = useState("");
   const [showRequiredFeedback, setShowRequiredFeedback] = useState(false);
-  const [isProductSkeletonVisible, setIsProductSkeletonVisible] = useState(true);
+  const [isProductSkeletonVisible, setIsProductSkeletonVisible] =
+    useState(true);
   const [isPhotoPreviewOpen, setIsPhotoPreviewOpen] = useState(false);
   const [isProductImageUnavailable, setIsProductImageUnavailable] =
     useState(false);
@@ -838,7 +840,7 @@ export function ProductPage() {
   }, null);
   const pizzaPrice =
     screen.pizzaPricingStrategy === "highest"
-      ? highestPricedPizzaOption?.priceValue ?? 0
+      ? (highestPricedPizzaOption?.priceValue ?? 0)
       : selectedPizzaOptions.reduce(
           (sum, option) => sum + option.priceValue * option.quantity,
           0,
@@ -885,10 +887,7 @@ export function ProductPage() {
   useEffect(() => {
     const isBorderSelectionCompleted = Boolean(selectedBorder);
 
-    if (
-      isBorderSelectionCompleted &&
-      !wasBorderSelectionCompletedRef.current
-    ) {
+    if (isBorderSelectionCompleted && !wasBorderSelectionCompletedRef.current) {
       window.setTimeout(() => {
         orderBumpSectionRef.current?.scrollIntoView({
           behavior: "smooth",
@@ -1129,10 +1128,10 @@ export function ProductPage() {
             showMissing={showRequiredFeedback}
           />
 
-          {screen.pizzaPricingStrategy === "highest" &&
-          screen.pizzaMax > 1 ? (
+          {screen.pizzaPricingStrategy === "highest" && screen.pizzaMax > 1 ? (
             <p className="border-b border-[#EEEEEE] bg-white px-[13px] py-[10px] text-[11px] font-normal leading-[1.35] text-[#6c757d] sm:px-6">
-              Em pizzas com mais de um sabor, será cobrado o sabor de maior valor.
+              Em pizzas com mais de um sabor, será cobrado o sabor de maior
+              valor.
             </p>
           ) : null}
 
@@ -1349,7 +1348,9 @@ export function ProductPage() {
         </section>
       </div>
 
-      {isPhotoPreviewOpen && screen.productImage && !isProductImageUnavailable ? (
+      {isPhotoPreviewOpen &&
+      screen.productImage &&
+      !isProductImageUnavailable ? (
         <div
           className="fixed inset-0 z-[90] flex items-center justify-center bg-black/95 px-4 py-[calc(18px+env(safe-area-inset-top))]"
           role="dialog"
