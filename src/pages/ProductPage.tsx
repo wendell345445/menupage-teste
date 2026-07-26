@@ -397,16 +397,8 @@ function RequiredBadge() {
 
 function CountBadge({ current, total }: { current: number; total: number }) {
   return (
-    <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-white px-2.5 py-1 text-[11px] font-normal leading-none text-[#2E2F31]">
-      {current} de {total}
-    </span>
-  );
-}
-
-function MissingBadge() {
-  return (
     <span className="inline-flex min-h-[21px] items-center justify-center rounded-[7px] bg-white px-2.5 py-1 text-[11px] font-normal leading-none text-[#4b4b4b]">
-      2 de 2
+      {current} de {total}
     </span>
   );
 }
@@ -550,8 +542,7 @@ function SectionHeader({
   selectedCount = 0,
   maxCount,
   completed = false,
-  missingCount = 0,
-  showMissing = false,
+  showCountProgress = false,
   optional = false,
 }: {
   title: string;
@@ -559,19 +550,11 @@ function SectionHeader({
   selectedCount?: number;
   maxCount?: number;
   completed?: boolean;
-  missingCount?: number;
-  showMissing?: boolean;
+  showCountProgress?: boolean;
   optional?: boolean;
 }) {
-  const hasPartialSelection = selectedCount > 0 && missingCount > 0;
-  const shouldShowMissingBadge =
-    missingCount > 0 && (showMissing || hasPartialSelection);
-  const shouldShowCompletedBadge = completed && missingCount === 0;
   const shouldShowCountBadge =
-    selectedCount > 0 &&
-    typeof maxCount === "number" &&
-    !shouldShowMissingBadge &&
-    !shouldShowCompletedBadge;
+    showCountProgress && selectedCount > 0 && typeof maxCount === "number";
   const shouldShowSelectedItemsBadge = optional && selectedCount > 0;
 
   return (
@@ -590,12 +573,10 @@ function SectionHeader({
           <SelectedItemsBadge count={selectedCount} />
         ) : optional ? (
           <OptionalBadge />
-        ) : shouldShowMissingBadge ? (
-          <MissingBadge />
-        ) : shouldShowCompletedBadge ? (
-          <CompletedBadge />
         ) : shouldShowCountBadge ? (
           <CountBadge current={selectedCount} total={maxCount} />
+        ) : completed ? (
+          <CompletedBadge />
         ) : (
           <RequiredBadge />
         )}
@@ -1125,8 +1106,7 @@ export function ProductPage() {
             selectedCount={totalSelectedPizzas}
             maxCount={screen.pizzaMax}
             completed={pizzaSelectionCompleted}
-            missingCount={missingPizzaCount}
-            showMissing={showRequiredFeedback}
+            showCountProgress
           />
 
           <fieldset
@@ -1213,8 +1193,6 @@ export function ProductPage() {
             selectedCount={selectedBorder ? 1 : 0}
             maxCount={1}
             completed={Boolean(selectedBorder)}
-            missingCount={missingBorderCount}
-            showMissing={showRequiredFeedback}
           />
 
           <fieldset className="m-0 border-0 p-0">
