@@ -754,6 +754,7 @@ export function MenuPage() {
         storeName={store.name}
         logo={store.logo}
         isOpen={isOpen}
+        address={store.address}
         minimumOrder={minimumOrder}
         categories={categories
           .filter((category) => category.isActive)

@@ -1,24 +1,21 @@
-import type { ReactNode } from 'react'
-
-import {
-  Home,
-  Medal,
-  ReceiptText,
-  ShoppingBag,
-  Info,
-  X,
-} from 'lucide-react'
-
 import {
   Sheet,
   SheetContent,
   SheetTitle,
 } from '@/components/ui/sheet'
-import { resolveImageUrl } from '@/shared/lib/imageUrl'
 
-const PUBLIC_FALLBACK_LOGO = '/burger-or-hamburger-logo-vintage-vector-Graphics-27222106-1.jpg'
 const MENU_PANDA_LOGO = '/menu-panda-logo.png'
 const SYSTEM_VERSION = 'v1.0.0'
+
+const DEFAULT_OPENING_HOURS = [
+  { day: 'Segunda-feira', hours: '18:00 às 23:30' },
+  { day: 'Terça-feira', hours: '18:00 às 23:30' },
+  { day: 'Quarta-feira', hours: '18:00 às 23:30' },
+  { day: 'Quinta-feira', hours: '18:00 às 23:30' },
+  { day: 'Sexta-feira', hours: '18:00 às 00:00' },
+  { day: 'Sábado', hours: '18:00 às 00:00' },
+  { day: 'Domingo', hours: '18:00 às 23:00' },
+]
 
 type SidebarCategory = {
   id: string
@@ -31,6 +28,7 @@ interface MenuPageSidebarProps {
   storeName: string
   logo?: string | null
   isOpen: boolean
+  address?: string | null
   minimumOrder?: number | null
   categories: SidebarCategory[]
   activeCategoryId: string | null
@@ -44,37 +42,22 @@ interface MenuPageSidebarProps {
   onOrdersClick: () => void
 }
 
-function getLogoImageUrl(url?: string | null): string {
-  const displayUrl = url || PUBLIC_FALLBACK_LOGO
-  const resolved = resolveImageUrl(displayUrl) ?? displayUrl
-
-  if (!resolved.includes('cloudinary.com')) return resolved
-
-  return resolved.replace('/upload/', '/upload/f_auto,w_180/')
+function getTodayOpeningHourIndex() {
+  const weekDay = new Date().getDay()
+  return weekDay === 0 ? 6 : weekDay - 1
 }
-
 
 export function MenuPageSidebar({
   open,
   onOpenChange,
-  storeName,
-  logo,
-  isOpen,
-  activeCategoryId,
-  hasFeaturedProducts,
-  cartQuantity,
-  tableMode = false,
-  onGoHome,
-  onGoHighlights,
-  onCartClick,
-  onOrdersClick,
+  address,
 }: MenuPageSidebarProps) {
-  const logoUrl = getLogoImageUrl(logo)
-
-  const runAndClose = (callback: () => void) => {
-    callback()
-    onOpenChange(false)
-  }
+  const todayOpeningHourIndex = getTodayOpeningHourIndex()
+  const displayAddress =
+    address?.trim() ||
+    'Av. Afonso Pena, 1377 - Centro, Belo Horizonte - MG, 30130-004'
+  const mapsPreviewUrl = `https://www.google.com/maps?q=${encodeURIComponent(displayAddress)}&output=embed`
+  const mapsLinkUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(displayAddress)}`
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -83,101 +66,125 @@ export function MenuPageSidebar({
         showCloseButton={false}
         className="z-[150] w-[305px] max-w-[86vw] gap-0 border-r border-black/10 bg-white p-0 font-sen text-[#2e2828] shadow-[18px_0_45px_rgba(0,0,0,0.18)]"
         style={{ left: 'max(0px, calc((100vw - 768px) / 2))' }}
-        aria-label="Menu do cardápio"
+        aria-label="Informações do estabelecimento"
       >
         <div className="flex h-full min-h-0 flex-col">
-          <div className="relative overflow-hidden border-b border-black/5 px-5 pb-5 pt-5">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/[0.045] to-transparent" />
+          <div className="relative flex min-h-[68px] items-center border-b border-black/5 px-5 py-4">
+            <SheetTitle className="text-[17px] font-bold tracking-[-0.25px] text-[#2E2828]">
+              Perfil loja
+            </SheetTitle>
 
-            <div className="relative flex min-w-0 items-center gap-3.5 pr-11">
-              <div className="h-14 w-14 shrink-0 overflow-hidden rounded-[17px] bg-white">
-                <img
-                  src={logoUrl}
-                  alt={storeName}
-                  className="block h-full w-full object-cover object-center"
-                  loading="eager"
-                  draggable={false}
-                />
-              </div>
-
-              <div className="min-w-0 flex-1">
-                <SheetTitle className="truncate font-sen text-[15px] font-bold leading-[1.3] tracking-[-0.28px] text-[#2e2828]">
-                  {storeName}
-                </SheetTitle>
-
-                <span
-                  className={[
-                    'mt-1.5 inline-flex items-center gap-1.5 text-[11px] font-semibold leading-none',
-                    isOpen ? 'text-[#1f9f4a]' : 'text-[#d13f3f]',
-                  ].join(' ')}
-                >
-                  <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
-                    {isOpen && (
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#1f9f4a] opacity-60" />
-                    )}
-                    <span
-                      className={[
-                        'relative inline-flex h-2 w-2 rounded-full',
-                        isOpen ? 'bg-[#1f9f4a]' : 'bg-[#d13f3f]',
-                      ].join(' ')}
-                    />
-                  </span>
-                  {isOpen ? 'Aberto agora' : 'Fechado'}
-                </span>
-              </div>
-
-              <button
-                type="button"
-                aria-label="Fechar menu"
-                onClick={() => onOpenChange(false)}
-                className="absolute right-0 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black text-white transition-transform hover:bg-black/90 focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 active:scale-95"
-              >
-                <X className="h-[17px] w-[17px]" strokeWidth={2.4} />
-              </button>
-            </div>
+            <button
+              type="button"
+              aria-label="Recolher perfil da loja"
+              onClick={() => onOpenChange(false)}
+              className="absolute right-[-20px] top-[84px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center bg-transparent transition-transform duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/15 active:-translate-y-1/2 active:scale-95"
+            >
+              <img
+                src="/icons-sidebar/side-bar.svg"
+                alt=""
+                aria-hidden="true"
+                className="h-[40px] w-[40px] object-contain"
+                draggable={false}
+              />
+            </button>
           </div>
 
-          <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <div className="space-y-1.5">
-              <SidebarAction
-                icon={<Home className="h-[18px] w-[18px]" strokeWidth={2.2} />}
-                label="Início"
-                active={activeCategoryId === null}
-                onClick={() => runAndClose(onGoHome)}
-              />
+          <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <section aria-labelledby="sidebar-opening-hours-title">
+              <h2
+                id="sidebar-opening-hours-title"
+                className="text-[14px] font-bold tracking-[-0.2px] text-[#343030]"
+              >
+                Horário de atendimento
+              </h2>
 
-              {hasFeaturedProducts && (
-                <SidebarAction
-                  icon={<Medal className="h-[18px] w-[18px]" strokeWidth={2.2} />}
-                  label="Destaques do Dia"
-                  active={false}
-                  onClick={() => runAndClose(onGoHighlights)}
+              <div className="mt-3 space-y-[9px]">
+                {DEFAULT_OPENING_HOURS.map((item, index) => {
+                  const isToday = index === todayOpeningHourIndex
+
+                  return (
+                    <div
+                      key={item.day}
+                      className="flex items-center justify-between gap-3"
+                    >
+                      <span
+                        className={[
+                          'truncate text-[12px] leading-[1.35]',
+                          isToday
+                            ? 'font-bold text-[#393434]'
+                            : 'font-medium text-[#6F6868]',
+                        ].join(' ')}
+                      >
+                        {item.day}
+                      </span>
+
+                      <span
+                        className={[
+                          'shrink-0 whitespace-nowrap text-[11px] leading-[1.35]',
+                          isToday
+                            ? 'font-bold text-[#393434]'
+                            : 'font-medium text-[#6F6868]',
+                        ].join(' ')}
+                      >
+                        {item.hours}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            </section>
+
+            <div className="my-5 h-px w-full bg-[#EEEEEE]" aria-hidden="true" />
+
+            <section aria-labelledby="sidebar-payments-title">
+              <h2
+                id="sidebar-payments-title"
+                className="text-[14px] font-bold tracking-[-0.2px] text-[#343030]"
+              >
+                Formas de pagamento
+              </h2>
+
+              <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-3">
+                <PaymentMethod label="Pix" iconSrc="/icons-sidebar/pix.svg" />
+                <PaymentMethod label="Dinheiro" iconSrc="/icons-sidebar/money.svg" />
+                <PaymentMethod label="Crédito" iconSrc="/icons-sidebar/credit-card.svg" />
+                <PaymentMethod label="Débito" iconSrc="/icons-sidebar/debitcard.svg" />
+              </div>
+            </section>
+
+            <div className="my-5 h-px w-full bg-[#EEEEEE]" aria-hidden="true" />
+
+            <section aria-labelledby="sidebar-address-title">
+              <h2
+                id="sidebar-address-title"
+                className="text-[14px] font-bold tracking-[-0.2px] text-[#343030]"
+              >
+                Endereço
+              </h2>
+
+              <div className="relative mt-3 overflow-hidden rounded-[12px] border border-[#E8E8E8] bg-[#F3F3F3]">
+                <iframe
+                  title={`Mapa de ${displayAddress}`}
+                  src={mapsPreviewUrl}
+                  className="pointer-events-none block h-[132px] w-full border-0"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
                 />
-              )}
 
-              <SidebarAction
-                icon={<ShoppingBag className="h-[18px] w-[18px]" strokeWidth={2.2} />}
-                label="Carrinho"
-                active={false}
-                badge={cartQuantity > 0 ? cartQuantity : undefined}
-                onClick={() => runAndClose(onCartClick)}
-              />
+                <a
+                  href={mapsLinkUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Abrir ${displayAddress} no Google Maps`}
+                  className="absolute inset-0 transition-colors hover:bg-black/[0.03] focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-black/20"
+                />
+              </div>
 
-              <SidebarAction
-                icon={<ReceiptText className="h-[18px] w-[18px]" strokeWidth={2.2} />}
-                label={tableMode ? 'Comanda' : 'Meus pedidos'}
-                active={false}
-                onClick={() => runAndClose(onOrdersClick)}
-              />
-
-              <SidebarAction
-                icon={<Info className="h-[18px] w-[18px]" strokeWidth={2.2} />}
-                label="Sobre nós"
-                active={false}
-                onClick={() => onOpenChange(false)}
-              />
-            </div>
-
+              <p className="mt-3 whitespace-pre-line text-[12px] font-medium leading-[1.55] tracking-[-0.1px] text-[#6F6868]">
+                {displayAddress}
+              </p>
+            </section>
           </div>
 
           <div className="mt-auto border-t border-black/5 px-5 pb-5 pt-4 text-center">
@@ -203,47 +210,26 @@ export function MenuPageSidebar({
   )
 }
 
-interface SidebarActionProps {
-  icon?: ReactNode
+interface PaymentMethodProps {
   label: string
-  active?: boolean
-  badge?: number
-  onClick: () => void
+  iconSrc: string
 }
 
-function SidebarAction({ icon, label, active = false, badge, onClick }: SidebarActionProps) {
+function PaymentMethod({ label, iconSrc }: PaymentMethodProps) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={[
-        'group flex min-h-[43px] w-full items-center justify-between gap-3 rounded-[16px] px-3 text-left transition-all active:scale-[0.99]',
-        active ? 'text-white' : 'bg-transparent text-[#574f4f] hover:bg-black/[0.045]',
-      ].join(' ')}
-      style={
-        active
-          ? {
-              background: 'var(--menu-primary)',
-              boxShadow: '0 8px 20px color-mix(in srgb, var(--menu-primary) 18%, transparent)',
-            }
-          : undefined
-      }
-    >
-      <span className="flex min-w-0 items-center gap-3">
-        {icon && <span className="shrink-0">{icon}</span>}
-        <span className="truncate text-[14px] font-bold tracking-[-0.18px]">{label}</span>
-      </span>
+    <div className="flex min-w-0 items-center gap-2">
+      <img
+        src={iconSrc}
+        alt=""
+        aria-hidden="true"
+        className="h-5 w-5 shrink-0 object-contain"
+        loading="eager"
+        draggable={false}
+      />
 
-      {badge != null && badge > 0 && (
-        <span
-          className={[
-            'flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full px-1.5 text-[10px] font-black',
-            active ? 'bg-white text-[var(--menu-primary)]' : 'bg-[var(--menu-primary)] text-white',
-          ].join(' ')}
-        >
-          {badge}
-        </span>
-      )}
-    </button>
+      <span className="truncate text-[12px] font-semibold tracking-[-0.12px] text-[#625B5B]">
+        {label}
+      </span>
+    </div>
   )
 }
