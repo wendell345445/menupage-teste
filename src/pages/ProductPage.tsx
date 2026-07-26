@@ -1336,7 +1336,7 @@ export function ProductPage() {
               onChange={(event) => setOrderNote(event.target.value)}
               placeholder="Ex: tirar cebola, deixar bem assada..."
               maxLength={180}
-              className="mt-3 min-h-[96px] w-full resize-none rounded-[7px] border border-[#E6E6E6] bg-white px-3.5 py-3 text-[13px] font-normal leading-[1.35] text-[#2E2F31] outline-none placeholder:text-[#9A9A9A] focus:border-[#000000] focus:ring-2 focus:ring-[#000000]/15 sm:text-[14px]"
+              className="mt-3 min-h-[96px] w-full resize-none rounded-[7px] border border-[#E6E6E6] bg-white px-3.5 py-3 text-[16px] font-normal leading-[1.35] text-[#2E2F31] outline-none placeholder:text-[#9A9A9A] focus:border-[#000000] focus:ring-2 focus:ring-[#000000]/15"
             />
           </label>
         </section>
