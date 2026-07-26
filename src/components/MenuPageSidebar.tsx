@@ -1,46 +1,50 @@
-import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+} from '@/components/ui/sheet'
 
-const MENU_PANDA_LOGO = "/menu-panda-logo.png";
-const SYSTEM_VERSION = "v1.0.0";
+const MENU_PANDA_LOGO = '/menu-panda-logo.png'
+const SYSTEM_VERSION = 'v1.0.0'
 
 const DEFAULT_OPENING_HOURS = [
-  { day: "Segunda-feira", hours: "18:00 às 23:30" },
-  { day: "Terça-feira", hours: "18:00 às 23:30" },
-  { day: "Quarta-feira", hours: "18:00 às 23:30" },
-  { day: "Quinta-feira", hours: "18:00 às 23:30" },
-  { day: "Sexta-feira", hours: "18:00 às 00:00" },
-  { day: "Sábado", hours: "18:00 às 00:00" },
-  { day: "Domingo", hours: "18:00 às 23:00" },
-];
+  { day: 'Segunda-feira', hours: '18:00 às 23:30' },
+  { day: 'Terça-feira', hours: '18:00 às 23:30' },
+  { day: 'Quarta-feira', hours: '18:00 às 23:30' },
+  { day: 'Quinta-feira', hours: '18:00 às 23:30' },
+  { day: 'Sexta-feira', hours: '18:00 às 00:00' },
+  { day: 'Sábado', hours: '18:00 às 00:00' },
+  { day: 'Domingo', hours: '18:00 às 23:00' },
+]
 
 type SidebarCategory = {
-  id: string;
-  name: string;
-};
+  id: string
+  name: string
+}
 
 interface MenuPageSidebarProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  storeName: string;
-  logo?: string | null;
-  isOpen: boolean;
-  address?: string | null;
-  minimumOrder?: number | null;
-  categories: SidebarCategory[];
-  activeCategoryId: string | null;
-  hasFeaturedProducts: boolean;
-  cartQuantity: number;
-  tableMode?: boolean;
-  onGoHome: () => void;
-  onGoHighlights: () => void;
-  onCategorySelect: (categoryId: string) => void;
-  onCartClick: () => void;
-  onOrdersClick: () => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  storeName: string
+  logo?: string | null
+  isOpen: boolean
+  address?: string | null
+  minimumOrder?: number | null
+  categories: SidebarCategory[]
+  activeCategoryId: string | null
+  hasFeaturedProducts: boolean
+  cartQuantity: number
+  tableMode?: boolean
+  onGoHome: () => void
+  onGoHighlights: () => void
+  onCategorySelect: (categoryId: string) => void
+  onCartClick: () => void
+  onOrdersClick: () => void
 }
 
 function getTodayOpeningHourIndex() {
-  const weekDay = new Date().getDay();
-  return weekDay === 0 ? 6 : weekDay - 1;
+  const weekDay = new Date().getDay()
+  return weekDay === 0 ? 6 : weekDay - 1
 }
 
 export function MenuPageSidebar({
@@ -48,12 +52,12 @@ export function MenuPageSidebar({
   onOpenChange,
   address,
 }: MenuPageSidebarProps) {
-  const todayOpeningHourIndex = getTodayOpeningHourIndex();
+  const todayOpeningHourIndex = getTodayOpeningHourIndex()
   const displayAddress =
     address?.trim() ||
-    "Av. Afonso Pena, 1377 - Centro, Belo Horizonte - MG, 30130-004";
-  const mapsPreviewUrl = `https://www.google.com/maps?q=${encodeURIComponent(displayAddress)}&output=embed`;
-  const mapsLinkUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(displayAddress)}`;
+    'Av. Afonso Pena, 1377 - Centro, Belo Horizonte - MG, 30130-004'
+  const mapsPreviewUrl = `https://www.google.com/maps?q=${encodeURIComponent(displayAddress)}&output=embed`
+  const mapsLinkUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(displayAddress)}`
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -61,7 +65,7 @@ export function MenuPageSidebar({
         side="left"
         showCloseButton={false}
         className="z-[150] w-[305px] max-w-[86vw] gap-0 border-r border-black/10 bg-white p-0 font-sen text-[#2e2828] shadow-[18px_0_45px_rgba(0,0,0,0.18)]"
-        style={{ left: "max(0px, calc((100vw - 768px) / 2))" }}
+        style={{ left: 'max(0px, calc((100vw - 768px) / 2))' }}
         aria-label="Informações do estabelecimento"
       >
         <div className="flex h-full min-h-0 flex-col">
@@ -74,7 +78,7 @@ export function MenuPageSidebar({
               type="button"
               aria-label="Recolher perfil da loja"
               onClick={() => onOpenChange(false)}
-              className="absolute right-[-20px] top-[70px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center bg-transparent transition-transform duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/15 active:-translate-y-1/2 active:scale-95"
+              className="absolute right-[-20px] top-[70px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center bg-transparent transition-transform duration-200 focus:outline-none focus-visible:outline-none focus-visible:ring-0 active:-translate-y-1/2 active:scale-95"
             >
               <img
                 src="/icons-sidebar/side-bar.svg"
@@ -97,7 +101,7 @@ export function MenuPageSidebar({
 
               <div className="mt-3 space-y-[9px]">
                 {DEFAULT_OPENING_HOURS.map((item, index) => {
-                  const isToday = index === todayOpeningHourIndex;
+                  const isToday = index === todayOpeningHourIndex
 
                   return (
                     <div
@@ -106,27 +110,27 @@ export function MenuPageSidebar({
                     >
                       <span
                         className={[
-                          "truncate text-[12px] leading-[1.35]",
+                          'truncate text-[12px] leading-[1.35]',
                           isToday
-                            ? "font-bold text-[#393434]"
-                            : "font-medium text-[#6F6868]",
-                        ].join(" ")}
+                            ? 'font-bold text-[#393434]'
+                            : 'font-medium text-[#6F6868]',
+                        ].join(' ')}
                       >
                         {item.day}
                       </span>
 
                       <span
                         className={[
-                          "shrink-0 whitespace-nowrap text-[11px] leading-[1.35]",
+                          'shrink-0 whitespace-nowrap text-[11px] leading-[1.35]',
                           isToday
-                            ? "font-bold text-[#393434]"
-                            : "font-medium text-[#6F6868]",
-                        ].join(" ")}
+                            ? 'font-bold text-[#393434]'
+                            : 'font-medium text-[#6F6868]',
+                        ].join(' ')}
                       >
                         {item.hours}
                       </span>
                     </div>
-                  );
+                  )
                 })}
               </div>
             </section>
@@ -143,18 +147,9 @@ export function MenuPageSidebar({
 
               <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-3">
                 <PaymentMethod label="Pix" iconSrc="/icons-sidebar/pix.svg" />
-                <PaymentMethod
-                  label="Dinheiro"
-                  iconSrc="/icons-sidebar/money.svg"
-                />
-                <PaymentMethod
-                  label="Crédito"
-                  iconSrc="/icons-sidebar/credit-card.svg"
-                />
-                <PaymentMethod
-                  label="Débito"
-                  iconSrc="/icons-sidebar/debitcard.svg"
-                />
+                <PaymentMethod label="Dinheiro" iconSrc="/icons-sidebar/money.svg" />
+                <PaymentMethod label="Crédito" iconSrc="/icons-sidebar/credit-card.svg" />
+                <PaymentMethod label="Débito" iconSrc="/icons-sidebar/debitcard.svg" />
               </div>
             </section>
 
@@ -212,12 +207,12 @@ export function MenuPageSidebar({
         </div>
       </SheetContent>
     </Sheet>
-  );
+  )
 }
 
 interface PaymentMethodProps {
-  label: string;
-  iconSrc: string;
+  label: string
+  iconSrc: string
 }
 
 function PaymentMethod({ label, iconSrc }: PaymentMethodProps) {
@@ -236,5 +231,5 @@ function PaymentMethod({ label, iconSrc }: PaymentMethodProps) {
         {label}
       </span>
     </div>
-  );
+  )
 }
