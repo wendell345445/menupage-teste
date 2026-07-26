@@ -260,7 +260,9 @@ function getProductStartingPrice(product: PriceableMenuProduct) {
       .filter((option) => option.isActive !== false && option.price != null)
       .map((option) => option.price ?? 0) ?? [];
 
-  return activeOptionPrices.length > 0 ? Math.min(...activeOptionPrices) : null;
+  return activeOptionPrices.length > 0
+    ? Math.min(...activeOptionPrices)
+    : null;
 }
 
 function shouldShowStartingFrom(product: PriceableMenuProduct) {
@@ -859,7 +861,7 @@ export function MenuPage() {
                   </div>
                 )}
 
-                <div className="relative z-10 px-4 pt-0 pb-0.5 transition-all duration-200 sm:px-6 md:px-8">
+                <div className="relative z-10 px-4 transition-all duration-200 sm:px-6 md:px-8">
                   <CategoryChips
                     categories={categoryOptions}
                     activeId={activeCategoryId}

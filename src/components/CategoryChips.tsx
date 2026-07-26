@@ -45,13 +45,13 @@ export function CategoryChips({
       <div className="relative -mx-4 overflow-hidden bg-transparent transition-colors duration-200 sm:-mx-6 md:-mx-8">
         <nav
           aria-label="Categorias de produtos"
-          className="relative z-20 flex w-full touch-pan-x items-center gap-2.5 overflow-x-auto overflow-y-hidden px-4 pt-1 pb-1.5 overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] sm:px-6 md:px-8 [&::-webkit-scrollbar]:hidden"
+          className="relative z-20 flex w-full touch-pan-x items-center gap-2.5 overflow-x-auto overflow-y-hidden px-4 py-1.5 overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] sm:px-6 md:px-8 [&::-webkit-scrollbar]:hidden"
         >
           {isLoading
             ? SKELETON_WIDTHS.map((width, index) => (
                 <div
                   key={`${width}-${index}`}
-                  className="relative z-20 h-[36px] shrink-0 overflow-hidden rounded-[13px] border border-[#DDDDDD] bg-white"
+                  className="relative z-20 h-[36px] shrink-0 overflow-hidden rounded-[13px] border-[0.5px] border-[#DDDDDD] bg-white"
                   style={{ width }}
                 >
                   <MenuShimmer className="absolute inset-0 rounded-[13px]" />
@@ -67,53 +67,51 @@ export function CategoryChips({
                     type="button"
                     aria-pressed={isActive}
                     onClick={() => onSelect(category.id)}
-                    className="relative z-20 isolate [contain:paint] flex h-[36px] shrink-0 items-center justify-center overflow-hidden rounded-[13px] px-5 transition-all duration-200"
-                    style={
-                      isSticky
-                        ? isActive
-                          ? {
-                              background:
-                                "linear-gradient(135deg, color-mix(in srgb, var(--menu-primary) 98%, transparent), color-mix(in srgb, var(--menu-gradient-to) 92%, transparent))",
-                              border: "1px solid #FFFFFF",
-                              backgroundClip: "padding-box",
-                              WebkitBackgroundClip: "padding-box",
-                              boxShadow: "none",
-                              backdropFilter: "blur(14px) saturate(175%)",
-                              WebkitBackdropFilter:
-                                "blur(14px) saturate(175%)",
-                            }
-                          : {
-                              background:
-                                "linear-gradient(135deg, rgba(255,255,255,0.44), rgba(255,255,255,0.22))",
-                              border: "1px solid #DDDDDD",
-                              boxShadow:
-                                "inset 0 1px 0 rgba(255,255,255,0.58)",
-                              backdropFilter: "blur(14px) saturate(175%)",
-                              WebkitBackdropFilter:
-                                "blur(14px) saturate(175%)",
-                            }
-                        : isActive
-                          ? {
-                              background: "var(--menu-primary)",
-                              border: "1px solid var(--menu-primary)",
-                              backgroundClip: "padding-box",
-                              WebkitBackgroundClip: "padding-box",
-                              boxShadow: "none",
-                            }
-                          : {
-                              background: "#ffffff",
-                              border: "1px solid #DDDDDD",
-                              boxShadow: "none",
-                            }
-                    }
+                    className={`relative z-20 isolate [contain:paint] flex h-[36px] shrink-0 items-center justify-center overflow-hidden rounded-[13px] border-[0.5px] px-5 transition-[border-color,box-shadow,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      isActive ? "scale-[1.015]" : "scale-100"
+                    }`}
+                    style={{
+                      background: isSticky
+                        ? "linear-gradient(135deg, rgba(255,255,255,0.44), rgba(255,255,255,0.22))"
+                        : "#ffffff",
+                      borderColor: isActive
+                        ? isSticky
+                          ? "#FFFFFF"
+                          : "var(--menu-primary)"
+                        : "#DDDDDD",
+                      boxShadow:
+                        isSticky && !isActive
+                          ? "inset 0 1px 0 rgba(255,255,255,0.58)"
+                          : "none",
+                      backdropFilter: isSticky
+                        ? "blur(14px) saturate(175%)"
+                        : undefined,
+                      WebkitBackdropFilter: isSticky
+                        ? "blur(14px) saturate(175%)"
+                        : undefined,
+                    }}
                   >
                     <span
-                      className={`relative whitespace-nowrap text-[14px] leading-none ${
+                      aria-hidden="true"
+                      className={`pointer-events-none absolute inset-0 rounded-[12.5px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                         isActive
-                          ? "font-semibold tracking-[0.5px] text-white"
+                          ? "scale-100 opacity-100"
+                          : "scale-[0.96] opacity-0"
+                      }`}
+                      style={{
+                        background: isSticky
+                          ? "linear-gradient(135deg, color-mix(in srgb, var(--menu-primary) 98%, transparent), color-mix(in srgb, var(--menu-gradient-to) 92%, transparent))"
+                          : "var(--menu-primary)",
+                      }}
+                    />
+
+                    <span
+                      className={`relative z-10 whitespace-nowrap text-[14px] font-semibold leading-none transition-[color,letter-spacing,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                        isActive
+                          ? "translate-y-0 tracking-[0.5px] text-white"
                           : isSticky
-                            ? "font-semibold tracking-[0.2px] text-[#1f2937]"
-                            : "font-semibold tracking-[0.2px] text-[#5c5555]"
+                            ? "translate-y-0 tracking-[0.2px] text-[#1f2937]"
+                            : "translate-y-0 tracking-[0.2px] text-[#5c5555]"
                       }`}
                     >
                       {category.name}
