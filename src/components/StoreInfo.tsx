@@ -182,12 +182,10 @@ export function StoreInfo({
               onLoad={() => setIsLogoLoaded(true)}
             />
 
-            {!showLogoSkeleton && (
-              <span
-                className="pointer-events-none absolute inset-0 z-20 rounded-[22px] border border-[#DDDDDD]"
-                aria-hidden="true"
-              />
-            )}
+            <span
+              className="pointer-events-none absolute inset-0 z-20 rounded-[22px] border border-[#DDDDDD]"
+              aria-hidden="true"
+            />
           </div>
         </div>
 
@@ -236,25 +234,25 @@ export function StoreInfo({
 
             {isLoading ? (
               <div
-                className="flex shrink-0 flex-col items-center gap-2 pt-[2px]"
+                className="flex shrink-0 flex-col items-center gap-2.5 pt-[2px]"
                 aria-hidden="true"
               >
-                <MenuShimmer className="h-[16px] w-[16px] rounded-[5px]" />
-                <MenuShimmer className="h-[16px] w-[16px] rounded-[5px]" />
+                <MenuShimmer className="h-[18px] w-[18px] rounded-[5px]" />
+                <MenuShimmer className="h-[18px] w-[18px] rounded-[5px]" />
               </div>
             ) : (
               <div
-                className="flex shrink-0 translate-y-[4px] flex-col items-center gap-2 pt-[2px]"
+                className="flex shrink-0 translate-y-[4px] flex-col items-center gap-2.5 pt-[2px]"
                 aria-label="Ações do restaurante"
               >
                 <button
                   type="button"
                   onClick={handleShareClick}
-                  className="flex h-[20px] w-[20px] items-center justify-center text-[#574f4f] transition-transform hover:text-[var(--menu-primary)] active:scale-95"
+                  className="flex h-[22px] w-[22px] items-center justify-center text-[#574f4f] transition-transform hover:text-[var(--menu-primary)] active:scale-95"
                   aria-label="Compartilhar cardápio"
                 >
                   <svg
-                    className="h-[16px] w-[16px]"
+                    className="h-[18px] w-[18px]"
                     viewBox="0 0 24 24"
                     fill="none"
                     aria-hidden="true"
@@ -293,11 +291,11 @@ export function StoreInfo({
                 <button
                   type="button"
                   onClick={handleInfoClick}
-                  className="flex h-[20px] w-[20px] items-center justify-center text-[#574f4f] transition-transform hover:text-[var(--menu-primary)] active:scale-95"
+                  className="flex h-[22px] w-[22px] items-center justify-center text-[#574f4f] transition-transform hover:text-[var(--menu-primary)] active:scale-95"
                   aria-label="Ver informações do restaurante"
                 >
                   <svg
-                    className="h-[17px] w-[17px]"
+                    className="h-[19px] w-[19px]"
                     viewBox="0 0 24 24"
                     fill="none"
                     aria-hidden="true"
