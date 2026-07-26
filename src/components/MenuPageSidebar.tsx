@@ -85,6 +85,10 @@ export function MenuPageSidebar({
                 alt=""
                 aria-hidden="true"
                 className="h-[40px] w-[40px] object-contain"
+                style={{
+                  filter:
+                    'drop-shadow(1px 0 0 #fff) drop-shadow(-1px 0 0 #fff) drop-shadow(0 1px 0 #fff) drop-shadow(0 -1px 0 #fff)',
+                }}
                 draggable={false}
               />
             </button>
