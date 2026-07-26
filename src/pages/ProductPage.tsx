@@ -554,7 +554,10 @@ function SectionHeader({
   optional?: boolean;
 }) {
   const shouldShowCountBadge =
-    showCountProgress && selectedCount > 0 && typeof maxCount === "number";
+    showCountProgress &&
+    selectedCount > 0 &&
+    typeof maxCount === "number" &&
+    selectedCount < maxCount;
   const shouldShowSelectedItemsBadge = optional && selectedCount > 0;
 
   return (
