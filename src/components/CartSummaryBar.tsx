@@ -1,5 +1,3 @@
-import { ShoppingBag } from 'lucide-react'
-
 interface Props {
   quantity: number
   total: number
@@ -28,7 +26,19 @@ export function CartSummaryBar({ quantity, total, onClick, bottomOffset = 64 }: 
         aria-label={`${quantity} ${quantity === 1 ? 'item' : 'itens'} na sacola. Ver sacola. Total ${fmt(total)}`}
       >
         <span className="flex h-9 w-9 shrink-0 items-center justify-start" aria-hidden="true">
-          <ShoppingBag className="h-[23px] w-[23px] text-white" strokeWidth={2} />
+          <span
+            className="block h-[23px] w-[23px] bg-white"
+            style={{
+              WebkitMaskImage: 'url("/shopping-bag.svg")',
+              maskImage: 'url("/shopping-bag.svg")',
+              WebkitMaskRepeat: 'no-repeat',
+              maskRepeat: 'no-repeat',
+              WebkitMaskPosition: 'center',
+              maskPosition: 'center',
+              WebkitMaskSize: 'contain',
+              maskSize: 'contain',
+            }}
+          />
         </span>
 
         <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-[14px] font-normal leading-none tracking-[0.1px] text-white">

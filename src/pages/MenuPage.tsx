@@ -754,7 +754,6 @@ export function MenuPage() {
         storeName={store.name}
         logo={store.logo}
         isOpen={isOpen}
-        address={store.address}
         minimumOrder={minimumOrder}
         categories={categories
           .filter((category) => category.isActive)
@@ -1001,7 +1000,7 @@ export function MenuPage() {
                                 finalPrice > 0 && (
                                   <span className="mt-1 block whitespace-nowrap text-[13px] font-bold leading-none tracking-[-0.25px] text-[#4bb363] sm:text-[14px]">
                                     {!hasPromo && showStartingFrom ? (
-                                      <span className="mr-1.5 text-[10px] font-normal tracking-normal sm:text-[11px]">
+                                      <span className="mr-1.5 text-[10px] font-normal tracking-normal text-[#6c757d] sm:text-[11px]">
                                         A partir de
                                       </span>
                                     ) : null}
