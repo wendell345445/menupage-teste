@@ -10,6 +10,7 @@ import { ThemeInjector } from "../components/ThemeInjector";
 import { CookieBanner, hasCookieConsent } from "../components/CookieBanner";
 import { SuspendedStorePage } from "../components/SuspendedStorePage";
 import { StoreHeader } from "../components/StoreHeader";
+import { StoreCover } from "../components/StoreCover";
 import { StoreInfo } from "../components/StoreInfo";
 import { CategoryChips } from "../components/CategoryChips";
 import { CartSummaryBar } from "../components/CartSummaryBar";
@@ -25,6 +26,25 @@ import { ProductImagePlaceholder } from "@/components/ProductImagePlaceholder";
 
 const IMAGE_SKELETON_MIN_MS = 800;
 const CONTENT_SKELETON_MIN_MS = 800;
+
+function getStoreCoverImage(store: unknown): string | null {
+  const source = store as {
+    coverImage?: string | null;
+    coverImageUrl?: string | null;
+    bannerImage?: string | null;
+    bannerUrl?: string | null;
+    coverUrl?: string | null;
+  };
+
+  return (
+    source.coverImage ??
+    source.coverImageUrl ??
+    source.bannerImage ??
+    source.bannerUrl ??
+    source.coverUrl ??
+    null
+  );
+}
 
 function getMinimumOrderValue(store: unknown) {
   const source = store as {
@@ -298,6 +318,7 @@ export function MenuPage() {
   const [isCategorySticky, setIsCategorySticky] = useState(false);
   const [showHeaderIdentity, setShowHeaderIdentity] = useState(false);
   const [showContentSkeleton, setShowContentSkeleton] = useState(true);
+  const storeIdentityRef = useRef<HTMLDivElement | null>(null);
   const categoryStickySentinelRef = useRef<HTMLDivElement | null>(null);
   const menuContentStartRef = useRef<HTMLDivElement | null>(null);
   const featuredSectionRef = useRef<HTMLElement | null>(null);
@@ -329,18 +350,24 @@ export function MenuPage() {
     const updateHeaderIdentity = () => {
       cancelAnimationFrame(frame);
       frame = window.requestAnimationFrame(() => {
-        setShowHeaderIdentity(window.scrollY > 88);
+        const storeIdentity = storeIdentityRef.current;
+
+        setShowHeaderIdentity(
+          Boolean(storeIdentity && storeIdentity.getBoundingClientRect().top <= 49),
+        );
       });
     };
 
     updateHeaderIdentity();
     window.addEventListener("scroll", updateHeaderIdentity, { passive: true });
+    window.addEventListener("resize", updateHeaderIdentity);
 
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", updateHeaderIdentity);
+      window.removeEventListener("resize", updateHeaderIdentity);
     };
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     return () => {
@@ -642,7 +669,9 @@ export function MenuPage() {
             }}
           />
 
-          <main className="w-full flex-1 px-4 pt-5 sm:px-6 md:px-8">
+          <main className="w-full flex-1 px-4 sm:px-6 md:px-8">
+            <StoreCover storeName="Cardápio" isLoading />
+
             <StoreInfo
               name=""
               logo={null}
@@ -650,6 +679,7 @@ export function MenuPage() {
               isOpen
               minimumOrder={20}
               isLoading
+              hasCover
             />
 
             <div className="h-3" aria-hidden="true" />
@@ -793,18 +823,27 @@ export function MenuPage() {
           }}
         />
 
-        <main className="w-full flex-1 px-4 pt-5 sm:px-6 md:px-8">
-          <StoreInfo
-            name={store.name}
-            logo={store.logo}
-            primaryColor={selectedTheme.primaryColor}
-            address={store.address}
-            isOpen={isOpen}
-            nextOpenLabel={store.nextOpenLabel}
-            minimumOrder={minimumOrder}
-            tableNumber={tableNumber}
+        <main className="w-full flex-1 px-4 sm:px-6 md:px-8">
+          <StoreCover
+            storeName={store.name}
+            image={getStoreCoverImage(store)}
             isLoading={showContentSkeleton}
           />
+
+          <div ref={storeIdentityRef}>
+            <StoreInfo
+              name={store.name}
+              logo={store.logo}
+              primaryColor={selectedTheme.primaryColor}
+              address={store.address}
+              isOpen={isOpen}
+              nextOpenLabel={store.nextOpenLabel}
+              minimumOrder={minimumOrder}
+              tableNumber={tableNumber}
+              isLoading={showContentSkeleton}
+              hasCover
+            />
+          </div>
 
           {!search.trim() && (
             <>

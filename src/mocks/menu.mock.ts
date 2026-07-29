@@ -14,6 +14,7 @@ export const mockMenuData: MenuData = {
     name: 'Menu Panda Burger',
     description: 'Cardápio digital de demonstração para editar a aparência real da MenuPage.',
     logo: null,
+    coverImage: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1400&q=86',
     primaryColor: '#000000',
     secondaryColor: '#000000',
     address: 'Rua das Palmeiras, 120 - Centro\nSalinas - MG',

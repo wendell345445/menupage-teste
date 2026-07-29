@@ -65,6 +65,11 @@ export interface MenuStore {
   name: string
   description?: string
   logo?: string | null
+  coverImage?: string | null
+  coverImageUrl?: string | null
+  bannerImage?: string | null
+  bannerUrl?: string | null
+  coverUrl?: string | null
   primaryColor?: string | null
   secondaryColor?: string | null
   address?: string

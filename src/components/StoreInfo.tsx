@@ -27,6 +27,7 @@ interface Props {
   minimumOrder?: number | string | null;
   tableNumber?: number | null;
   isLoading?: boolean;
+  hasCover?: boolean;
 }
 
 function fmtBRL(value: number) {
@@ -90,6 +91,7 @@ export function StoreInfo({
   minimumOrder,
   tableNumber,
   isLoading = false,
+  hasCover = false,
 }: Props) {
   // Fallback visual: se a API ainda não enviar pedido mínimo, mantém o bloco aparecendo.
   const minimumOrderValue =
@@ -164,12 +166,12 @@ export function StoreInfo({
 
   return (
     <section
-      className="relative w-full"
+      className={`relative w-full ${hasCover ? "pt-4 sm:pt-5" : "pt-5"}`}
       aria-label="Informações do estabelecimento"
     >
       <div className="flex w-full items-start gap-3.5 sm:gap-4">
-        <div className="relative shrink-0">
-          <div className="relative h-[74px] w-[74px] overflow-hidden rounded-[22px] border-0 bg-white p-0 shadow-none sm:h-[78px] sm:w-[78px]">
+        <div className={`relative shrink-0 ${hasCover ? "-mt-[42px] sm:-mt-[48px]" : ""}`}>
+          <div className={`relative h-[74px] w-[74px] overflow-hidden rounded-[22px] bg-white p-0 sm:h-[78px] sm:w-[78px] ${hasCover ? "border-[3px] border-white shadow-none" : "border-0 shadow-none"}`}>
             {showLogoSkeleton && <LogoShimmerSkeleton />}
 
             <img
