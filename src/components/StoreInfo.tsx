@@ -56,7 +56,7 @@ function getLogoImageUrl(url: string): string {
 }
 
 function LogoShimmerSkeleton({
-  roundedClass = "rounded-[22px]",
+  roundedClass = "rounded-full",
 }: {
   roundedClass?: string;
 }) {
@@ -169,9 +169,16 @@ export function StoreInfo({
       className={`relative w-full ${hasCover ? "pt-4 sm:pt-5" : "pt-5"}`}
       aria-label="Informações do estabelecimento"
     >
+      {hasCover ? (
+        <div
+          className="pointer-events-none absolute left-[-1rem] right-[-1rem] top-0 h-[3px] bg-[var(--menu-primary)] sm:left-[-1.5rem] sm:right-[-1.5rem] md:left-[-2rem] md:right-[-2rem]"
+          aria-hidden="true"
+        />
+      ) : null}
+
       <div className="flex w-full items-start gap-3.5 sm:gap-4">
         <div className={`relative shrink-0 ${hasCover ? "-mt-[35px] sm:-mt-[40px]" : ""}`}>
-          <div className={`relative h-[74px] w-[74px] overflow-hidden rounded-[22px] bg-white p-0 sm:h-[78px] sm:w-[78px] ${hasCover ? "border-[3px] border-white shadow-none" : "border-0 shadow-none"}`}>
+          <div className={`relative h-[74px] w-[74px] overflow-hidden rounded-full bg-white p-0 sm:h-[78px] sm:w-[78px] ${hasCover ? "border-[3px] border-white shadow-none" : "border-0 shadow-none"}`}>
             {showLogoSkeleton && <LogoShimmerSkeleton />}
 
             <img
@@ -185,7 +192,7 @@ export function StoreInfo({
             />
 
             <span
-              className="pointer-events-none absolute inset-0 z-20 rounded-[22px] border border-[#DDDDDD]"
+              className="pointer-events-none absolute inset-0 z-20 rounded-full border border-[#DDDDDD]"
               aria-hidden="true"
             />
           </div>
