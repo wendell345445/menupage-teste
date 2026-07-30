@@ -170,7 +170,7 @@ export function StoreInfo({
       aria-label="Informações do estabelecimento"
     >
       <div className="flex w-full items-start gap-3.5 sm:gap-4">
-        <div className={`relative shrink-0 ${hasCover ? "-mt-[42px] sm:-mt-[48px]" : ""}`}>
+        <div className={`relative shrink-0 ${hasCover ? "-mt-[35px] sm:-mt-[40px]" : ""}`}>
           <div className={`relative h-[74px] w-[74px] overflow-hidden rounded-[22px] bg-white p-0 sm:h-[78px] sm:w-[78px] ${hasCover ? "border-[3px] border-white shadow-none" : "border-0 shadow-none"}`}>
             {showLogoSkeleton && <LogoShimmerSkeleton />}
 
