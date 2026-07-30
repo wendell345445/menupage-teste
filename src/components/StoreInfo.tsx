@@ -171,7 +171,7 @@ export function StoreInfo({
     >
       <div className="flex w-full items-start gap-3.5 sm:gap-4">
         <div className={`relative shrink-0 ${hasCover ? "-mt-[42px] sm:-mt-[48px]" : ""}`}>
-          <div className={`relative h-[74px] w-[74px] overflow-hidden rounded-[22px] bg-white p-0 sm:h-[78px] sm:w-[78px] ${hasCover ? "border-[3px] border-white shadow-none" : "border-0 shadow-none"}`}>
+          <div className={`relative h-[74px] w-[74px] overflow-hidden rounded-[22px] bg-white p-0 sm:h-[78px] sm:w-[78px] ${hasCover ? "border-[4px] border-white shadow-none" : "border-0 shadow-none"}`}>
             {showLogoSkeleton && <LogoShimmerSkeleton />}
 
             <img
@@ -191,17 +191,26 @@ export function StoreInfo({
           </div>
         </div>
 
-        <div className={`min-w-0 flex-1 pt-[1px] ${hasCover ? "-mt-[8px]" : ""}`}>
+        <div className="min-w-0 flex-1 pt-[1px]">
           <div className="flex min-w-0 items-start justify-between gap-2.5">
             <div className="min-w-0 flex-1">
               {isLoading ? (
-                <div className="mt-[6px] flex items-center gap-[7px]">
+                <MenuShimmer className="h-[21px] w-[68%] max-w-[230px] rounded-full" />
+              ) : (
+                <h1 className="min-w-0 truncate py-[2px] text-[18px] font-bold leading-[1.18] tracking-[-0.38px] text-[#574f4f] sm:text-[20px]">
+                  {name}
+                </h1>
+              )}
+
+              {isLoading ? (
+                <div className="mt-[7px] flex items-center gap-[7px]">
                   <MenuShimmer className="h-[12px] w-[12px] shrink-0 rounded-[4px]" />
                   <MenuShimmer className="h-[11px] w-[82%] max-w-[290px] rounded-full" />
                 </div>
               ) : (
                 address && (
-                  <div className="mt-[4px] flex items-start gap-[7px]">
+                  <div className="mt-[5px] flex items-start gap-[7px]">
+                    {/* Mapa-com-pin (FontAwesome map-marker-alt v4) — mesmo SVG do MenuPanda */}
                     <svg
                       className="mt-[3px] h-[12px] w-[12px] shrink-0 text-menu-text"
                       viewBox="0 0 512 512"
@@ -318,17 +327,7 @@ export function StoreInfo({
         </div>
       </div>
 
-      <div className="-mt-[12px]">
-        {isLoading ? (
-          <MenuShimmer className="h-[21px] w-[68%] max-w-[230px] rounded-full" />
-        ) : (
-          <h1 className="min-w-0 py-[2px] text-[18px] font-bold leading-[1.18] tracking-[-0.38px] text-[#574f4f] sm:text-[20px]">
-            {name}
-          </h1>
-        )}
-      </div>
-
-      <div className="mt-[8px] flex w-full flex-nowrap items-center gap-x-2.5 gap-y-1 overflow-hidden">
+      <div className="mt-[11px] flex w-full flex-nowrap items-center gap-x-2.5 gap-y-1 overflow-hidden">
         {isLoading ? (
           <>
             <div
