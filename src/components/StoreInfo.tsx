@@ -191,7 +191,7 @@ export function StoreInfo({
           </div>
         </div>
 
-        <div className="min-w-0 flex-1 pt-[1px]">
+        <div className={`min-w-0 flex-1 pt-[1px] ${hasCover ? "-mt-[8px]" : ""}`}>
           <div className="flex min-w-0 items-start justify-between gap-2.5">
             <div className="min-w-0 flex-1">
               {isLoading ? (
