@@ -165,7 +165,7 @@ export function StoreHeader({
 
               <div className="menu-header-rotating-message menu-header-rotating-message-two absolute inset-0 flex items-center justify-center">
                 <span className="menu-header-message-text max-w-full truncate px-2 py-[4px] [font-family:'Sen',Helvetica] text-[17px] font-semibold leading-none tracking-[-0.2px] text-white sm:text-[18px]">
-                  Faça seu pedido
+                  18:00 às 23:30
                 </span>
               </div>
             </div>

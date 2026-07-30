@@ -334,7 +334,7 @@ export function StoreInfo({
         </div>
       </div>
 
-      <div className="mt-[11px] flex w-full flex-nowrap items-center gap-x-2.5 gap-y-1 overflow-hidden">
+      <div className="mt-[17px] flex w-full flex-nowrap items-center gap-x-2.5 gap-y-1 overflow-hidden">
         {isLoading ? (
           <>
             <div
@@ -381,7 +381,10 @@ export function StoreInfo({
                     }}
                   />
                   <span className="whitespace-nowrap text-[11px] font-semibold leading-[1.35] tracking-[-0.22px] text-[#574f4f] sm:text-xs">
-                    Pedido mínimo {fmtBRL(minimumOrderValue)}
+                    Pedido mínimo{" "}
+                    <strong className="text-[12px] font-extrabold tracking-[-0.24px] text-[#746C6C] sm:text-[13px]">
+                      {fmtBRL(minimumOrderValue)}
+                    </strong>
                   </span>
                 </div>
 
