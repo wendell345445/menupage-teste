@@ -177,8 +177,8 @@ export function StoreInfo({
       ) : null}
 
       <div className="flex w-full items-start gap-3.5 sm:gap-4">
-        <div className={`relative shrink-0 ${hasCover ? "-mt-[35px] sm:-mt-[40px]" : ""}`}>
-          <div className={`relative h-[74px] w-[74px] overflow-hidden rounded-full bg-white p-0 sm:h-[78px] sm:w-[78px] ${hasCover ? "border-[3px] border-white shadow-none" : "border-0 shadow-none"}`}>
+        <div className={`relative shrink-0 ${hasCover ? "-mt-[36px] sm:-mt-[41px]" : ""}`}>
+          <div className={`relative h-[80px] w-[80px] overflow-hidden rounded-full bg-white p-0 sm:h-[84px] sm:w-[84px] ${hasCover ? "border-[3px] border-white shadow-none" : "border-0 shadow-none"}`}>
             {showLogoSkeleton && <LogoShimmerSkeleton />}
 
             <img
