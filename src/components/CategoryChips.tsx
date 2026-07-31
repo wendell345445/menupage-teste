@@ -134,7 +134,7 @@ export function CategoryChips({
                       isActive ? "scale-[1.015]" : "scale-100"
                     }`}
                     style={{
-                      background: isSticky
+                      background: isSticky && !isActive
                         ? "linear-gradient(135deg, rgba(255,255,255,0.44), rgba(255,255,255,0.22))"
                         : "#ffffff",
                       borderColor: isActive
@@ -146,10 +146,10 @@ export function CategoryChips({
                         isSticky && !isActive
                           ? "inset 0 1px 0 rgba(255,255,255,0.58)"
                           : "none",
-                      backdropFilter: isSticky
+                      backdropFilter: isSticky && !isActive
                         ? "blur(14px) saturate(175%)"
                         : undefined,
-                      WebkitBackdropFilter: isSticky
+                      WebkitBackdropFilter: isSticky && !isActive
                         ? "blur(14px) saturate(175%)"
                         : undefined,
                     }}
@@ -162,14 +162,12 @@ export function CategoryChips({
                           : "scale-[0.96] opacity-0"
                       }`}
                       style={{
-                        background: isSticky
-                          ? "linear-gradient(135deg, color-mix(in srgb, var(--menu-primary) 98%, transparent), color-mix(in srgb, var(--menu-gradient-to) 92%, transparent))"
-                          : "var(--menu-primary)",
+                        background: "var(--menu-primary)",
                       }}
                     />
 
                     <span
-                      className={`relative z-10 whitespace-nowrap text-[16px] font-semibold leading-none transition-[color,letter-spacing,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      className={`relative z-10 whitespace-nowrap text-[14px] font-semibold leading-none transition-[color,letter-spacing,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                         isActive
                           ? "translate-y-0 tracking-[0.5px] text-white"
                           : isSticky
