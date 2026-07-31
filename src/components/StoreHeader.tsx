@@ -142,7 +142,7 @@ export function StoreHeader({
             </div>
           ) : showCompactIdentity ? (
             <div className="pointer-events-none flex min-w-0 max-w-full items-center justify-center gap-2 rounded-full px-1 py-[2px] transition-all duration-200">
-              <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-[12px] border-0 bg-white p-0 shadow-none">
+              <div className="relative h-7 w-7 shrink-0 overflow-hidden rounded-full border-0 bg-white p-0 shadow-none">
                 <img
                   src={logoUrl}
                   alt={storeName}

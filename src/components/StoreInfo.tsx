@@ -171,9 +171,15 @@ export function StoreInfo({
     >
       {hasCover ? (
         <div
-          className="pointer-events-none absolute left-[-1rem] right-[-1rem] top-0 h-[2px] bg-[var(--menu-primary)] sm:left-[-1.5rem] sm:right-[-1.5rem] md:left-[-2rem] md:right-[-2rem]"
+          className="pointer-events-none absolute left-[-1rem] right-[-1rem] top-0 h-[2px] overflow-hidden sm:left-[-1.5rem] sm:right-[-1.5rem] md:left-[-2rem] md:right-[-2rem]"
           aria-hidden="true"
-        />
+        >
+          {isLoading ? (
+            <MenuShimmer className="h-full w-full rounded-none" />
+          ) : (
+            <span className="block h-full w-full bg-[var(--menu-primary)]" />
+          )}
+        </div>
       ) : null}
 
       <div className="flex w-full items-start gap-3.5 sm:gap-4">
