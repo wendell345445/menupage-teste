@@ -124,20 +124,16 @@ export function CategoryChips({
                       key="__all__"
                       className="relative z-20 flex shrink-0 items-center gap-3"
                     >
-                      <span
+                      <svg
                         aria-hidden="true"
-                        className="h-[17px] w-[17px] shrink-0 bg-[#5c5555]"
-                        style={{
-                          WebkitMaskImage: "url(/menu.svg)",
-                          maskImage: "url(/menu.svg)",
-                          WebkitMaskRepeat: "no-repeat",
-                          maskRepeat: "no-repeat",
-                          WebkitMaskPosition: "center",
-                          maskPosition: "center",
-                          WebkitMaskSize: "contain",
-                          maskSize: "contain",
-                        }}
-                      />
+                        className="h-[18px] w-[18px] shrink-0 text-[#5c5555]"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <circle cx="12" cy="5" r="1.8" />
+                        <circle cx="12" cy="12" r="1.8" />
+                        <circle cx="12" cy="19" r="1.8" />
+                      </svg>
                       {categoryButton}
                     </div>
                   );
