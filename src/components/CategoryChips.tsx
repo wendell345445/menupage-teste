@@ -60,9 +60,8 @@ export function CategoryChips({
             : categories.map((category) => {
                 const isActive = activeId === category.id;
 
-                return (
+                const categoryButton = (
                   <button
-                    key={category.id ?? "__all__"}
                     ref={isActive ? activeButtonRef : undefined}
                     type="button"
                     aria-pressed={isActive}
@@ -118,6 +117,33 @@ export function CategoryChips({
                     </span>
                   </button>
                 );
+
+                if (category.id === null) {
+                  return (
+                    <div
+                      key="__all__"
+                      className="relative z-20 flex shrink-0 items-center gap-3"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="h-[17px] w-[17px] shrink-0 bg-[#5c5555]"
+                        style={{
+                          WebkitMaskImage: "url(/menu.svg)",
+                          maskImage: "url(/menu.svg)",
+                          WebkitMaskRepeat: "no-repeat",
+                          maskRepeat: "no-repeat",
+                          WebkitMaskPosition: "center",
+                          maskPosition: "center",
+                          WebkitMaskSize: "contain",
+                          maskSize: "contain",
+                        }}
+                      />
+                      {categoryButton}
+                    </div>
+                  );
+                }
+
+                return <div key={category.id}>{categoryButton}</div>;
               })}
         </nav>
       </div>
