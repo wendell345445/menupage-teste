@@ -629,19 +629,166 @@ function SectionHeader({
     typeof maxCount === "number" &&
     selectedCount < maxCount;
   const shouldShowSelectedItemsBadge = optional && selectedCount > 0;
+  const titleRef = useRef<HTMLHeadingElement | null>(null);
+  const [isTitleExpanded, setIsTitleExpanded] = useState(false);
+  const [canExpandTitle, setCanExpandTitle] = useState(false);
+  const [collapsedTitle, setCollapsedTitle] = useState(title);
+
+  useEffect(() => {
+    setIsTitleExpanded(false);
+    setCollapsedTitle(title);
+  }, [title]);
+
+  useEffect(() => {
+    if (isTitleExpanded) return;
+
+    const titleElement = titleRef.current;
+    if (!titleElement) return;
+
+    const calculateCollapsedTitle = () => {
+      const availableWidth = titleElement.clientWidth;
+      if (availableWidth <= 0) return;
+
+      const computed = window.getComputedStyle(titleElement);
+      const lineHeight = Number.parseFloat(computed.lineHeight) || 18.75;
+      const maxHeight = lineHeight * 2 + 1;
+
+      const measure = document.createElement("div");
+      measure.setAttribute("aria-hidden", "true");
+      Object.assign(measure.style, {
+        position: "fixed",
+        left: "-99999px",
+        top: "0",
+        visibility: "hidden",
+        pointerEvents: "none",
+        width: `${availableWidth}px`,
+        fontFamily: computed.fontFamily,
+        fontSize: computed.fontSize,
+        fontWeight: computed.fontWeight,
+        lineHeight: computed.lineHeight,
+        letterSpacing: computed.letterSpacing,
+        whiteSpace: "normal",
+        overflowWrap: "anywhere",
+      });
+
+      const textSpan = document.createElement("span");
+      const moreSpan = document.createElement("span");
+      moreSpan.textContent = "Ver mais";
+      Object.assign(moreSpan.style, {
+        display: "inline",
+        marginLeft: "6px",
+        whiteSpace: "nowrap",
+        fontSize: "11px",
+        fontWeight: "600",
+        lineHeight: "1.2",
+      });
+
+      measure.append(textSpan, moreSpan);
+      document.body.appendChild(measure);
+
+      moreSpan.style.display = "none";
+      textSpan.textContent = title;
+      const fullTitleFits = measure.scrollHeight <= maxHeight;
+
+      if (fullTitleFits) {
+        setCanExpandTitle(false);
+        setCollapsedTitle(title);
+        measure.remove();
+        return;
+      }
+
+      moreSpan.style.display = "inline";
+      const words = title.trim().split(/\s+/);
+      let low = 0;
+      let high = words.length;
+      let best = "";
+
+      while (low <= high) {
+        const middle = Math.floor((low + high) / 2);
+        const candidate = `${words.slice(0, middle).join(" ").trim()}...`;
+        textSpan.textContent = candidate;
+
+        if (measure.scrollHeight <= maxHeight) {
+          best = candidate;
+          low = middle + 1;
+        } else {
+          high = middle - 1;
+        }
+      }
+
+      if (!best) {
+        let charLow = 0;
+        let charHigh = title.length;
+
+        while (charLow <= charHigh) {
+          const middle = Math.floor((charLow + charHigh) / 2);
+          const candidate = `${title.slice(0, middle).trimEnd()}...`;
+          textSpan.textContent = candidate;
+
+          if (measure.scrollHeight <= maxHeight) {
+            best = candidate;
+            charLow = middle + 1;
+          } else {
+            charHigh = middle - 1;
+          }
+        }
+      }
+
+      setCanExpandTitle(true);
+      setCollapsedTitle(best || "...");
+      measure.remove();
+    };
+
+    const frame = window.requestAnimationFrame(calculateCollapsedTitle);
+    const resizeObserver = new ResizeObserver(calculateCollapsedTitle);
+    resizeObserver.observe(titleElement);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      resizeObserver.disconnect();
+    };
+  }, [title, isTitleExpanded]);
 
   return (
-    <div className="sticky top-0 z-30 flex min-h-[70px] items-center justify-between gap-3 bg-[#F3F3F3] px-[13px] py-[14px] shadow-[0_1px_0_rgba(0,0,0,0.04)] sm:px-6">
-      <div className="min-w-0">
-        <h2 className="text-[15px] font-bold leading-none text-[#4b4949]">
-          {title}
-        </h2>
-        <p className="mt-[8px] text-[11px] font-normal leading-none text-[#2E2F31]">
+    <div className="sticky top-0 z-30 grid min-h-[70px] grid-cols-[minmax(0,1fr)_auto] items-center gap-x-1.5 gap-y-2 bg-[#F3F3F3] px-[13px] py-[14px] shadow-[0_1px_0_rgba(0,0,0,0.04)] max-[340px]:grid-cols-1 sm:px-6">
+      <div className="min-w-0 pr-0">
+        <div className="min-w-0">
+          <h2
+            ref={titleRef}
+            className="min-w-0 break-words text-[15px] font-bold leading-[1.25] text-[#4b4949]"
+            title={title}
+          >
+            {isTitleExpanded ? title : collapsedTitle}
+            {canExpandTitle && !isTitleExpanded ? (
+              <button
+                type="button"
+                aria-expanded={false}
+                onClick={() => setIsTitleExpanded(true)}
+                className="ml-1.5 inline whitespace-nowrap text-[11px] font-semibold leading-[1.2] text-[var(--menu-primary)] transition-opacity hover:opacity-75 active:opacity-60"
+              >
+                Ver mais
+              </button>
+            ) : null}
+          </h2>
+        </div>
+
+        {canExpandTitle && isTitleExpanded ? (
+          <button
+            type="button"
+            aria-expanded={true}
+            onClick={() => setIsTitleExpanded(false)}
+            className="mt-[5px] inline-flex whitespace-nowrap text-[11px] font-semibold leading-none text-[var(--menu-primary)] transition-opacity hover:opacity-75 active:opacity-60"
+          >
+            Ver menos
+          </button>
+        ) : null}
+
+        <p className="mt-[6px] text-[11px] font-normal leading-[1.25] text-[#2E2F31]">
           {helper}
         </p>
       </div>
 
-      <div className="flex shrink-0 items-center self-center gap-1.5">
+      <div className="flex shrink-0 items-center justify-self-end gap-1.5 max-[340px]:justify-self-end">
         {shouldShowSelectedItemsBadge ? (
           <SelectedItemsBadge count={selectedCount} />
         ) : optional ? (
