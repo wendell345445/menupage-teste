@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { type RefObject, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { useMenu } from "@/hooks/useMenu";
@@ -536,6 +536,68 @@ function SkeletonSection({
   );
 }
 
+function GroupNavigation({
+  onPrevious,
+  onNext,
+  previousDisabled = false,
+  nextDisabled = false,
+}: {
+  onPrevious?: () => void;
+  onNext?: () => void;
+  previousDisabled?: boolean;
+  nextDisabled?: boolean;
+}) {
+  return (
+    <div className="flex h-[29px] shrink-0 items-center overflow-hidden rounded-[8px] border-[0.5px] border-[#E6E6E6] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+      <button
+        type="button"
+        aria-label="Ir para o grupo anterior"
+        onClick={onPrevious}
+        disabled={previousDisabled || !onPrevious}
+        className="flex h-full w-[31px] items-center justify-center border-r border-[0.5px] border-[#EAEAEA] text-[var(--menu-primary)] transition-colors hover:bg-black/[0.03] active:bg-black/[0.06] disabled:cursor-default disabled:opacity-30"
+      >
+        <span
+          aria-hidden="true"
+          className="h-[16px] w-[16px] rotate-180 bg-[var(--menu-primary)]"
+          style={{
+            WebkitMaskImage: "url('/product-page/arrow baixo.svg')",
+            maskImage: "url('/product-page/arrow baixo.svg')",
+            WebkitMaskRepeat: "no-repeat",
+            maskRepeat: "no-repeat",
+            WebkitMaskPosition: "center",
+            maskPosition: "center",
+            WebkitMaskSize: "contain",
+            maskSize: "contain",
+          }}
+        />
+      </button>
+
+      <button
+        type="button"
+        aria-label="Ir para o próximo grupo"
+        onClick={onNext}
+        disabled={nextDisabled || !onNext}
+        className="flex h-full w-[31px] items-center justify-center text-[var(--menu-primary)] transition-colors hover:bg-black/[0.03] active:bg-black/[0.06] disabled:cursor-default disabled:opacity-30"
+      >
+        <span
+          aria-hidden="true"
+          className="h-[16px] w-[16px] bg-[var(--menu-primary)]"
+          style={{
+            WebkitMaskImage: "url('/product-page/arrow baixo.svg')",
+            maskImage: "url('/product-page/arrow baixo.svg')",
+            WebkitMaskRepeat: "no-repeat",
+            maskRepeat: "no-repeat",
+            WebkitMaskPosition: "center",
+            maskPosition: "center",
+            WebkitMaskSize: "contain",
+            maskSize: "contain",
+          }}
+        />
+      </button>
+    </div>
+  );
+}
+
 function SectionHeader({
   title,
   helper,
@@ -544,6 +606,10 @@ function SectionHeader({
   completed = false,
   showCountProgress = false,
   optional = false,
+  onPreviousGroup,
+  onNextGroup,
+  previousGroupDisabled = false,
+  nextGroupDisabled = false,
 }: {
   title: string;
   helper: string;
@@ -552,6 +618,10 @@ function SectionHeader({
   completed?: boolean;
   showCountProgress?: boolean;
   optional?: boolean;
+  onPreviousGroup?: () => void;
+  onNextGroup?: () => void;
+  previousGroupDisabled?: boolean;
+  nextGroupDisabled?: boolean;
 }) {
   const shouldShowCountBadge =
     showCountProgress &&
@@ -583,6 +653,13 @@ function SectionHeader({
         ) : (
           <RequiredBadge />
         )}
+
+        <GroupNavigation
+          onPrevious={onPreviousGroup}
+          onNext={onNextGroup}
+          previousDisabled={previousGroupDisabled}
+          nextDisabled={nextGroupDisabled}
+        />
       </div>
     </div>
   );
@@ -739,6 +816,7 @@ export function ProductPage() {
   const [isProductImageUnavailable, setIsProductImageUnavailable] =
     useState(false);
   const pizzaGroupName = useId();
+  const pizzaSectionRef = useRef<HTMLElement | null>(null);
   const borderSectionRef = useRef<HTMLElement | null>(null);
   const orderBumpSectionRef = useRef<HTMLElement | null>(null);
   const wasPizzaSelectionCompletedRef = useRef(false);
@@ -774,7 +852,7 @@ export function ProductPage() {
   useEffect(() => {
     const skeletonTimer = window.setTimeout(() => {
       setIsProductSkeletonVisible(false);
-    }, 1500);
+    }, 500);
 
     return () => window.clearTimeout(skeletonTimer);
   }, []);
@@ -935,6 +1013,13 @@ export function ProductPage() {
 
       next[optionId] = currentQuantity - 1;
       return next;
+    });
+  };
+
+  const scrollToGroup = (sectionRef: RefObject<HTMLElement | null>) => {
+    sectionRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
     });
   };
 
@@ -1102,7 +1187,11 @@ export function ProductPage() {
           ) : null}
         </section>
 
-        <section aria-labelledby="sabores-heading" className="w-full">
+        <section
+          ref={pizzaSectionRef}
+          aria-labelledby="sabores-heading"
+          className="scroll-mt-0 w-full"
+        >
           <SectionHeader
             title={screen.pizzaGroupTitle}
             helper={screen.pizzaGroupHelper}
@@ -1110,6 +1199,8 @@ export function ProductPage() {
             maxCount={screen.pizzaMax}
             completed={pizzaSelectionCompleted}
             showCountProgress
+            previousGroupDisabled
+            onNextGroup={() => scrollToGroup(borderSectionRef)}
           />
 
           <fieldset
@@ -1196,6 +1287,8 @@ export function ProductPage() {
             selectedCount={selectedBorder ? 1 : 0}
             maxCount={1}
             completed={Boolean(selectedBorder)}
+            onPreviousGroup={() => scrollToGroup(pizzaSectionRef)}
+            onNextGroup={() => scrollToGroup(orderBumpSectionRef)}
           />
 
           <fieldset className="m-0 border-0 p-0">
@@ -1249,6 +1342,8 @@ export function ProductPage() {
             helper={screen.orderBumpGroupHelper}
             selectedCount={totalSelectedOrderBumps}
             optional
+            onPreviousGroup={() => scrollToGroup(borderSectionRef)}
+            nextGroupDisabled
           />
 
           <fieldset className="m-0 border-0 p-0">
